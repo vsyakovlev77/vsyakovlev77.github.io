@@ -480,7 +480,7 @@
                     <p><strong>Before reading on, consider:</strong> You know that HHG produces XUV light. But the wavelength of this light (~10-100 nm) is much larger than a typical molecule (~0.1 nm). How can it possibly be used to "see" or resolve molecular structure?</p>
                     <button class="reveal-btn">Think about it, then click to continue</button>
                     <div class="hidden-content">
-                        <p>This is a great question, and it gets to the heart of the matter. The trick is that we are not using the emitted XUV photon for imaging in the way a traditional microscope uses light. The resolution comes from the particle that probes the molecule *during* the HHG process itself. Let's find out what that is in the next section.</p>
+                        <p>This is a great question, and it gets to the heart of the matter. The trick is that we are not using the emitted XUV photon for imaging in the way a traditional microscope uses light. The resolution comes from the particle that probes the molecule <em>during</em> the HHG process itself. Let's find out what that is in the next section.</p>
                     </div>
                 </div>
             </section>
@@ -488,7 +488,7 @@
             <section id="concept-1" class="concept-section">
                 <h2>1. The Electron as a Probe: A Matter of Wavelength</h2>
                 <p>The secret to resolving molecular structure lies not with the emitted photon, but with the returning electron from step 2 of the three-step model. While this electron is a particle, it also has a wave nature, described by the de Broglie wavelength:</p>
-                <p>$$ \lambda_{dB} = \frac{h}{p} = \frac{h}{\sqrt{2m_e E_k}} $$</p>
+                <p>$$ \lambda_\mathrm{dB} = \frac{h}{p} = \frac{h}{\sqrt{2m_e E_k}} $$</p>
                 <p>Here, $E_k$ is the electron's kinetic energy. In a typical HHG experiment, the electron can gain hundreds of electron-volts (eV) of kinetic energy from the laser field. An electron with 100 eV of energy has a de Broglie wavelength of about 0.12 nm (1.2 Å). This is precisely on the scale of molecular bond lengths!</p>
                 
                 <div class="callout">
@@ -496,14 +496,14 @@
                 </div>
                 
                  <div class="reflection">
-                    <p><strong>Pause and think:</strong> How does the ponderomotive energy, $U_p$, that you learned about relate to the de Broglie wavelength of the recolliding electron? (Hint: The maximum kinetic energy upon return is $3.17 U_p$.)</p>
+                    <p><strong>Pause and think:</strong> How does the ponderomotive energy, $U_\mathrm{p}$, that you learned about relate to the de Broglie wavelength of the recolliding electron? (Hint: The maximum kinetic energy upon return is $3.17 U_\mathrm{p}$.)</p>
                 </div>
             </section>
             
             <section id="concept-2" class="concept-section">
                 <h2>2. What is High-Harmonic Spectroscopy?</h2>
                 <div class="pre-question">
-                    <p><strong>Before reading on, consider:</strong> The HHG process involves ionization, propagation, and recombination. Which of these three steps do you think carries the most information about the electronic structure of the *original* molecule?</p>
+                    <p><strong>Before reading on, consider:</strong> The HHG process involves ionization, propagation, and recombination. Which of these three steps do you think carries the most information about the electronic structure of the <em>original</em> molecule?</p>
                     <button class="reveal-btn">Think about it, then click to continue</button>
                     <div class="hidden-content">
                         <p>While ionization potential matters (step 1), the most detailed information comes from the <strong>recombination</strong> step. This is when the returning electron wave "sees" the molecule and transitions back into a bound state (an orbital). This transition is what makes HHG a spectroscopic tool.</p>
@@ -511,27 +511,27 @@
                         <h3>From Light Source to Information Source</h3>
                         <p>Initially, HHG was just seen as a source of coherent XUV light. But physicists soon realized the spectrum itself was a rich source of information. <strong>High-Harmonic Spectroscopy (HHS)</strong> is the field dedicated to analyzing the HHG spectrum (the intensity, phase, and polarization of the harmonics) to learn about the structure and dynamics of the generating atoms or molecules.</p>
                         <p>The harmonic signal, $S(\Omega)$, from a single molecule can be approximately factorized:</p>
-                        <p>$$ S(\Omega) \propto |a_{ion} \cdot a_{prop} \cdot d_{rec}|^2 $$</p>
-                        <p>Here, $a_{ion}$ describes ionization, $a_{prop}$ describes the electron's propagation in the laser field, and $d_{rec}$ is the <strong>recombination dipole moment</strong>. This dipole moment describes the transition from the continuum electron state back to the bound orbital. It is the molecular "fingerprint" we want to measure.</p>
+                        <p>$$ S(\Omega) \propto |a_\mathrm{ion} \cdot a_\mathrm{prop} \cdot d_\mathrm{rec}|^2 $$</p>
+                        <p>Here, $a_\mathrm{ion}$ describes ionization, $a_\mathrm{prop}$ describes the electron's propagation in the laser field, and $d_\mathrm{rec}$ is the <strong>recombination dipole moment</strong>. This dipole moment describes the transition from the continuum electron state back to the bound orbital. It is the molecular "fingerprint" we want to measure.</p>
                         
                         <h3>Time-Reversed Photoionization</h3>
-                        <p>The recombination step is essentially the time-reverse of photoionization. This means the recombination dipole $d_{rec}$ is the same one that governs photoionization. We can test this by comparing the HHG spectrum of an atom with its known photoionization cross-section. They should show similar features.</p>
+                        <p>The recombination step is essentially the time-reverse of photoionization. This means the recombination dipole $d_\mathrm{rec}$ is the same one that governs photoionization. We can test this by comparing the HHG spectrum of an atom with its known photoionization cross-section. They should show similar features.</p>
                         
                         <figure>
                             <div class="interactive-figure-container">
-                                <img src="Figure1.webp" alt="HHG spectrum of Xenon showing a giant resonance" class="zoomable-img">
+                                <img src="Figure1.webp" alt="HHG spectrum of xenon showing a giant resonance" class="zoomable-img">
                                 <!-- Annotations -->
                                 <div class="annotation-point" style="top: 25%; left: 45%;">
-                                    <div class="annotation-tooltip">The HHG spectrum (blue line) from Xenon shows a broad peak, a "giant resonance", around 100 eV.</div>
+                                    <div class="annotation-tooltip">The HHG spectrum (blue line) from xenon shows a broad peak, a "giant resonance", around 100 eV.</div>
                                 </div>
                                 <div class="annotation-point" style="top: 45%; left: 65%;">
                                     <div class="annotation-tooltip">This resonance perfectly matches photoionization data from synchrotrons (triangles) and theoretical calculations (green line), proving HHG probes the same physics.</div>
                                 </div>
-                                <div class="annotation-point" style="top: 80%; left: 75%;">
+                                <div class="annotation-point" style="top: 65%; left: 45%;">
                                     <div class="annotation-tooltip">This resonance involves complex electron-electron correlations. The returning 5p electron can kick a deeper 4d electron into the 5p hole, and then recombine into the now-empty 4d shell.</div>
                                 </div>
                             </div>
-                            <figcaption>Figure 1: High harmonic spectrum from Xenon gas. The excellent agreement between the HHG signal and the known photoionization cross-section demonstrates that recombination is the time-reverse of photoionization. (Adapted from Fig 1a in the review)</figcaption>
+                            <figcaption>Figure 1: High harmonic spectrum from xenon gas. The good agreement between the HHG signal (solid blue curve) and the known photoionization cross-section (symbols) demonstrates that recombination is the time-reverse of photoionization. (Adapted from Fig 1a in the review)</figcaption>
                         </figure>
                         
                         <div class="summary-box">
@@ -573,7 +573,7 @@
                         <h3>Two-Center Interference</h3>
                         <p>Once molecules are aligned, we can see quantum mechanics in action. Consider CO₂, an O=C=O molecule. The highest occupied molecular orbital (HOMO) is made of p-orbitals on the two oxygen atoms, with opposite phases.</p>
                         <p>When the electron wave returns to the molecule, it can recombine at either oxygen atom. If the path difference for the electron wave to reach the two atoms is an integer multiple of its de Broglie wavelength, the waves arrive in phase. However, because the orbital lobes have opposite signs, the emitted light from the two centers will be exactly out of phase and will interfere destructively. This creates a deep minimum in the HHG signal at a specific angle and energy.</p>
-                        <p>$$ R \cos\theta = n \lambda_{dB} \quad (\text{Condition for destructive interference}) $$</p>
+                        <p>$$ R \cos\theta = n \lambda_\mathrm{dB} \quad (\text{Condition for destructive interference}) $$</p>
 
                         <figure>
                             <div class="interactive-figure-container">
@@ -585,7 +585,7 @@
                                     <div class="annotation-tooltip">The HOMO of CO₂ has two lobes with opposite phase (represented by the spheres on the oxygen atoms).</div>
                                 </div>
                                 <div class="annotation-point" style="top: 55%; left: 85%;">
-                                    <div class="annotation-tooltip">The path difference to the two oxygen atoms is Rcosθ. When this equals λ, the emitted light from the two centers cancels out, creating a minimum in the signal.</div>
+                                    <div class="annotation-tooltip">The path difference to the two oxygen atoms is $R \cosθ$. When this equals $\lambda$, the emitted light from the two centers cancels out, creating a minimum in the signal.</div>
                                 </div>
                             </div>
                             <figcaption>Figure 3: A schematic of two-center interference. This purely quantum effect is a direct probe of the molecule's geometry and orbital symmetry. (Adapted from Fig 1c in the review)</figcaption>
@@ -686,7 +686,7 @@
             <section id="concept-6" class="concept-section">
                 <h2>6. Filming Dynamics II: Electron Motion</h2>
                 <div class="pre-question">
-                    <p><strong>Before reading on, consider:</strong> Nuclear motion (vibrations, reactions) happens on a femtosecond ($10^{-15}$ s) timescale. Electron motion is much faster. What feature of the HHG process *itself* could provide the sub-femtosecond, attosecond ($10^{-18}$ s) time resolution needed to watch an electron move?</p>
+                    <p><strong>Before reading on, consider:</strong> Nuclear motion (vibrations, reactions) happens on a femtosecond ($10^{-15}$ s) timescale. Electron motion is much faster. What feature of the HHG process <em>itself</em> could provide the sub-femtosecond, attosecond ($10^{-18}$ s) time resolution needed to watch an electron move?</p>
                     <button class="reveal-btn">Think about it, then click to continue</button>
                     <div class="hidden-content">
                         <p>The key is the <strong>attochirp</strong>. Within the single half-cycle of the laser field during which one attosecond pulse is born, there is a very precise timing relationship. Electrons that return earlier have less kinetic energy and produce lower-frequency harmonics. Electrons that return slightly later gain more energy and produce higher-frequency harmonics. This provides a direct mapping:</p>
