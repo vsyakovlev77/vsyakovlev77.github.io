@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Harmonic Generation in Molecules: An Interactive Guide</title>
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <!-- Embedded CSS -->
+    <style>
+        :root {
+            --bg-color-light: #f8f9fa;
+            --text-color-light: #212529;
+            --primary-color-light: #003366;
+            --secondary-color-light: #0055a4;
+            --accent-color-light: #e63946;
+            --border-color-light: #dee2e6;
+            --card-bg-light: #ffffff;
+            --link-color-light: #0056b3;
+            --code-bg-light: #e9ecef;
+            --callout-bg-light: #e7f3ff;
+            --callout-border-light: #90caff;
+
+            --bg-color-dark: #121212;
+            --text-color-dark: #e0e0e0;
+            --primary-color-dark: #8ab4f8;
+            --secondary-color-dark: #a8c7fa;
+            --accent-color-dark: #f28b82;
+            --border-color-dark: #3c4043;
+            --card-bg-dark: #1e1e1e;
+            --link-color-dark: #8ab4f8;
+            --code-bg-dark: #282c34;
+            --callout-bg-dark: #283a4f;
+            --callout-border-dark: #5887b6;
+        }
+
+        .light-mode {
+            --bg-color: var(--bg-color-light);
+            --text-color: var(--text-color-light);
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --border-color: var(--border-color-light);
+            --card-bg: var(--card-bg-light);
+            --link-color: var(--link-color-light);
+            --code-bg: var(--code-bg-light);
+            --callout-bg: var(--callout-bg-light);
+            --callout-border: var(--callout-border-light);
+        }
+
+        .dark-mode {
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --border-color: var(--border-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --link-color: var(--link-color-dark);
+            --code-bg: var(--code-bg-dark);
+            --callout-bg: var(--callout-bg-dark);
+            --callout-border: var(--callout-border-dark);
+        }
+
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        h1, h2, h3 {
+            font-family: "Georgia", "Times New Roman", serif;
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; color: var(--secondary-color); }
+        
+        p { margin-bottom: 1rem; }
+        a { color: var(--link-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Header and Navigation */
+        #main-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 50px;
+        }
+        .theme-switch input {
+            display:none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Table of Contents */
+        #toc-container {
+            position: sticky;
+            top: 2rem;
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        #toc-container h3 { margin-top: 0; }
+        #toc { list-style: none; padding: 0; }
+        #toc li a {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+        #toc li a.active {
+            background-color: var(--callout-bg);
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        #progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        #progress-bar {
+            width: 0;
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+            transition: width 0.2s ease-out;
+        }
+        @media (max-width: 1024px) {
+            #toc-container {
+                position: static;
+                height: auto;
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Main Content */
+        main {
+            max-width: 800px;
+        }
+        .concept-section {
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+            margin-top: -2rem;
+        }
+        .pre-question {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .pre-question strong {
+            color: var(--accent-color);
+        }
+        .reveal-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        .reveal-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+        .hidden-content.show {
+            margin-top: 1.5rem;
+        }
+
+        /* Callouts and Reflection */
+        .callout, .reflection {
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid;
+            border-radius: 5px;
+        }
+        .callout {
+            background-color: var(--callout-bg);
+            border-color: var(--callout-border);
+        }
+        .reflection {
+            background-color: var(--code-bg);
+            border-color: var(--accent-color);
+        }
+        .callout strong, .reflection strong {
+            color: var(--primary-color);
+        }
+        .dark-mode .callout strong, .dark-mode .reflection strong {
+            color: var(--secondary-color-dark);
+        }
+
+        /* Figures and Interactivity */
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        figcaption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        .interactive-figure-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+        .interactive-figure-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            cursor: zoom-in;
+            border: 1px solid var(--border-color);
+        }
+        .annotation-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(230, 57, 70, 0.7);
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .annotation-point:hover {
+            transform: scale(1.3);
+        }
+        .annotation-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
+            font-size: 0.9rem;
+            width: 200px;
+            transform: translate(-50%, -120%);
+        }
+        .annotation-point:hover .annotation-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Zoom Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            display: block;
+            margin: auto;
+            animation: zoom-in 0.3s;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        @keyframes zoom-in {
+            from {transform: scale(0.1)}
+            to {transform: scale(1)}
+        }
+
+        /* Summary */
+        .summary-box {
+            border-top: 2px solid var(--border-color);
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+        }
+        .summary-box ul {
+            list-style-type: '✓ ';
+            padding-left: 1.5rem;
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                --bg-color: #ffffff;
+                --text-color: #000000;
+                --primary-color: #000000;
+                --secondary-color: #333333;
+                font-size: 12pt;
+                color: black;
+                background-color: white;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            #toc-container, #main-header, .reveal-btn, .reflection {
+                display: none;
+            }
+            main {
+                max-width: 100%;
+            }
+            .hidden-content {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            .callout {
+                background-color: #f0f0f0;
+                border-color: #cccccc;
+            }
+            a {
+                text-decoration: none;
+                color: black;
+            }
+            a:after {
+                content: " (" attr(href) ")";
+            }
+            figure img {
+                max-width: 70% !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header id="main-header">
+            <h1 style="font-size: 1.5rem; margin: 0;">HHG in Molecules</h1>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider"></div>
+                </label>
+            </div>
+        </header>
+
+        <aside id="toc-container">
+            <h3>Lecture Outline</h3>
+            <nav>
+                <ul id="toc">
+                    <li><a href="#intro" class="active">0. Introduction</a></li>
+                    <li><a href="#concept-1">1. The Electron as a Probe</a></li>
+                    <li><a href="#concept-2">2. High-Harmonic Spectroscopy</a></li>
+                    <li><a href="#concept-3">3. Probing Static Structure</a></li>
+                    <li><a href="#concept-4">4. Imaging Molecular Orbitals</a></li>
+                    <li><a href="#concept-5">5. Filming Nuclear Motion</a></li>
+                    <li><a href="#concept-6">6. Tracking Electron Motion</a></li>
+                    <li><a href="#summary">7. Summary</a></li>
+                </ul>
+            </nav>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+        </aside>
+
+        <main>
+            <section id="intro" class="concept-section">
+                <h2>0. Welcome and Learning Objectives</h2>
+                <p>Welcome to this interactive guide on high-harmonic generation (HHG) in molecules. In previous lectures, you learned how HHG works in atoms using the semi-classical three-step model. We will now extend these concepts to molecules, a much richer and more complex system.</p>
+                
+                <div class="callout">
+                    <strong>Learning Objectives:</strong> By the end of this module, you will be able to:
+                    <ul>
+                        <li>Explain why the recolliding electron, not the emitted photon, is the key to imaging.</li>
+                        <li>Describe how molecular structure creates unique signatures, like interference minima, in the HHG spectrum.</li>
+                        <li>Understand the principle of molecular orbital tomography.</li>
+                        <li>Explain how pump-probe HHG can be used to "film" ultrafast nuclear and electronic dynamics.</li>
+                    </ul>
+                </div>
+
+                <h3>Prerequisite Check: The Three-Step Model</h3>
+                <p>Recall the three-step model for HHG in atoms:
+                    <ol>
+                        <li><strong>Ionization:</strong> A strong laser field rips an electron from the atom via tunneling.</li>
+                        <li><strong>Acceleration:</strong> The free electron is accelerated by the laser field, first away from and then back towards its parent ion.</li>
+                        <li><strong>Recombination:</strong> The electron recollides with the ion, releasing its kinetic energy as a high-energy photon.</li>
+                    </ol>
+                This process repeats every half-cycle of the laser field, producing a train of attosecond pulses.
+                </p>
+                <div class="pre-question">
+                    <p><strong>Before reading on, consider:</strong> You know that HHG produces XUV light. But the wavelength of this light (~10-100 nm) is much larger than a typical molecule (~0.1 nm). How can it possibly be used to "see" or resolve molecular structure?</p>
+                    <button class="reveal-btn">Think about it, then click to continue</button>
+                    <div class="hidden-content">
+                        <p>This is a great question, and it gets to the heart of the matter. The trick is that we are not using the emitted XUV photon for imaging in the way a traditional microscope uses light. The resolution comes from the particle that probes the molecule *during* the HHG process itself. Let's find out what that is in the next section.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="concept-1" class="concept-section">
+                <h2>1. The Electron as a Probe: A Matter of Wavelength</h2>
+                <p>The secret to resolving molecular structure lies not with the emitted photon, but with the returning electron from step 2 of the three-step model. While this electron is a particle, it also has a wave nature, described by the de Broglie wavelength:</p>
+                <p>$$ \lambda_{dB} = \frac{h}{p} = \frac{h}{\sqrt{2m_e E_k}} $$</p>
+                <p>Here, $E_k$ is the electron's kinetic energy. In a typical HHG experiment, the electron can gain hundreds of electron-volts (eV) of kinetic energy from the laser field. An electron with 100 eV of energy has a de Broglie wavelength of about 0.12 nm (1.2 Å). This is precisely on the scale of molecular bond lengths!</p>
+                
+                <div class="callout">
+                    <strong>Key Insight:</strong> The recolliding electron acts as a microscopic probe. Its de Broglie wavelength is short enough to diffract off the structure of its own parent molecule, encoding structural information into the light it emits upon recombination.
+                </div>
+                
+                 <div class="reflection">
+                    <p><strong>Pause and think:</strong> How does the ponderomotive energy, $U_p$, that you learned about relate to the de Broglie wavelength of the recolliding electron? (Hint: The maximum kinetic energy upon return is $3.17 U_p$.)</p>
+                </div>
+            </section>
+            
+            <section id="concept-2" class="concept-section">
+                <h2>2. What is High-Harmonic Spectroscopy?</h2>
+                <div class="pre-question">
+                    <p><strong>Before reading on, consider:</strong> The HHG process involves ionization, propagation, and recombination. Which of these three steps do you think carries the most information about the electronic structure of the *original* molecule?</p>
+                    <button class="reveal-btn">Think about it, then click to continue</button>
+                    <div class="hidden-content">
+                        <p>While ionization potential matters (step 1), the most detailed information comes from the <strong>recombination</strong> step. This is when the returning electron wave "sees" the molecule and transitions back into a bound state (an orbital). This transition is what makes HHG a spectroscopic tool.</p>
+                        
+                        <h3>From Light Source to Information Source</h3>
+                        <p>Initially, HHG was just seen as a source of coherent XUV light. But physicists soon realized the spectrum itself was a rich source of information. <strong>High-Harmonic Spectroscopy (HHS)</strong> is the field dedicated to analyzing the HHG spectrum (the intensity, phase, and polarization of the harmonics) to learn about the structure and dynamics of the generating atoms or molecules.</p>
+                        <p>The harmonic signal, $S(\Omega)$, from a single molecule can be approximately factorized:</p>
+                        <p>$$ S(\Omega) \propto |a_{ion} \cdot a_{prop} \cdot d_{rec}|^2 $$</p>
+                        <p>Here, $a_{ion}$ describes ionization, $a_{prop}$ describes the electron's propagation in the laser field, and $d_{rec}$ is the <strong>recombination dipole moment</strong>. This dipole moment describes the transition from the continuum electron state back to the bound orbital. It is the molecular "fingerprint" we want to measure.</p>
+                        
+                        <h3>Time-Reversed Photoionization</h3>
+                        <p>The recombination step is essentially the time-reverse of photoionization. This means the recombination dipole $d_{rec}$ is the same one that governs photoionization. We can test this by comparing the HHG spectrum of an atom with its known photoionization cross-section. They should show similar features.</p>
+                        
+                        <figure>
+                            <div class="interactive-figure-container">
+                                <img src="Figure1.webp" alt="HHG spectrum of Xenon showing a giant resonance" class="zoomable-img">
+                                <!-- Annotations -->
+                                <div class="annotation-point" style="top: 25%; left: 45%;">
+                                    <div class="annotation-tooltip">The HHG spectrum (blue line) from Xenon shows a broad peak, a "giant resonance", around 100 eV.</div>
+                                </div>
+                                <div class="annotation-point" style="top: 45%; left: 65%;">
+                                    <div class="annotation-tooltip">This resonance perfectly matches photoionization data from synchrotrons (triangles) and theoretical calculations (green line), proving HHG probes the same physics.</div>
+                                </div>
+                                <div class="annotation-point" style="top: 80%; left: 75%;">
+                                    <div class="annotation-tooltip">This resonance involves complex electron-electron correlations. The returning 5p electron can kick a deeper 4d electron into the 5p hole, and then recombine into the now-empty 4d shell.</div>
+                                </div>
+                            </div>
+                            <figcaption>Figure 1: High harmonic spectrum from Xenon gas. The excellent agreement between the HHG signal and the known photoionization cross-section demonstrates that recombination is the time-reverse of photoionization. (Adapted from Fig 1a in the review)</figcaption>
+                        </figure>
+                        
+                        <div class="summary-box">
+                          <h3>Section Summary</h3>
+                          <ul>
+                            <li>High-Harmonic Spectroscopy (HHS) uses the harmonic spectrum to probe molecular properties.</li>
+                            <li>The recombination step contains the most detailed information about the molecular orbitals.</li>
+                            <li>Recombination is the time-reverse of photoionization, so HHG can probe the same transition dipole moments.</li>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="concept-3" class="concept-section">
+                <h2>3. Probing Static Structure: Alignment & Interference</h2>
+                 <div class="pre-question">
+                    <p><strong>Before reading on, consider:</strong> Molecules in a gas tumble around randomly. To take a meaningful "picture" of a single molecule with the laser field, what experimental trick must we perform first?</p>
+                    <button class="reveal-btn">Think about it, then click to continue</button>
+                    <div class="hidden-content">
+                        <p>Exactly! We need to tell the molecules which way to face. We need to <strong>align</strong> them in space, so their axes are all pointing in the same direction relative to the laser's polarization.</p>
+                        
+                        <h3>Field-Free Alignment</h3>
+                        <p>This is done with a "pump" laser pulse that arrives shortly before the main HHG pulse. This alignment pulse is not strong enough to ionize but gives each molecule a small "kick". This creates a coherent superposition of rotational states. While the molecules are mostly random immediately after the kick, this wavepacket evolves, and at specific later times (called "rotational revivals"), the molecules transiently snap into alignment. By timing the HHG pulse to hit the gas at a revival, we can probe an ensemble of aligned molecules.</p>
+                        
+                        <figure>
+                            <div class="interactive-figure-container">
+                                <img src="Figure2.webp" alt="HHG spectra from aligned N2, O2, and CO2 molecules" class="zoomable-img">
+                                <div class="annotation-point" style="top: 50%; left: 18%;">
+                                    <div class="annotation-tooltip">Nitrogen (N₂): Emission is strongest when the laser polarization is parallel to the molecular axis (0° and 180°).</div>
+                                </div>
+                                 <div class="annotation-point" style="top: 20%; left: 83%;">
+                                    <div class="annotation-tooltip">Carbon Dioxide (CO₂): Emission is strongest when the laser is perpendicular to the molecular axis (90° and 270°). This is a direct signature of its πg HOMO orbital.</div>
+                                </div>
+                            </div>
+                            <figcaption>Figure 2: HHG yield from N₂, O₂, and CO₂ measured as a function of the angle between the molecule and the laser polarization. Each molecule has a unique angular "fingerprint". (Adapted from Fig 1b in the review)</figcaption>
+                        </figure>
+                        
+                        <h3>Two-Center Interference</h3>
+                        <p>Once molecules are aligned, we can see quantum mechanics in action. Consider CO₂, an O=C=O molecule. The highest occupied molecular orbital (HOMO) is made of p-orbitals on the two oxygen atoms, with opposite phases.</p>
+                        <p>When the electron wave returns to the molecule, it can recombine at either oxygen atom. If the path difference for the electron wave to reach the two atoms is an integer multiple of its de Broglie wavelength, the waves arrive in phase. However, because the orbital lobes have opposite signs, the emitted light from the two centers will be exactly out of phase and will interfere destructively. This creates a deep minimum in the HHG signal at a specific angle and energy.</p>
+                        <p>$$ R \cos\theta = n \lambda_{dB} \quad (\text{Condition for destructive interference}) $$</p>
+
+                        <figure>
+                            <div class="interactive-figure-container">
+                                <img src="Figure3.webp" alt="Illustration of two-center interference in CO2" class="zoomable-img">
+                                 <div class="annotation-point" style="top: 20%; left: 60%;">
+                                    <div class="annotation-tooltip">The returning electron is represented as a plane wave with de Broglie wavelength λ.</div>
+                                </div>
+                                <div class="annotation-point" style="top: 45%; left: 45%;">
+                                    <div class="annotation-tooltip">The HOMO of CO₂ has two lobes with opposite phase (represented by the spheres on the oxygen atoms).</div>
+                                </div>
+                                <div class="annotation-point" style="top: 55%; left: 85%;">
+                                    <div class="annotation-tooltip">The path difference to the two oxygen atoms is Rcosθ. When this equals λ, the emitted light from the two centers cancels out, creating a minimum in the signal.</div>
+                                </div>
+                            </div>
+                            <figcaption>Figure 3: A schematic of two-center interference. This purely quantum effect is a direct probe of the molecule's geometry and orbital symmetry. (Adapted from Fig 1c in the review)</figcaption>
+                        </figure>
+                        
+                        <div class="summary-box">
+                          <h3>Section Summary</h3>
+                          <ul>
+                            <li>Molecules must first be aligned in space to get meaningful structural information.</li>
+                            <li>The HHG yield is highly dependent on the molecular orientation.</li>
+                            <li>Quantum interference from different parts of the molecule (e.g., two atoms in CO₂) creates minima in the HHG spectrum that encode geometry.</li>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="concept-4" class="concept-section">
+                <h2>4. Imaging Molecular Orbitals: Tomography</h2>
+                <div class="pre-question">
+                    <p><strong>Before reading on, consider:</strong> If you can measure the HHG signal from a molecule at many different angles (as in Fig. 2), how could you piece that information together to create an image?</p>
+                    <button class="reveal-btn">Think about it, then click to continue</button>
+                    <div class="hidden-content">
+                        <p>The idea is remarkably similar to a medical CT (Computed Tomography) scan! A CT scanner takes many 1D X-ray images (projections) of a patient from different angles and uses a computer algorithm to reconstruct a 3D image. We can do the same for a molecule.</p>
+
+                        <h3>Molecular Orbital Tomography</h3>
+                        <p>In our case, each HHG spectrum measured at a specific alignment angle is a "projection" of the molecular orbital. By recording these projections over a wide range of angles, we can use a mathematical algorithm (related to the Fourier transform) to invert the data and reconstruct an image of the orbital from which the electron came.</p>
+                        <p>This process requires knowing both the amplitude (intensity) and phase of the emitted harmonics. While the amplitude is easy to measure, measuring the phase is complex, often requiring other techniques like RABITT. However, even with just the amplitude data and some clever assumptions, remarkable images can be made.</p>
+
+                        <figure>
+                            <div class="interactive-figure-container">
+                                <img src="Figure4.webp" alt="Tomographic reconstruction of the N2 HOMO" class="zoomable-img">
+                                <div class="annotation-point" style="top: 50%; left: 25%;">
+                                    <div class="annotation-tooltip">a) The image of the highest occupied molecular orbital (HOMO) of N₂ reconstructed from experimental HHG data.</div>
+                                </div>
+                                <div class="annotation-point" style="top: 50%; left: 75%;">
+                                    <div class="annotation-tooltip">b) The same orbital calculated using standard quantum chemistry software. The resemblance is stunning!</div>
+                                </div>
+                            </div>
+                            <figcaption>Figure 4: The first tomographic imaging of a molecular orbital. The close match between the reconstructed image and theory was a landmark achievement for attosecond science. (Adapted from Fig 2a,b in the review)</figcaption>
+                        </figure>
+                        
+                        <div class="callout">
+                            <strong>Key Insight:</strong> High-harmonic spectroscopy allows us to go beyond simply identifying features; we can actually reconstruct an image of a single molecular orbital, making the quantum world visible.
+                        </div>
+
+                        <div class="summary-box">
+                          <h3>Section Summary</h3>
+                          <ul>
+                            <li>Molecular orbital tomography uses HHG spectra from many alignment angles to reconstruct an orbital's shape.</li>
+                            <li>The method is analogous to a medical CT scan.</li>
+                            <li>This technique made it possible to directly "photograph" a quantum mechanical wavefunction.</li>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="concept-5" class="concept-section">
+                <h2>5. Filming Dynamics I: Nuclear Motion</h2>
+                <div class="pre-question">
+                    <p><strong>Before reading on, consider:</strong> HHG is an ultrafast process driven by a femtosecond laser pulse. How could you adapt this technique to watch a molecule break apart, which is also an ultrafast process?</p>
+                    <button class="reveal-btn">Think about it, then click to continue</button>
+                    <div class="hidden-content">
+                        <p>The solution is the classic <strong>pump-probe</strong> technique, now applied with HHS. We use one laser pulse (the "pump") to initiate a chemical reaction, and a second, time-delayed pulse (the "probe") to generate high harmonics from the evolving molecule. By changing the delay between the pump and probe, we can create a stop-motion movie of the reaction.</p>
+                        
+                        <h3>Watching a Molecule Bend and Vibrate</h3>
+                        <p>A fascinating example is the study of nitrogen dioxide ($NO_2$). A 400 nm pump pulse excites the molecule to a higher electronic state, causing it to start bending. This vibrational motion eventually brings it to a "conical intersection"—a point where two electronic energy surfaces touch. At this point, the molecule can hop back down to the ground electronic state.</p>
+                        <p>By probing with HHS, scientists could track the electronic state of the molecule. They observed oscillations in the harmonic signal that matched the timing of the molecule passing through the conical intersection. This was a direct observation of the interplay between nuclear motion and electronic state changes during a chemical reaction.</p>
+
+                        <figure>
+                            <div class="interactive-figure-container">
+                                <img src="Figure5.webp" alt="Pump-probe HHS of NO2 dynamics" class="zoomable-img">
+                                 <div class="annotation-point" style="top: 55%; left: 10%;">
+                                    <div class="annotation-tooltip">A pump pulse (blue) excites the NO₂ molecule, initiating a chemical reaction (dissociation).</div>
+                                </div>
+                                <div class="annotation-point" style="top: 15%; left: 25%;">
+                                    <div class="annotation-tooltip">A delayed probe pulse (red) generates high harmonics. The properties of these harmonics depend on the state of the molecule at the moment the probe arrives.</div>
+                                </div>
+                                <div class="annotation-point" style="top: 80%; left: 45%;">
+                                    <div class="annotation-tooltip">The harmonic signal (H15) oscillates in time, tracking the population on the excited state as the molecule vibrates through a conical intersection.</div>
+                                </div>
+                            </div>
+                            <figcaption>Figure 5: Following the dynamics around a conical intersection in NO₂. By varying the pump-probe delay, HHS creates a movie of the molecule's electronic state changing over femtoseconds. (Adapted from Fig 4 in the review)</figcaption>
+                        </figure>
+
+                        <div class="summary-box">
+                          <h3>Section Summary</h3>
+                          <ul>
+                            <li>Pump-probe HHS allows us to film chemical reactions with femtosecond time resolution.</li>
+                            <li>We can track not just the positions of atoms, but also the electronic state of the molecule as it evolves.</li>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="concept-6" class="concept-section">
+                <h2>6. Filming Dynamics II: Electron Motion</h2>
+                <div class="pre-question">
+                    <p><strong>Before reading on, consider:</strong> Nuclear motion (vibrations, reactions) happens on a femtosecond ($10^{-15}$ s) timescale. Electron motion is much faster. What feature of the HHG process *itself* could provide the sub-femtosecond, attosecond ($10^{-18}$ s) time resolution needed to watch an electron move?</p>
+                    <button class="reveal-btn">Think about it, then click to continue</button>
+                    <div class="hidden-content">
+                        <p>The key is the <strong>attochirp</strong>. Within the single half-cycle of the laser field during which one attosecond pulse is born, there is a very precise timing relationship. Electrons that return earlier have less kinetic energy and produce lower-frequency harmonics. Electrons that return slightly later gain more energy and produce higher-frequency harmonics. This provides a direct mapping:</p>
+                        <p><strong>Emission Energy $\leftrightarrow$ Recollision Time</strong></p>
+                        <p>This intrinsic "clock" of the HHG process gives us the incredible time resolution to see electrons move.</p>
+
+                        <h3>Tracking Charge Migration</h3>
+                        <p>Scientists used this principle to watch charge migration in an iodoacetylene molecule (H-C≡C-I). When the strong laser field ionizes the molecule, it can create a superposition of electronic states in the remaining cation. This creates a "hole" (the absence of an electron) that is not stationary but moves back and forth along the molecule.</p>
+                        <p>The HHG signal is sensitive to the location of this hole at the moment of recombination. Because different harmonic energies correspond to different recombination times, the HHG spectrum contains a time-lapsed image of the hole's motion. The results showed the hole starting at the iodine atom, traveling to the hydrogen end, and returning, all within about 1.8 femtoseconds!</p>
+
+                        <figure>
+                            <div class="interactive-figure-container">
+                                <img src="Figure6.webp" alt="Reconstructed hole dynamics in iodoacetylene" class="zoomable-img">
+                                <div class="annotation-point" style="top: 10%; left: 60%;">
+                                    <div class="annotation-tooltip">t = 0 fs: Ionization creates a hole (red cloud) localized on the iodine atom.</div>
+                                </div>
+                                <div class="annotation-point" style="top: 50%; left: 45%;">
+                                    <div class="annotation-tooltip">t = 0.93 fs: The hole has migrated across the molecule to the acetylene end.</div>
+                                </div>
+                                 <div class="annotation-point" style="top: 90%; left: 60%;">
+                                    <div class="annotation-tooltip">t = 1.85 fs: The hole has completed one full oscillation and returned to the iodine atom.</div>
+                                </div>
+                            </div>
+                            <figcaption>Figure 6: A movie of charge migration. Each frame shows the location of the electron hole at a specific time, reconstructed from the HHG spectrum using the attochirp clock. (Adapted from Fig 5 in the review)</figcaption>
+                        </figure>
+
+                         <div class="callout">
+                            <strong>Key Insight:</strong> The attochirp inherent to HHG provides a sub-femtosecond clock, allowing us to resolve the fastest processes in chemistry and physics: the motion of electrons themselves.
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="summary" class="concept-section">
+                <h2>7. Summary and Key Takeaways</h2>
+                <p>We've journeyed from the basics of HHG to its most advanced applications in imaging and filming molecules on their natural timescales. Let's recap the main ideas:</p>
+                 <div class="summary-box">
+                  <h3>Lecture Summary</h3>
+                  <ul>
+                    <li>The <strong>recolliding electron's de Broglie wavelength</strong> is the key to resolving molecular structure, not the emitted XUV photon.</li>
+                    <li><strong>High-Harmonic Spectroscopy (HHS)</strong> treats the HHG signal as a rich source of information about the target molecule's electronic structure and dynamics.</li>
+                    <li>By <strong>aligning molecules</strong>, we can observe structural signatures like <strong>anisotropy</strong> and <strong>two-center interference</strong> in the harmonic spectrum.</li>
+                    <li><strong>Molecular orbital tomography</strong> uses these angle-resolved spectra to reconstruct images of quantum orbitals.</li>
+                    <li><strong>Pump-probe HHS</strong> allows us to create femtosecond movies of <strong>nuclear dynamics</strong>, like chemical reactions.</li>
+                    <li>The intrinsic <strong>attochirp</strong> provides a sub-femtosecond clock to film the fastest dynamics of all: <strong>electronic charge migration</strong>.</li>
+                  </ul>
+                </div>
+                <p>High-harmonic spectroscopy has fundamentally changed our ability to "see" the quantum world, providing a direct window into the structure of orbitals and the ultrafast dance of electrons and nuclei that governs all of chemistry and material science.</p>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Image Zoom Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Embedded JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocLinks = document.querySelectorAll('#toc a');
+            const sections = document.querySelectorAll('.concept-section');
+            const progressBar = document.getElementById('progress-bar');
+            const mainContent = document.querySelector('main');
+
+            // --- Theme Switch ---
+            const themeToggle = document.getElementById('checkbox');
+            const currentTheme = localStorage.getItem('theme');
+
+            if (currentTheme === 'dark') {
+                document.documentElement.classList.replace('light-mode', 'dark-mode');
+                themeToggle.checked = true;
+            }
+
+            themeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.documentElement.classList.replace('light-mode', 'dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.replace('dark-mode', 'light-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // --- Reveal Content ---
+            document.querySelectorAll('.reveal-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const hiddenContent = button.nextElementSibling;
+                    if (hiddenContent.style.maxHeight) {
+                        hiddenContent.style.maxHeight = null;
+                        button.textContent = 'Think about it, then click to continue';
+                    } else {
+                        hiddenContent.classList.add('show');
+                        hiddenContent.style.maxHeight = hiddenContent.scrollHeight + "px";
+                        button.textContent = 'Hide Content';
+                    }
+                });
+            });
+
+            // --- TOC and Progress Bar ---
+            function updateActiveLink() {
+                let index = sections.length;
+
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                tocLinks.forEach((link) => link.classList.remove('active'));
+                if (tocLinks[index]) {
+                   tocLinks[index].classList.add('active');
+                }
+            }
+            
+            function updateProgressBar() {
+                const totalHeight = mainContent.scrollHeight;
+                const scrollPosition = window.scrollY - mainContent.offsetTop;
+                const windowHeight = window.innerHeight;
+
+                if (scrollPosition < 0) {
+                     progressBar.style.width = '0%';
+                     return;
+                }
+                
+                const progress = (scrollPosition / (totalHeight - windowHeight)) * 100;
+                progressBar.style.width = Math.min(progress, 100) + '%';
+            }
+
+            updateActiveLink();
+            updateProgressBar();
+            window.addEventListener('scroll', () => {
+                updateActiveLink();
+                updateProgressBar();
+            });
+
+            // --- Image Zoom Modal ---
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.close-modal');
+
+            document.querySelectorAll('.zoomable-img').forEach(img => {
+                img.addEventListener('click', () => {
+                    modal.style.display = 'flex';
+                    modalImg.src = img.src;
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
