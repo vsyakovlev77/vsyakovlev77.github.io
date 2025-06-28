@@ -237,7 +237,7 @@
         }
         .pre-question strong {
             color: var(--accent-color);
-            display: block;
+            display: inline;
             margin-bottom: 0.5rem;
         }
         .reveal-btn {
@@ -283,7 +283,7 @@
         }
         .callout strong, .reflection strong {
             color: var(--primary-color);
-            display: block;
+            display: inline;
             margin-bottom: 0.5rem;
         }
         .dark-mode .callout strong, .dark-mode .reflection strong {
@@ -318,29 +318,22 @@
         }
         .annotation-point {
             position: absolute;
-            width: 24px;
-            height: 24px;
-            background-color: rgba(230, 57, 70, 0.8);
+            width: 20px;
+            height: 20px;
+            background-color: rgba(230, 57, 70, 0.7);
             border: 2px solid white;
             border-radius: 50%;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
+            transition: transform 0.2s;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
         .annotation-point:hover {
             transform: scale(1.3);
-            background-color: rgba(230, 57, 70, 1.0);
         }
         .annotation-tooltip {
             position: absolute;
-            background-color: var(--card-bg-dark);
-            color: var(--text-color-dark);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
             padding: 10px;
             border-radius: 5px;
             opacity: 0;
@@ -348,11 +341,8 @@
             transition: opacity 0.3s, visibility 0.3s;
             z-index: 100;
             font-size: 0.9rem;
-            width: 220px;
+            width: 200px;
             transform: translate(-50%, -120%);
-            left: 50%;
-            bottom: 100%;
-            pointer-events: none;
         }
         .annotation-point:hover .annotation-tooltip {
             opacity: 1;
@@ -572,18 +562,21 @@
                 <p>You've learned that High-Harmonic Generation (HHG) in gases is a cornerstone of attosecond science, primarily used to generate ultrashort light pulses. When we move from a single atom to a solid, the game changes. The fundamental physics is similar—an electron is ripped away from its "home" and then recombines—but the environment is drastically different.</p>
                 <p>In a solid, electrons exist in a dense, periodic array of atoms. This periodicity creates energy bands, and the electron's motion is confined to the crystal lattice. This seemingly small change opens up a powerful new application for HHG: instead of just being a light source, it becomes a sensitive probe of the material itself. This technique is called <strong>High-Harmonic Spectroscopy (HHS)</strong>.</p>
                 
-                <figure>
-                    <div class="interactive-figure-container">
-                        <img src="Figure1.webp" alt="Comparison of HHG in atoms and solids" class="zoomable">
-                        <div class="annotation-point" style="top: 25%; left: 15%;" data-tooltip="In gases, an electron tunnels from an isolated atom into the vacuum. The potential is a single Coulomb well.">1</div>
+            <figure>
+                <div class="interactive-figure-container">
+                    <img src="Figure1.webp" alt="Comparison of HHG in atoms and solids" class="zoomable">
+                    <div class="annotation-point" style="top: 25%; left: 15%;">
                         <div class="annotation-tooltip">In gases, an electron tunnels from an isolated atom into the vacuum. The potential is a single Coulomb well.</div>
-                        <div class="annotation-point" style="top: 65%; left: 15%;" data-tooltip="In solids, electrons are part of a periodic potential (a crystal lattice). They don't escape to vacuum but move within the solid's energy bands.">2</div>
-                        <div class="annotation-tooltip">In solids, electrons are part of a periodic potential (a crystal lattice). They don't escape to vacuum but move within the solid's energy bands.</div>
-                         <div class="annotation-point" style="top: 80%; left: 75%;" data-tooltip="HHS can probe complex material properties like topology, correlations, and ultrafast dynamics.">3</div>
-                        <div class="annotation-tooltip">HHS can probe complex material properties like topology, correlations, and ultrafast dynamics.</div>
                     </div>
-                    <figcaption><strong>Figure 1.</strong> The conceptual shift from HHG in atoms (top) to solids (bottom). The key difference is the periodic potential of the crystal lattice, which enables HHG to be used as a spectroscopic tool for probing condensed matter.</figcaption>
-                </figure>
+                    <div class="annotation-point" style="top: 65%; left: 15%;">
+                        <div class="annotation-tooltip">In solids, electrons are part of a periodic potential (a crystal lattice). They don't escape to vacuum but move within the solid's energy bands.</div>
+                    </div>
+                    <div class="annotation-point" style="top: 80%; left: 75%;">
+                        <div class="annotation-tooltip">HHS can probe complex material properties like topology, correlations, and ultrafast dynamics.</div>
+                </div>
+                </div>
+                <figcaption><strong>Figure 1.</strong> The conceptual shift from HHG in atoms (top) to solids (bottom). The key difference is the periodic potential of the crystal lattice, which enables HHG to be used as a spectroscopic tool for probing condensed matter.</figcaption>
+            </figure>
             </section>
             
             <section class="concept-section" id="section-2">
@@ -602,12 +595,15 @@
                 <figure>
                     <div class="interactive-figure-container">
                         <img src="Figure2.webp" alt="The three-step model of HHG in the k-space of a solid." class="zoomable">
-                        <div class="annotation-point" style="top: 35%; left: 25%;" data-tooltip="Step 1: Injection. The laser field promotes an electron from the valence band (VB) to the conduction band (CB), creating an electron-hole pair.">1</div>
-                        <div class="annotation-tooltip">Step 1: Injection. The laser field promotes an electron from the valence band (VB) to the conduction band (CB), creating an electron-hole pair.</div>
-                        <div class="annotation-point" style="top: 20%; left: 55%;" data-tooltip="Step 2: Acceleration. The laser field accelerates the electron (blue) in the CB and the hole (red) in the VB. They traverse the Brillouin zone.">2</div>
-                        <div class="annotation-tooltip">Step 2: Acceleration. The laser field accelerates the electron (blue) in the CB and the hole (red) in the VB. They traverse the Brillouin zone.</div>
-                        <div class="annotation-point" style="top: 40%; left: 70%;" data-tooltip="Step 3: Recombination. The electron and hole are driven to the same point in k-space and recombine, releasing a high-energy photon.">3</div>
+                        <div class="annotation-point" style="top: 35%; left: 25%;">
+                            <div class="annotation-tooltip">Step 1: Injection. The laser field promotes an electron from the valence band (VB) to the conduction band (CB), creating an electron-hole pair.</div>
+                        </div>
+                        <div class="annotation-point" style="top: 20%; left: 55%;">
+                            <div class="annotation-tooltip">Step 2: Acceleration. The laser field accelerates the electron (blue) in the CB and the hole (red) in the VB. They traverse the Brillouin zone.</div>
+                        </div>
+                        <div class="annotation-point" style="top: 40%; left: 70%;">
                         <div class="annotation-tooltip">Step 3: Recombination. The electron and hole are driven to the same point in k-space and recombine, releasing a high-energy photon.</div>
+                        </div>
                     </div>
                     <figcaption><strong>Figure 2.</strong> The k-space picture of HHG in a solid. This process happens within a single cycle of the driving laser field, making it an ultrafast probe.</figcaption>
                 </figure>
@@ -728,12 +724,15 @@
                 <figure>
                     <div class="interactive-figure-container">
                         <img src="Figure4.webp" alt="Probing a topological phase transition with HHG" class="zoomable">
-                        <div class="annotation-point" style="top: 35%; left: 30%;" data-tooltip="In pristine Bi₂Se₃ (a non-trivial TI), the HHG signal increases dramatically as the driving laser's polarization goes from linear (ellipticity = 0) to circular (ellipticity = 1).">1</div>
+                        <div class="annotation-point" style="top: 35%; left: 30%;">
                         <div class="annotation-tooltip">In pristine Bi₂Se₃ (a non-trivial TI), the HHG signal increases dramatically as the driving laser's polarization goes from linear (ellipticity = 0) to circular (ellipticity = 1).</div>
-                         <div class="annotation-point" style="top: 70%; left: 30%;" data-tooltip="In the doped, topologically trivial sample, the HHG signal shows a 'normal' response, peaking for linear polarization and decreasing towards circular.">2</div>
-                        <div class="annotation-tooltip">In the doped, topologically trivial sample, the HHG signal shows a 'normal' response, peaking for linear polarization and decreasing towards circular.</div>
-                         <div class="annotation-point" style="top: 50%; left: 80%;" data-tooltip="This plot shows the ratio of HHG for circular vs. linear drive. The ratio is high in the topological phase (x < 0.1) and drops abruptly after the phase transition, confirming HHG's sensitivity to topology.">3</div>
-                        <div class="annotation-tooltip">This plot shows the ratio of HHG for circular vs. linear drive. The ratio is high in the topological phase (x < 0.1) and drops abruptly after the phase transition, confirming HHG's sensitivity to topology.</div>
+                        </div>
+                        <div class="annotation-point" style="top: 70%; left: 30%;">
+                            <div class="annotation-tooltip">In the doped, topologically trivial sample, the HHG signal shows a 'normal' response, peaking for linear polarization and decreasing towards circular.</div>
+                        </div>
+                        <div class="annotation-point" style="top: 50%; left: 80%;">
+                            <div class="annotation-tooltip">This plot shows the ratio of HHG for circular vs. linear drive. The ratio is high in the topological phase ($x < 0.1$) and drops abruptly after the phase transition, confirming HHG's sensitivity to topology.</div>
+                        </div>
                     </div>
                     <figcaption><strong>Figure 4.</strong> HHS directly tracks a topological phase transition. The anomalous ellipticity dependence, where HHG is strongest for circular polarization (top blue curve), is a hallmark of the topological phase. This signature disappears when the material becomes a trivial insulator (bottom grey curve), as shown conclusively by tracking the transition with increased doping (right plot).</figcaption>
                 </figure>
@@ -775,10 +774,12 @@
                  <figure>
                     <div class="interactive-figure-container">
                         <img src="Figure6.webp" alt="Time-resolved HHS experiments" class="zoomable">
-                         <div class="annotation-point" style="top: 30%; left: 30%;" data-tooltip="Here, a pump pulse creates carriers in MoS₂. The probe-generated harmonic signal is reduced due to scattering, allowing a measurement of the dephasing time.">1</div>
+                         <div class="annotation-point" style="top: 30%; left: 30%;">
                         <div class="annotation-tooltip">Here, a pump pulse creates carriers in MoS₂. The probe-generated harmonic signal is reduced due to scattering, allowing a measurement of the dephasing time.</div>
-                         <div class="annotation-point" style="top: 70%; left: 30%;" data-tooltip="Here, a THz pump excites a phonon in ZnO. This breaks the crystal's symmetry, causing even harmonics (red spectrum) to appear where there were none before (black dashed spectrum).">2</div>
+                        </div>
+                         <div class="annotation-point" style="top: 70%; left: 30%;">
                         <div class="annotation-tooltip">Here, a THz pump excites a phonon in ZnO. This breaks the crystal's symmetry, causing even harmonics (red spectrum) to appear where there were none before (black dashed spectrum).</div>
+                        </div>    
                     </div>
                     <figcaption><strong>Figure 5.</strong> Using time-resolved HHS to probe dynamics. The technique can measure purely electronic properties like dephasing (left) or track structural changes like lattice vibrations (right).</figcaption>
                 </figure>
@@ -889,17 +890,6 @@
                 close();
             }
         });
-        
-        // --- Tooltip visibility for annotation points ---
-        const annotationPoints = document.querySelectorAll('.annotation-point');
-        annotationPoints.forEach(point => {
-            const tooltipText = point.dataset.tooltip;
-            const tooltip = point.nextElementSibling; // Get the sibling tooltip
-            if (tooltip && tooltip.classList.contains('annotation-tooltip')) {
-                 tooltip.textContent = tooltipText;
-            }
-        });
-
 
         // --- TOC and Scroll Progress ---
         const tocContainer = document.getElementById('toc');
