@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Harmonic Generation in Solids: An Interactive Guide</title>
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <!-- Embedded CSS -->
+    <style>
+        :root {
+            --bg-color-light: #f8f9fa;
+            --text-color-light: #212529;
+            --primary-color-light: #003366;
+            --secondary-color-light: #0055a4;
+            --accent-color-light: #e63946;
+            --border-color-light: #dee2e6;
+            --card-bg-light: #ffffff;
+            --link-color-light: #0056b3;
+            --code-bg-light: #e9ecef;
+            --callout-bg-light: #e7f3ff;
+            --callout-border-light: #90caff;
+
+            --bg-color-dark: #121212;
+            --text-color-dark: #e0e0e0;
+            --primary-color-dark: #8ab4f8;
+            --secondary-color-dark: #a8c7fa;
+            --accent-color-dark: #f28b82;
+            --border-color-dark: #3c4043;
+            --card-bg-dark: #1e1e1e;
+            --link-color-dark: #8ab4f8;
+            --code-bg-dark: #282c34;
+            --callout-bg-dark: #283a4f;
+            --callout-border-dark: #5887b6;
+        }
+
+        .light-mode {
+            --bg-color: var(--bg-color-light);
+            --text-color: var(--text-color-light);
+            --primary-color: var(--primary-color-light);
+            --secondary-color: var(--secondary-color-light);
+            --accent-color: var(--accent-color-light);
+            --border-color: var(--border-color-light);
+            --card-bg: var(--card-bg-light);
+            --link-color: var(--link-color-light);
+            --code-bg: var(--code-bg-light);
+            --callout-bg: var(--callout-bg-light);
+            --callout-border: var(--callout-border-light);
+        }
+
+        .dark-mode {
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --accent-color: var(--accent-color-dark);
+            --border-color: var(--border-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --link-color: var(--link-color-dark);
+            --code-bg: var(--code-bg-dark);
+            --callout-bg: var(--callout-bg-dark);
+            --callout-border: var(--callout-border-dark);
+        }
+
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        h1, h2, h3 {
+            font-family: "Georgia", "Times New Roman", serif;
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 { font-size: 2.5rem; text-align: center; grid-column: 1 / -1; }
+        h2 { font-size: 2rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; color: var(--secondary-color); }
+        
+        p { margin-bottom: 1rem; }
+        a { color: var(--link-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Header and Navigation */
+        #main-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 50px;
+        }
+        .theme-switch input {
+            display:none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Table of Contents */
+        #toc-container {
+            position: sticky;
+            top: 2rem;
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        #toc-container h3 { margin-top: 0; }
+        #toc { list-style: none; padding: 0; }
+        #toc li a {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+            position: relative;
+            border-left: 3px solid transparent;
+        }
+        #toc li a.active {
+            background-color: var(--callout-bg);
+            font-weight: bold;
+            color: var(--primary-color);
+            border-left-color: var(--accent-color);
+        }
+        #progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        #progress-bar {
+            width: 0;
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+            transition: width 0.2s ease-out;
+        }
+        @media (max-width: 1024px) {
+            #toc-container {
+                position: static;
+                height: auto;
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Main Content */
+        main {
+            max-width: 800px;
+        }
+        .concept-section {
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+            margin-top: -2rem;
+        }
+        .pre-question {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .dark-mode .pre-question {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .pre-question strong {
+            color: var(--accent-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .reveal-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-size: 1rem;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .reveal-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        .reveal-btn:active {
+            transform: scale(0.98);
+        }
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+        .hidden-content.show {
+            margin-top: 1.5rem;
+        }
+
+        /* Callouts and Reflection */
+        .callout, .reflection {
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid;
+            border-radius: 5px;
+        }
+        .callout {
+            background-color: var(--callout-bg);
+            border-color: var(--callout-border);
+        }
+        .reflection {
+            background-color: var(--code-bg);
+            border-color: var(--accent-color);
+        }
+        .callout strong, .reflection strong {
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .dark-mode .callout strong, .dark-mode .reflection strong {
+            color: var(--secondary-color-dark);
+        }
+
+        /* Figures and Interactivity */
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        figcaption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .interactive-figure-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+        .interactive-figure-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            cursor: zoom-in;
+            border: 1px solid var(--border-color);
+        }
+        .annotation-point {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(230, 57, 70, 0.8);
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .annotation-point:hover {
+            transform: scale(1.3);
+            background-color: rgba(230, 57, 70, 1.0);
+        }
+        .annotation-tooltip {
+            position: absolute;
+            background-color: var(--card-bg-dark);
+            color: var(--text-color-dark);
+            padding: 10px;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
+            font-size: 0.9rem;
+            width: 220px;
+            transform: translate(-50%, -120%);
+            left: 50%;
+            bottom: 100%;
+            pointer-events: none;
+        }
+        .annotation-point:hover .annotation-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Zoom Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            display: block;
+            margin: auto;
+            animation: zoom-in 0.3s;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-modal:hover {
+            color: #bbb;
+        }
+        @keyframes zoom-in {
+            from {transform: scale(0.1)}
+            to {transform: scale(1)}
+        }
+
+        /* Summary */
+        .summary-box {
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            margin-top: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+        }
+        .summary-box ul {
+            list-style-type: '✓ ';
+            padding-left: 1.5rem;
+        }
+        .summary-box li {
+            padding-left: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* AI Tutor */
+        .ai-tutor-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        #tutor-question {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        #ask-tutor-btn {
+            margin-top: 1rem;
+        }
+        #ask-tutor-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .dark-mode #ask-tutor-btn:disabled {
+            background-color: #555;
+        }
+        .tutor-response-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--callout-bg);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            min-height: 50px;
+            line-height: 1.6;
+        }
+        .loader {
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto 0;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                --bg-color: #ffffff;
+                --text-color: #000000;
+                --primary-color: #000000;
+                --secondary-color: #333333;
+                font-size: 12pt;
+                color: black;
+                background-color: white;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            #toc-container, #main-header, .reveal-btn, .reflection, .annotation-point, .ai-tutor-container {
+                display: none;
+            }
+            main {
+                max-width: 100%;
+            }
+            .hidden-content {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            .callout {
+                background-color: #f0f0f0 !important;
+                border-color: #cccccc !important;
+                color: black !important;
+            }
+            a {
+                text-decoration: none;
+                color: black;
+            }
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+            }
+            figure img {
+                max-width: 70% !important;
+                page-break-inside: avoid;
+            }
+            h1,h2,h3 { color: black !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header id="main-header">
+            <h3>Attosecond Physics Lecture</h3>
+            <div class="theme-switch-wrapper">
+                <span>☀️</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-slider">
+                    <span class="slider"></span>
+                </label>
+                <span>🌙</span>
+            </div>
+        </header>
+
+        <h1>High-Harmonic Generation in Solids: An Interactive Guide</h1>
+        
+        <aside id="toc-container">
+            <h3>Table of Contents</h3>
+            <ul id="toc"></ul>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+        </aside>
+
+        <main>
+            <section class="concept-section" id="section-0">
+                <h2>Introduction</h2>
+                <div class="callout">
+                    <strong>Learning Objectives</strong>
+                    <p>After working through this guide, you will be able to:</p>
+                    <ul>
+                        <li>Explain the key differences between HHG in gases and solids.</li>
+                        <li>Describe the microscopic mechanism of HHG in solids using the k-space picture.</li>
+                        <li>Identify the two main emission channels: interband and intraband.</li>
+                        <li>Explain how HHG can be used to probe material properties like symmetry and band structure.</li>
+                        <li>Discuss key experimental results from 2D materials, topological insulators, and correlated systems.</li>
+                    </ul>
+                </div>
+                <div class="reflection">
+                    <strong>Prerequisite Check</strong>
+                    <p>Before you begin, make sure you're comfortable with the following concepts from previous lectures:</p>
+                    <ul>
+                        <li>The semiclassical <strong>three-step model</strong> of HHG in gases, including ionization, acceleration, and recombination.</li>
+                        <li>Basic solid-state physics concepts, such as <strong>valence and conduction bands</strong>, and the <strong>Brillouin zone</strong>.</li>
+                        <li>The role of symmetry, explaining why centrosymmetric systems (like atoms) produce only <strong>odd harmonics</strong>.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="concept-section" id="section-1">
+                <h2>1. The Big Picture: From Atoms to Solids</h2>
+                <p>You've learned that High-Harmonic Generation (HHG) in gases is a cornerstone of attosecond science, primarily used to generate ultrashort light pulses. When we move from a single atom to a solid, the game changes. The fundamental physics is similar—an electron is ripped away from its "home" and then recombines—but the environment is drastically different.</p>
+                <p>In a solid, electrons exist in a dense, periodic array of atoms. This periodicity creates energy bands, and the electron's motion is confined to the crystal lattice. This seemingly small change opens up a powerful new application for HHG: instead of just being a light source, it becomes a sensitive probe of the material itself. This technique is called <strong>High-Harmonic Spectroscopy (HHS)</strong>.</p>
+                
+                <figure>
+                    <div class="interactive-figure-container">
+                        <img src="Figure1.webp" alt="Comparison of HHG in atoms and solids" class="zoomable">
+                        <div class="annotation-point" style="top: 25%; left: 15%;" data-tooltip="In gases, an electron tunnels from an isolated atom into the vacuum. The potential is a single Coulomb well.">1</div>
+                        <div class="annotation-tooltip">In gases, an electron tunnels from an isolated atom into the vacuum. The potential is a single Coulomb well.</div>
+                        <div class="annotation-point" style="top: 65%; left: 15%;" data-tooltip="In solids, electrons are part of a periodic potential (a crystal lattice). They don't escape to vacuum but move within the solid's energy bands.">2</div>
+                        <div class="annotation-tooltip">In solids, electrons are part of a periodic potential (a crystal lattice). They don't escape to vacuum but move within the solid's energy bands.</div>
+                         <div class="annotation-point" style="top: 80%; left: 75%;" data-tooltip="HHS can probe complex material properties like topology, correlations, and ultrafast dynamics.">3</div>
+                        <div class="annotation-tooltip">HHS can probe complex material properties like topology, correlations, and ultrafast dynamics.</div>
+                    </div>
+                    <figcaption><strong>Figure 1.</strong> The conceptual shift from HHG in atoms (top) to solids (bottom). The key difference is the periodic potential of the crystal lattice, which enables HHG to be used as a spectroscopic tool for probing condensed matter.</figcaption>
+                </figure>
+            </section>
+            
+            <section class="concept-section" id="section-2">
+                <h2>2. The Mechanism: A New Three-Step Model</h2>
+                <div class="pre-question">
+                    <strong>Before you read on, consider this:</strong>
+                    <p>In the gas-phase three-step model, the electron is ionized into the vacuum. What could be the equivalent of "ionization" inside a solid, where electrons are already "free" to move within their bands?</p>
+                    <button class="reveal-btn" data-target="reveal-1">Click to Reveal</button>
+                    <div class="hidden-content" id="reveal-1">
+                        <p>The equivalent of ionization is the excitation of an electron from the completely filled <strong>valence band (VB)</strong> to the mostly empty <strong>conduction band (CB)</strong>. This process, driven by the strong laser field, creates a mobile electron in the CB and leaves behind a mobile "hole" (the absence of an electron) in the VB.</p>
+                    </div>
+                </div>
+
+                <p>The microscopic mechanism of HHG in solids can be understood with a new three-step model that takes place in momentum space (also called reciprocal space or k-space). This is the most crucial concept to grasp.</p>
+
+                <figure>
+                    <div class="interactive-figure-container">
+                        <img src="Figure2.webp" alt="The three-step model of HHG in the k-space of a solid." class="zoomable">
+                        <div class="annotation-point" style="top: 35%; left: 25%;" data-tooltip="Step 1: Injection. The laser field promotes an electron from the valence band (VB) to the conduction band (CB), creating an electron-hole pair.">1</div>
+                        <div class="annotation-tooltip">Step 1: Injection. The laser field promotes an electron from the valence band (VB) to the conduction band (CB), creating an electron-hole pair.</div>
+                        <div class="annotation-point" style="top: 20%; left: 55%;" data-tooltip="Step 2: Acceleration. The laser field accelerates the electron (blue) in the CB and the hole (red) in the VB. They traverse the Brillouin zone.">2</div>
+                        <div class="annotation-tooltip">Step 2: Acceleration. The laser field accelerates the electron (blue) in the CB and the hole (red) in the VB. They traverse the Brillouin zone.</div>
+                        <div class="annotation-point" style="top: 40%; left: 70%;" data-tooltip="Step 3: Recombination. The electron and hole are driven to the same point in k-space and recombine, releasing a high-energy photon.">3</div>
+                        <div class="annotation-tooltip">Step 3: Recombination. The electron and hole are driven to the same point in k-space and recombine, releasing a high-energy photon.</div>
+                    </div>
+                    <figcaption><strong>Figure 2.</strong> The k-space picture of HHG in a solid. This process happens within a single cycle of the driving laser field, making it an ultrafast probe.</figcaption>
+                </figure>
+
+                <h3>Two Sources of Harmonics: Interband vs. Intraband</h3>
+                <p>A key feature of solid-state HHG is that the emitted light comes from two distinct, coherent sources:</p>
+                <ol>
+                    <li><strong>Interband Polarization:</strong> This comes from the recombination of the electron and hole (Step 3). The energy of the emitted photon is equal to the energy difference between the electron and hole, $E_\mathrm{photon} = E_\mathrm{e}(k) - E_\mathrm{h}(k)$. Since this happens for many different crystal momenta ($k$) that the particles traverse, it provides a map of the <strong>momentum-dependent bandgap</strong> across the Brillouin zone.</li>
+                    <li><strong>Intraband Current:</strong> This arises from the acceleration of the electron and hole within their respective bands (Step 2). If the bands were perfectly parabolic (like a free electron), the current would be purely sinusoidal. However, real bands have complex shapes. An electron moving in a non-parabolic band generates a non-sinusoidal current, which inherently contains high-frequency components (harmonics). This channel directly probes the <strong>shape (curvature) of the bands</strong>.</li>
+                </ol>
+
+                <div class="callout">
+                    <strong>Key Insight: The Role of Mid-Infrared Lasers</strong>
+                    <p>Why are mid-infrared lasers (wavelengths of 3-10 µm) essential for solid-state HHG? A longer wavelength means a longer laser period. This gives the electron more time to be accelerated by the strong field across a large portion of the Brillouin zone. With shorter wavelength lasers (like the Ti:Sapphire lasers common in gas-phase HHG), the material would suffer optical damage long before the electron could explore the band structure.</p>
+                </div>
+
+                <div class="summary-box">
+                    <h3>Section 2 Summary</h3>
+                    <ul>
+                        <li>The gas-phase three-step model is adapted to a <strong>k-space model</strong> in solids: injection, acceleration, and recombination.</li>
+                        <li>High harmonics are generated by two coherent mechanisms: <strong>interband polarization</strong> (from e-h recombination) and <strong>intraband current</strong> (from acceleration in non-parabolic bands).</li>
+                        <li>Interband emission probes the bandgap, while intraband emission probes the band shape.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="concept-section" id="section-3">
+                <h2>3. Probing Material Properties</h2>
+                <p>The two emission mechanisms make HHS an incredibly versatile tool. By analyzing the properties of the emitted harmonics (their intensity, polarization, and which orders are present), we can deduce fundamental properties of the material.</p>
+
+                <h3>Crystal Symmetry and Harmonic Orders</h3>
+                <p>You know that in systems with inversion symmetry (like an isolated atom), the physics must be the same if the electric field $E$ is flipped to $-E$. This leads to the emission of only odd harmonics. The same principle applies to solids.</p>
+                <ul>
+                    <li><strong>Centrosymmetric Crystals:</strong> Crystals with inversion symmetry (e.g., silicon, bulk MoS₂) only produce <strong>odd-order harmonics</strong>.</li>
+                    <li><strong>Non-Centrosymmetric Crystals:</strong> If the crystal lacks inversion symmetry (e.g., ZnO), or if symmetry is broken at a surface, <strong>even-order harmonics</strong> are also generated. The presence of even harmonics is therefore a direct, all-optical signature of broken inversion symmetry.</li>
+                </ul>
+                
+                <h3>Berry Curvature and "Anomalous" Currents</h3>
+                <div class="pre-question">
+                    <strong>Before you read on, consider this:</strong>
+                    <p>If you drive an electron with a linearly polarized laser field, you would expect the electron to oscillate along the direction of polarization. Could there be any reason for the electron to move sideways, perpendicular to the driving field?</p>
+                    <button class="reveal-btn" data-target="reveal-2">Click to Reveal</button>
+                    <div class="hidden-content" id="reveal-2">
+                        <p>Yes! In certain materials, the geometry of the electronic wavefunctions within the crystal can induce a "sideways" velocity. This is not due to a force in that direction, but rather a fundamental property of the band structure known as the <strong>Berry curvature</strong>.</p>
+                    </div>
+                </div>
+
+                <p>The Berry curvature is a fascinating concept. It's a geometric property of the energy bands that acts like a "magnetic field" in momentum space. As the laser field drives an electron through the Brillouin zone, the Berry curvature can deflect its trajectory, inducing a velocity component perpendicular to the driving field. This is called an <strong>anomalous current</strong>.</p>
+
+                <div class="callout">
+                    <strong>Spectroscopic Signature of Berry Curvature</strong>
+                    <p>An oscillating current emits light polarized in the direction of the current. Therefore, the anomalous current generates high harmonics that are polarized <strong>orthogonally</strong> to the polarization of the driving laser. Detecting these cross-polarized harmonics is a direct measurement of the effects of Berry curvature in the material.</p>
+                </div>
+                
+                <div class="reflection">
+                    <strong>Pause and Think:</strong> How could you experimentally distinguish between even harmonics generated by broken inversion symmetry and cross-polarized harmonics generated by Berry curvature? (Hint: Think about polarization analysis.)
+                </div>
+
+                 <div class="summary-box">
+                    <h3>Section 3 Summary</h3>
+                    <ul>
+                        <li>The presence of <strong>even harmonics</strong> signals broken inversion symmetry.</li>
+                        <li><strong>Berry curvature</strong>, a geometric property of the bands, can deflect electron motion, creating an anomalous current.</li>
+                        <li>This anomalous current emits harmonics polarized <strong>perpendicular</strong> to the driving laser field.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="concept-section" id="section-4">
+                <h2>4. Frontier #1: 2D Materials</h2>
+                <p>Two-dimensional materials, which are only one or a few atoms thick, provide a perfect laboratory for HHS. Their reduced dimensionality leads to unique electronic properties not found in their bulk counterparts.</p>
+                
+                <h3>Monolayer MoS₂: A Case Study</h3>
+                <p>Molybdenum disulfide (MoS₂) is a semiconductor. In its bulk form, it has inversion symmetry. However, a single monolayer of MoS₂ lacks this symmetry. As expected, experiments on monolayer MoS₂ revealed:</p>
+                <ul>
+                    <li>The presence of both <strong>odd and even harmonics</strong>, confirming the broken symmetry.</li>
+                    <li>The even harmonics were predominantly polarized <strong>perpendicular</strong> to the laser field, a clear signature of the strong Berry curvature in this material.</li>
+                </ul>
+                 <figure>
+                    <div class="interactive-figure-container">
+                        <img src="Figure3.webp" alt="HHG spectrum from monolayer MoS2" class="zoomable">
+                    </div>
+                    <figcaption><strong>Figure 3.</strong> A typical HHG spectrum from monolayer MoS₂. Note the presence of both odd (7th, 9th, 11th...) and even (8th, 10th, 12th...) harmonic orders, a direct result of the broken inversion symmetry in a single layer. The inset shows that the per-layer efficiency is much higher in the monolayer than in the bulk.</figcaption>
+                </figure>
+
+                <p>Surprisingly, the HHG efficiency from a single monolayer was found to be much higher (per layer) than from the bulk crystal. This enhancement is attributed to strong electron-hole interactions (excitons) which are much more tightly bound in 2D due to reduced dielectric screening from the environment.</p>
+
+                <h3>Graphene: HHG from Massless Dirac Electrons</h3>
+                <p>Graphene is a semimetal with a unique band structure featuring "Dirac cones," where electrons behave as if they have no mass. HHS experiments on graphene revealed a bizarre phenomenon known as <strong>anomalous ellipticity dependence</strong>. In atoms and most conventional solids, HHG is most efficient for linearly polarized light and drops off rapidly as the light becomes elliptical. In graphene, the harmonic yield is actually *enhanced* for elliptically polarized light! This is a unique signature of the interplay between interband and intraband dynamics near the Dirac points.</p>
+
+                <div class="summary-box">
+                    <h3>Section 4 Summary</h3>
+                    <ul>
+                        <li>Monolayer 2D materials are ideal for HHS due to their unique symmetries and enhanced many-body effects.</li>
+                        <li>Monolayer MoS₂ shows even harmonics and strong cross-polarized emission, pointing to broken symmetry and Berry curvature.</li>
+                        <li>Graphene exhibits an anomalous ellipticity dependence, where HHG is enhanced by elliptical polarization, a signature of its unique Dirac band structure.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="concept-section" id="section-5">
+                <h2>5. Frontier #2: Topological Insulators</h2>
+                <div class="pre-question">
+                    <strong>Before you read on, consider this:</strong>
+                    <p>Topological insulators (TIs) have conducting surface states that are "protected" from scattering. This means electrons can travel long distances on the surface without losing energy. How might this property affect the HHG process?</p>
+                    <button class="reveal-btn" data-target="reveal-3">Click to Reveal</button>
+                    <div class="hidden-content" id="reveal-3">
+                        <p>The protection from scattering leads to very long coherence times for the electrons on the surface. Since HHG is a coherent process, one might expect these long-lived surface states to be a very efficient source of high harmonics.</p>
+                    </div>
+                </div>
+
+                <p>Topological Insulators are one of the most exciting new classes of materials. They are electrical insulators in their bulk, but their surfaces host metallic states that are topologically protected. HHS has emerged as a powerful, all-optical method to probe these exotic states.</p>
+
+                <h3>The Fingerprint of Topology</h3>
+                <p>Like graphene, TIs show a striking <strong>anomalous ellipticity dependence</strong>, but it's even more extreme. In the TI material Bi₂Se₃, the HHG signal is not just enhanced, but is *maximized* for purely <strong>circularly polarized light</strong>. This is highly unusual and serves as a unique fingerprint of the topological surface states.</p>
+                <p>The definitive experiment to prove this connection involved chemical doping. Scientists took Bi₂Se₃ (a TI) and gradually replaced the Bismuth (Bi) atoms with Indium (In) atoms. At a certain concentration of Indium, the material undergoes a phase transition and loses its topological properties, becoming a trivial insulator.</p>
+                
+                <figure>
+                    <div class="interactive-figure-container">
+                        <img src="Figure4.webp" alt="Probing a topological phase transition with HHG" class="zoomable">
+                        <div class="annotation-point" style="top: 35%; left: 30%;" data-tooltip="In pristine Bi₂Se₃ (a non-trivial TI), the HHG signal increases dramatically as the driving laser's polarization goes from linear (ellipticity = 0) to circular (ellipticity = 1).">1</div>
+                        <div class="annotation-tooltip">In pristine Bi₂Se₃ (a non-trivial TI), the HHG signal increases dramatically as the driving laser's polarization goes from linear (ellipticity = 0) to circular (ellipticity = 1).</div>
+                         <div class="annotation-point" style="top: 70%; left: 30%;" data-tooltip="In the doped, topologically trivial sample, the HHG signal shows a 'normal' response, peaking for linear polarization and decreasing towards circular.">2</div>
+                        <div class="annotation-tooltip">In the doped, topologically trivial sample, the HHG signal shows a 'normal' response, peaking for linear polarization and decreasing towards circular.</div>
+                         <div class="annotation-point" style="top: 50%; left: 80%;" data-tooltip="This plot shows the ratio of HHG for circular vs. linear drive. The ratio is high in the topological phase (x < 0.1) and drops abruptly after the phase transition, confirming HHG's sensitivity to topology.">3</div>
+                        <div class="annotation-tooltip">This plot shows the ratio of HHG for circular vs. linear drive. The ratio is high in the topological phase (x < 0.1) and drops abruptly after the phase transition, confirming HHG's sensitivity to topology.</div>
+                    </div>
+                    <figcaption><strong>Figure 4.</strong> HHS directly tracks a topological phase transition. The anomalous ellipticity dependence, where HHG is strongest for circular polarization (top blue curve), is a hallmark of the topological phase. This signature disappears when the material becomes a trivial insulator (bottom grey curve), as shown conclusively by tracking the transition with increased doping (right plot).</figcaption>
+                </figure>
+
+                <div class="reflection">
+                    <strong>Pause and Think:</strong> In the gas-phase three-step model, the electron must return to the parent ion to recombine. Why does this make HHG inefficient for circularly polarized light in gases? And why might this constraint be lifted for surface states in a solid?
+                </div>
+
+                <div class="summary-box">
+                    <h3>Section 5 Summary</h3>
+                    <ul>
+                        <li>Topological insulators have insulating bulk but conducting surfaces.</li>
+                        <li>The key spectroscopic signature from their surface states is an <strong>anomalous ellipticity dependence</strong>, with HHG yield being maximized for <strong>circularly polarized light</strong>.</li>
+                        <li>HHS can be used to track topological phase transitions in materials all-optically.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="concept-section" id="section-6">
+                 <h2>6. Frontier #3: Strongly Correlated Materials</h2>
+                 <p>In most materials, we can treat electrons as nearly independent particles moving in an average potential (this is the basis of band theory). However, in <strong>strongly correlated materials</strong>, the interactions between electrons are so strong that they dominate the material's behavior. A classic example is a Mott insulator.</p>
+                 <p>A Mott insulator should be a metal according to simple band theory, but strong electron-electron repulsion prevents electrons from moving, opening up an energy gap and making it an insulator. Probing these materials is a grand challenge, and HHS offers a new window into their complex dynamics.</p>
+                 
+                 <h3>An Experimental Puzzle in a Mott Insulator</h3>
+                 <p>In the Mott insulator Ca₂RuO₄, experiments revealed a surprising result. As the material was cooled, the Mott gap increased (making it "more insulating"). Standard HHG theory would predict that a larger gap should make it harder for the laser to inject electrons into the conduction band, thus suppressing the HHG signal. Instead, the opposite happened: the HHG signal became significantly <strong>stronger</strong> as the temperature was lowered!</p>
+                 <p>This counter-intuitive result is still being debated, but it highlights that HHS is sensitive to more than just the band structure. In correlated systems, it likely probes complex many-body effects like the coherence time of the excited states, which can be strongly temperature-dependent. This is an active area of research where theory and experiment are working to understand the underlying physics.</p>
+            </section>
+            
+            <section class="concept-section" id="section-7">
+                <h2>7. Time-Resolved HHS: Filming Ultrafast Dynamics</h2>
+                <p>Perhaps the most powerful application of HHS is its intrinsic temporal resolution. Because the HHG process is completed within one laser cycle (a few femtoseconds), it can be used in a pump-probe scheme to track ultrafast dynamics in materials.</p>
+
+                <h3>Probing Electron and Lattice Motion</h3>
+                <p>The setup is simple: a "pump" pulse initiates some dynamic process, and a delayed "probe" pulse generates high harmonics. By changing the delay, we can create a movie of how the material evolves.</p>
+                <ul>
+                    <li><strong>Filming Electron-Hole Coherence:</strong> A pump pulse can create a population of electrons and holes. These extra carriers can collide with the electron-hole pairs generated by the probe pulse, destroying their coherence and reducing the HHG signal. By measuring this reduction as a function of pump-probe delay, we can directly measure the <strong>electron-hole dephasing time ($T_2$)</strong>.</li>
+                    <li><strong>Filming Atoms Move (Phonons):</strong> A pump pulse (often in the THz range) can be tuned to be resonant with a specific lattice vibration (a phonon). This coherent atomic motion dynamically changes the crystal's symmetry. For example, in a centrosymmetric crystal like ZnO, exciting a phonon can temporarily break the inversion symmetry. This causes <strong>even harmonics</strong> to appear, and their intensity oscillates exactly at the phonon frequency, providing a direct measurement of the atomic motion.</li>
+                </ul>
+                 <figure>
+                    <div class="interactive-figure-container">
+                        <img src="Figure6.webp" alt="Time-resolved HHS experiments" class="zoomable">
+                         <div class="annotation-point" style="top: 30%; left: 30%;" data-tooltip="Here, a pump pulse creates carriers in MoS₂. The probe-generated harmonic signal is reduced due to scattering, allowing a measurement of the dephasing time.">1</div>
+                        <div class="annotation-tooltip">Here, a pump pulse creates carriers in MoS₂. The probe-generated harmonic signal is reduced due to scattering, allowing a measurement of the dephasing time.</div>
+                         <div class="annotation-point" style="top: 70%; left: 30%;" data-tooltip="Here, a THz pump excites a phonon in ZnO. This breaks the crystal's symmetry, causing even harmonics (red spectrum) to appear where there were none before (black dashed spectrum).">2</div>
+                        <div class="annotation-tooltip">Here, a THz pump excites a phonon in ZnO. This breaks the crystal's symmetry, causing even harmonics (red spectrum) to appear where there were none before (black dashed spectrum).</div>
+                    </div>
+                    <figcaption><strong>Figure 5.</strong> Using time-resolved HHS to probe dynamics. The technique can measure purely electronic properties like dephasing (left) or track structural changes like lattice vibrations (right).</figcaption>
+                </figure>
+
+            </section>
+            
+            <section class="concept-section" id="section-8">
+                <h2>8. Conclusion & Key Takeaways</h2>
+                <p>High-Harmonic Spectroscopy in solids has transitioned from a niche curiosity to a frontline tool in condensed matter physics. It provides an all-optical, ultrafast probe that is uniquely sensitive to the core electronic and structural properties of materials.</p>
+                <div class="summary-box">
+                    <h3>Final Summary</h3>
+                    <ul>
+                        <li><strong>Different Mechanism:</strong> Solid-state HHG is driven by electron-hole dynamics within the crystal's bands, not ionization into a vacuum.</li>
+                        <li><strong>Powerful Probe:</strong> It provides direct information about band structure, crystal symmetry, geometric phases (Berry curvature), and many-body correlations.</li>
+                        <li><strong>Unique Signatures:</strong> HHS reveals fingerprints of exotic material properties, such as the anomalous ellipticity dependence in graphene and topological insulators.</li>
+                        <li><strong>Ultrafast Movie Camera:</strong> In a pump-probe configuration, HHS can track electron scattering and lattice vibrations on their natural femtosecond-to-attosecond timescales.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="concept-section" id="section-9">
+                <h2>9. Ask the AI Tutor</h2>
+                <p>Have a question about any of the concepts on this page? Ask our AI tutor, powered by Gemini, for a different explanation or to clarify a point.</p>
+                <div class="ai-tutor-container">
+                    <textarea id="tutor-question" placeholder="For example: Can you explain the difference between interband and intraband currents using an analogy?"></textarea>
+                    <button id="ask-tutor-btn" class="reveal-btn">Ask Tutor</button>
+                    <div id="tutor-loader" class="loader" style="display: none;"></div>
+                    <div id="tutor-response" class="tutor-response-box"></div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Modal for image zoom -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Embedded JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Theme Switcher ---
+        const themeSlider = document.getElementById('theme-slider');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+            document.documentElement.classList.remove('light-mode');
+            themeSlider.checked = true;
+        } else {
+            document.documentElement.classList.add('light-mode');
+             document.documentElement.classList.remove('dark-mode');
+        }
+
+        themeSlider.addEventListener('change', () => {
+            if (themeSlider.checked) {
+                document.documentElement.classList.add('dark-mode');
+                document.documentElement.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.add('light-mode');
+                document.documentElement.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // --- Reveal Content ---
+        const revealButtons = document.querySelectorAll('.reveal-btn:not(#ask-tutor-btn)');
+        revealButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.dataset.target;
+                const content = document.getElementById(targetId);
+                if (content) {
+                    content.classList.toggle('show');
+                    if (content.classList.contains('show')) {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        button.textContent = 'Hide Answer';
+                    } else {
+                        content.style.maxHeight = '0px';
+                        button.textContent = 'Click to Reveal';
+                    }
+                }
+            });
+        });
+
+        // --- Image Zoom Modal ---
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const zoomableImages = document.querySelectorAll('.zoomable');
+        const closeModal = document.querySelector('.close-modal');
+
+        zoomableImages.forEach(img => {
+            img.addEventListener('click', () => {
+                modal.classList.add('show');
+                modalImg.src = img.src;
+            });
+        });
+
+        const close = () => {
+            modal.classList.remove('show');
+        }
+
+        closeModal.addEventListener('click', close);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                close();
+            }
+        });
+        
+        // --- Tooltip visibility for annotation points ---
+        const annotationPoints = document.querySelectorAll('.annotation-point');
+        annotationPoints.forEach(point => {
+            const tooltipText = point.dataset.tooltip;
+            const tooltip = point.nextElementSibling; // Get the sibling tooltip
+            if (tooltip && tooltip.classList.contains('annotation-tooltip')) {
+                 tooltip.textContent = tooltipText;
+            }
+        });
+
+
+        // --- TOC and Scroll Progress ---
+        const tocContainer = document.getElementById('toc');
+        const sections = document.querySelectorAll('.concept-section');
+        const progressBar = document.getElementById('progress-bar');
+        
+        // Generate ToC
+        sections.forEach((section, index) => {
+            const titleEl = section.querySelector('h2');
+            if(titleEl){
+                const title = titleEl.textContent;
+                const id = section.id;
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<a href="#${id}">${title}</a>`;
+                tocContainer.appendChild(listItem);
+            }
+        });
+
+        const tocLinks = document.querySelectorAll('#toc a');
+
+        // Scrollspy and Progress Bar logic
+        const updateActiveLink = () => {
+            let currentSectionId = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 100) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSectionId}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Update progress bar
+            const scrollPosition = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (docHeight > 0) ? (scrollPosition / docHeight) * 100 : 0;
+            progressBar.style.width = scrolled + '%';
+        };
+
+        window.addEventListener('scroll', updateActiveLink);
+        updateActiveLink(); // Initial call
+
+        // --- AI Tutor Functionality ---
+        const askTutorBtn = document.getElementById('ask-tutor-btn');
+        const tutorQuestionInput = document.getElementById('tutor-question');
+        const tutorResponseDiv = document.getElementById('tutor-response');
+        const tutorLoader = document.getElementById('tutor-loader');
+        
+        // Function to call Gemini API
+        async function callGemini(prompt) {
+            // Show loader and disable button
+            tutorLoader.style.display = 'block';
+            tutorResponseDiv.innerHTML = '';
+            askTutorBtn.disabled = true;
+            askTutorBtn.textContent = 'Thinking...';
+
+            // Construct the context-aware prompt
+            const fullPrompt = `You are an expert physics tutor specializing in attosecond science. A master's student is working through an interactive guide on High-Harmonic Generation in Solids and has asked the following question. Provide a clear, concise, and conceptually focused answer. Avoid overly complex mathematics unless necessary. Format your answer using simple markdown (bold with **, italics with *, code with \`). The student's question is: "${prompt}"`;
+            
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: fullPrompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // API key is handled by the environment
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
+                }
+
+                const result = await response.json();
+                
+                let text = 'Sorry, I could not generate a response. Please try again.';
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    text = result.candidates[0].content.parts[0].text;
+                }
+
+                // A simple markdown-to-html converter
+                let htmlText = text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')       // Italics
+                    .replace(/`([^`]+)`/g, '<code>$1</code>')         // Inline code
+                    .replace(/\n/g, '<br>'); // Newlines
+
+                tutorResponseDiv.innerHTML = htmlText;
+
+            } catch (error) {
+                console.error('Gemini API call failed:', error);
+                tutorResponseDiv.innerHTML = `<p style="color: var(--accent-color);">An error occurred. Please check the console for details and try again.</p>`;
+            } finally {
+                // Hide loader and re-enable button
+                tutorLoader.style.display = 'none';
+                askTutorBtn.disabled = false;
+                askTutorBtn.textContent = 'Ask Tutor';
+            }
+        }
+        
+        if (askTutorBtn) {
+            askTutorBtn.addEventListener('click', () => {
+                const question = tutorQuestionInput.value.trim();
+                if (question) {
+                    callGemini(question);
+                } else {
+                    tutorResponseDiv.innerHTML = 'Please enter a question.';
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
