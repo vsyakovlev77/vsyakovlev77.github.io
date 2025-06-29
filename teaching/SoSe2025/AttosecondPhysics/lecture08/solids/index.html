@@ -410,7 +410,7 @@
         }
         
         /* AI Tutor */
-        .ai-tutor-container {
+        /* .ai-tutor-container {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             padding: 1.5rem;
@@ -461,7 +461,7 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
+        } */
 
         /* Print Styles */
         @media print {
@@ -477,6 +477,7 @@
             .container {
                 grid-template-columns: 1fr;
             }
+            /* #toc-container, #main-header, .reveal-btn, .reflection, .annotation-point, .ai-tutor-container { */
             #toc-container, #main-header, .reveal-btn, .reflection, .annotation-point, .ai-tutor-container {
                 display: none;
             }
@@ -801,7 +802,7 @@ fifth-harmonic intensities obtained for circular and linear excitations with inc
                 </div>
             </section>
             
-            <section class="concept-section" id="section-9">
+            <!-- <section class="concept-section" id="section-9">
                 <h2>9. Ask the AI Tutor</h2>
                 <p>Have a question about any of the concepts on this page? Ask our AI tutor, powered by Gemini, for a different explanation or to clarify a point.</p>
                 <div class="ai-tutor-container">
@@ -810,7 +811,7 @@ fifth-harmonic intensities obtained for circular and linear excitations with inc
                     <div id="tutor-loader" class="loader" style="display: none;"></div>
                     <div id="tutor-response" class="tutor-response-box"></div>
                 </div>
-            </section>
+            </section> -->
 
         </main>
     </div>
@@ -938,80 +939,80 @@ fifth-harmonic intensities obtained for circular and linear excitations with inc
         window.addEventListener('scroll', updateActiveLink);
         updateActiveLink(); // Initial call
 
-        // --- AI Tutor Functionality ---
-        const askTutorBtn = document.getElementById('ask-tutor-btn');
-        const tutorQuestionInput = document.getElementById('tutor-question');
-        const tutorResponseDiv = document.getElementById('tutor-response');
-        const tutorLoader = document.getElementById('tutor-loader');
+        // // --- AI Tutor Functionality ---
+        // const askTutorBtn = document.getElementById('ask-tutor-btn');
+        // const tutorQuestionInput = document.getElementById('tutor-question');
+        // const tutorResponseDiv = document.getElementById('tutor-response');
+        // const tutorLoader = document.getElementById('tutor-loader');
         
-        // Function to call Gemini API
-        async function callGemini(prompt) {
-            // Show loader and disable button
-            tutorLoader.style.display = 'block';
-            tutorResponseDiv.innerHTML = '';
-            askTutorBtn.disabled = true;
-            askTutorBtn.textContent = 'Thinking...';
+    //     // Function to call Gemini API
+    //     async function callGemini(prompt) {
+    //         // Show loader and disable button
+    //         tutorLoader.style.display = 'block';
+    //         tutorResponseDiv.innerHTML = '';
+    //         askTutorBtn.disabled = true;
+    //         askTutorBtn.textContent = 'Thinking...';
 
-            // Construct the context-aware prompt
-            const fullPrompt = `You are an expert physics tutor specializing in attosecond science. A master's student is working through an interactive guide on High-Harmonic Generation in Solids and has asked the following question. Provide a clear, concise, and conceptually focused answer. Avoid overly complex mathematics unless necessary. Format your answer using simple markdown (bold with **, italics with *, code with \`). The student's question is: "${prompt}"`;
+    //         // Construct the context-aware prompt
+    //         const fullPrompt = `You are an expert physics tutor specializing in attosecond science. A master's student is working through an interactive guide on High-Harmonic Generation in Solids and has asked the following question. Provide a clear, concise, and conceptually focused answer. Avoid overly complex mathematics unless necessary. Format your answer using simple markdown (bold with **, italics with *, code with \`). The student's question is: "${prompt}"`;
             
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: fullPrompt }] });
-            const payload = { contents: chatHistory };
-            const apiKey = ""; // API key is handled by the environment
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    //         let chatHistory = [];
+    //         chatHistory.push({ role: "user", parts: [{ text: fullPrompt }] });
+    //         const payload = { contents: chatHistory };
+    //         const apiKey = ""; // API key is handled by the environment
+    //         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+    //         try {
+    //             const response = await fetch(apiUrl, {
+    //                 method: 'POST',
+    //                 headers: { 'Content-Type': 'application/json' },
+    //                 body: JSON.stringify(payload)
+    //             });
 
-                if (!response.ok) {
-                    const errorBody = await response.text();
-                    throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
-                }
+    //             if (!response.ok) {
+    //                 const errorBody = await response.text();
+    //                 throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
+    //             }
 
-                const result = await response.json();
+    //             const result = await response.json();
                 
-                let text = 'Sorry, I could not generate a response. Please try again.';
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    text = result.candidates[0].content.parts[0].text;
-                }
+    //             let text = 'Sorry, I could not generate a response. Please try again.';
+    //             if (result.candidates && result.candidates.length > 0 &&
+    //                 result.candidates[0].content && result.candidates[0].content.parts &&
+    //                 result.candidates[0].content.parts.length > 0) {
+    //                 text = result.candidates[0].content.parts[0].text;
+    //             }
 
-                // A simple markdown-to-html converter
-                let htmlText = text
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')       // Italics
-                    .replace(/`([^`]+)`/g, '<code>$1</code>')         // Inline code
-                    .replace(/\n/g, '<br>'); // Newlines
+    //             // A simple markdown-to-html converter
+    //             let htmlText = text
+    //                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+    //                 .replace(/\*(.*?)\*/g, '<em>$1</em>')       // Italics
+    //                 .replace(/`([^`]+)`/g, '<code>$1</code>')         // Inline code
+    //                 .replace(/\n/g, '<br>'); // Newlines
 
-                tutorResponseDiv.innerHTML = htmlText;
+    //             tutorResponseDiv.innerHTML = htmlText;
 
-            } catch (error) {
-                console.error('Gemini API call failed:', error);
-                tutorResponseDiv.innerHTML = `<p style="color: var(--accent-color);">An error occurred. Please check the console for details and try again.</p>`;
-            } finally {
-                // Hide loader and re-enable button
-                tutorLoader.style.display = 'none';
-                askTutorBtn.disabled = false;
-                askTutorBtn.textContent = 'Ask Tutor';
-            }
-        }
+    //         } catch (error) {
+    //             console.error('Gemini API call failed:', error);
+    //             tutorResponseDiv.innerHTML = `<p style="color: var(--accent-color);">An error occurred. Please check the console for details and try again.</p>`;
+    //         } finally {
+    //             // Hide loader and re-enable button
+    //             tutorLoader.style.display = 'none';
+    //             askTutorBtn.disabled = false;
+    //             askTutorBtn.textContent = 'Ask Tutor';
+    //         }
+    //     }
         
-        if (askTutorBtn) {
-            askTutorBtn.addEventListener('click', () => {
-                const question = tutorQuestionInput.value.trim();
-                if (question) {
-                    callGemini(question);
-                } else {
-                    tutorResponseDiv.innerHTML = 'Please enter a question.';
-                }
-            });
-        }
+    //     if (askTutorBtn) {
+    //         askTutorBtn.addEventListener('click', () => {
+    //             const question = tutorQuestionInput.value.trim();
+    //             if (question) {
+    //                 callGemini(question);
+    //             } else {
+    //                 tutorResponseDiv.innerHTML = 'Please enter a question.';
+    //             }
+    //         });
+    //     }
     });
     </script>
 </body>
