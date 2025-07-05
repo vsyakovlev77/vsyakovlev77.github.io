@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probing Atomic Electron Dynamics: An Interactive Guide</title>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true,
+          processEnvironments: true,
+          tags: 'ams'
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"></script>
+    <style>
+        /* --- General & Theming --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #212529;
+            --primary-color: #005f73;
+            --secondary-color: #0a9396;
+            --accent-color: #ee9b00;
+            --muted-color: #6c757d;
+            --border-color: #dee2e6;
+            --card-bg: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --font-serif: "Georgia", "Times New Roman", serif;
+            --font-sans: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary-color: #94d2bd;
+            --secondary-color: #0a9396;
+            --accent-color: #ee9b00;
+            --muted-color: #adb5bd;
+            --border-color: #495057;
+            --card-bg: #1e1e1e;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+            scroll-padding-top: 80px; /* Offset for sticky header */
+        }
+
+        /* --- Layout & Typography --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header, footer {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+        
+        footer {
+            border-top: 1px solid var(--border-color);
+            border-bottom: none;
+            text-align: center;
+            font-size: 0.9em;
+            color: var(--muted-color);
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-serif);
+            color: var(--primary-color);
+            line-height: 1.3;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; text-align: center; }
+        h2 { font-size: 2rem; border-bottom: 2px solid var(--secondary-color); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; }
+        p, li { font-size: 1.1rem; }
+        a { color: var(--secondary-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        strong { color: var(--primary-color); }
+        hr { border: 0; height: 1px; background: var(--border-color); margin: 2rem 0; }
+
+        /* --- Navigation & Progress Bar --- */
+        #main-nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color);
+            z-index: 1000;
+            padding: 0.5rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        #toc-list {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        #toc-list li {
+            margin-right: 1.5rem;
+            white-space: nowrap;
+        }
+
+        #toc-list a {
+            padding: 0.5rem 0;
+            border-bottom: 3px solid transparent;
+            transition: border-color 0.3s, color 0.3s;
+        }
+
+        #toc-list a.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        #progress-bar-container {
+            width: 100%;
+            height: 5px;
+            background-color: var(--border-color);
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: var(--accent-color);
+            transition: width 0.2s;
+        }
+
+        /* --- Interactive Elements --- */
+        .pre-question, .reflection-prompt, .callout {
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            background-color: var(--card-bg);
+            border-radius: 0 8px 8px 0;
+        }
+        .callout { border-left-color: var(--secondary-color); }
+        .reflection-prompt { border-left-color: var(--primary-color); }
+
+        .reveal-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .reveal-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+
+        /* --- Figure & Modal --- */
+        figure {
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: zoom-in;
+        }
+        figcaption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: var(--muted-color);
+            font-size: 0.9em;
+        }
+        .figure-interactive-container {
+            position: relative;
+            display: inline-block;
+        }
+        .hotspot {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: rgba(238, 155, 0, 0.7);
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .hotspot:hover {
+            transform: scale(1.2);
+        }
+        .hotspot-popup {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1;
+            min-width: 200px;
+            transition: visibility 0s, opacity 0.3s;
+        }
+        .hotspot:hover .hotspot-popup {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- Theme Toggle --- */
+        #theme-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            body {
+                --bg-color: #ffffff;
+                --text-color: #000000;
+                --primary-color: #000000;
+                --secondary-color: #000000;
+                color: var(--text-color);
+                font-size: 12pt;
+            }
+            #main-nav, .pre-question button, footer, .figure-interactive-container .hotspot {
+                display: none;
+            }
+            .hidden-content {
+                max-height: none !important;
+            }
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+            figure {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            .nav-container { flex-direction: column; }
+            #toc-list { padding-top: 0.5rem; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Probing Atomic Electron Dynamics</h1>
+            <p style="text-align:center; font-style: italic;">An Interactive Guide</p>
+        </div>
+    </header>
+    
+    <nav id="main-nav">
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+        <div class="nav-container">
+            <ul id="toc-list"></ul>
+            <button id="theme-toggle" title="Toggle dark/light mode">🌓</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="intro">
+            <h2>Welcome! Learning Objectives & Prerequisites</h2>
+            <p>Welcome to this interactive guide on probing atomic electron dynamics.</p>
+            <p>By the end of this module, you will be able to:</p>
+            <ul>
+                <li>✅ Describe the key electronic processes that follow core-level ionization, such as Auger decay and shake-up.</li>
+                <li>✅ Explain the fundamental concept of photoemission time delay (Wigner delay).</li>
+                <li>✅ Understand the working principles of primary experimental techniques like Attosecond Streaking Spectroscopy (AST), RABBITT, and Attosecond Transient Absorption Spectroscopy (ATAS).</li>
+                <li>✅ Appreciate how these methods are used to trace electron wave packet motion and probe electron correlations.</li>
+            </ul>
+            <div class="callout">
+                <p><strong>Prerequisite Check:</strong> This guide assumes you have a foundational understanding of quantum mechanics, the three-step model of high-harmonic generation (HHG), and the basic concept of an attosecond pulse. You should remember that an attosecond pulse is generated from the coherent emission of many high-order harmonics.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" id="section-1">
+            <h2>1. The Aftermath of a Core-Hole: Ultrafast Relaxation</h2>
+            <div class="pre-question">
+                <p><strong>Before reading on, consider this:</strong> If you use a high-energy XUV photon to knock an electron out from a deep inner shell of an atom, the atom becomes a highly excited ion. What do you think happens next? Does the ion simply stay in that state, or would the other electrons react to the suddenly created vacancy?</p>
+                <button class="reveal-btn">Think about it, then click to explore</button>
+                <div class="hidden-content">
+                    <p>You're right to suspect that the system won't remain static! The creation of a "core-hole" is a highly unstable situation. The remaining electrons in the atom rearrange themselves almost instantly to fill this vacancy. This rearrangement is not a simple, single event but a cascade of complex, correlated electron dynamics that are fundamental to our understanding of matter. Let's explore the main pathways.</p>
+                    
+                    <h3>Key Relaxation Processes</h3>
+                    <p>When a core-level electron is ejected, the atom is left in a highly excited state. It rapidly relaxes back towards a more stable configuration through several key processes, which are themselves fascinating examples of electron dynamics occurring on attosecond to femtosecond timescales.</p>
+                    <ul>
+                        <li><strong>Auger-Meitner Decay:</strong> This is a primary, radiationless relaxation pathway. An electron from an outer shell drops down to fill the core hole. The energy released by this transition is not emitted as a photon. Instead, it is transferred to another outer-shell electron, which is then ejected from the atom. This ejected particle is called the <strong>Auger-Meitner electron</strong>. A key signature of this process is that the atom's charge state increases by one more unit (e.g., from A⁺ to A²⁺).</li>
+                        <li><strong>Shake-Up & Shake-Off:</strong> These processes are direct manifestations of electron correlation. The sudden change in the atomic potential upon the removal of one electron can "shake" the remaining electron cloud. In a <strong>shake-up</strong> event, a second electron is promoted to a higher, unoccupied bound state, leaving an excited ion. In a <strong>shake-off</strong> event, the shake is so strong that a second electron is ejected into the continuum, leading to double ionization from a single photon.</li>
+                         <li><strong>Coster-Kronig Decay:</strong> A special, very fast subset of Auger-Meitner decay where the electron filling the hole comes from the same principal shell, just a different subshell.</li>
+                    </ul>
+                     <figure>
+                        <div class="figure-interactive-container">
+                            <img src="Figure1.png" alt="Diagram of atomic excitation and decay processes" id="fig1">
+                            <div class="hotspot" style="top: 40%; left: 49%;" title="Auger-Meitner Decay">
+                                <span class="hotspot-popup" style="bottom: 110%; left: -50%;">In process (c), an outer electron fills the core hole, and the energy is given to another electron, which is ejected. This is Auger-Meitner Decay.</span>
+                            </div>
+                             <div class="hotspot" style="top: 40%; left: 63%;" title="Shake-up">
+                                <span class="hotspot-popup" style="bottom: 110%; left: -50%;">In process (d), the initial photoemission is accompanied by the excitation of a second electron to a higher state (shake-up).</span>
+                            </div>
+                        </div>
+                        <figcaption>
+                            <b>Figure 1:</b> A summary of different electronic processes in an atom. An incoming attosecond XUV pulse, $E_\mathrm{X}(t)$, can initiate various dynamics. These include (a) simple valence photoemission, (b) core-level photoemission, which can be followed by relaxation processes like (c) Auger-Meitner decay. Correlated processes like (d) shake-up can also occur. All these dynamics can be probed in real-time by a synchronized, few-cycle laser field, $E_\mathrm{L}(t)$.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" id="section-2">
+            <h2>2. Is Photoionization Instantaneous?</h2>
+             <div class="pre-question">
+                <p><strong>Before reading on, consider this:</strong> Einstein won the Nobel prize for the photoelectric effect, a cornerstone of quantum mechanics. His model treats photoemission as an instantaneous event. But is anything in physics truly instantaneous? If you could time the process with attosecond precision, would you expect to measure a delay between the photon arriving and the electron leaving? Why or why not?</p>
+                <button class="reveal-btn">Think about it, then click to explore</button>
+                <div class="hidden-content">
+                    <p>This is a profound question that gets to the heart of attosecond science. The answer is <strong>no, photoionization is not instantaneous</strong>. With the ability to resolve events on their natural, attosecond timescale, we've found that there is a measurable delay. This delay tells us a great deal about the fundamental interactions an electron experiences as it escapes the atom.</p>
+
+                    <h3>The Concept of Wigner Time Delay</h3>
+                    <p>The main contribution to this delay comes from what is known as the <strong>Wigner time delay</strong> ($\tau_\mathrm{W}$). Imagine the photoelectron not as a simple particle but as a wave packet. As this wave packet leaves the atom, it has to move through the attractive Coulomb potential of the remaining ion. This interaction with the potential impresses a phase shift on the electron's wave function.</p>
+                    <div class="callout">
+                        <p><strong>Physical Intuition:</strong> The Wigner delay is the extra time the photoelectron wave packet spends near the parent ion due to the attractive Coulomb force. A positive delay means the electron is momentarily <em>held back</em> by the potential before it escapes.</p>
+                    </div>
+                    <p>Mathematically, the Wigner delay is defined as the energy derivative of this scattering phase shift ($\phi_\mathrm{scat}$):</p>
+                    $$ \tau_\mathrm{W} = \hbar \frac{d\phi_\mathrm{scat}}{dE} $$
+                    <p>This relationship is crucial because it connects a measurable quantity (the phase, accessible through interferometric techniques) to a time delay, giving us a "clock" for photoionization.</p>
+
+                    <figure>
+                        <div class="figure-interactive-container">
+                             <img src="Figure2.jpg" alt="Diagram showing a wave packet interacting with a potential" id="fig2">
+                        </div>
+                        <figcaption>
+                            <b>Figure 2:</b> A schematic showing how the Wigner time delay arises. An outgoing electron wave packet (left) interacts with an atomic potential $V(r)$. This interaction adds a scattering phase $\phi(k)$ to the wave packet. The condition for the wave packet's center to follow a classical trajectory (stationary phase condition, right) shows that this phase shift results in an apparent time delay, $\tau_\mathrm{W}$.
+                        </figcaption>
+                    </figure>
+
+                    <h3>The Full "Atomic Delay"</h3>
+                    <p>In a real pump-probe experiment that uses a streaking IR field, the total measured delay (often called the "atomic delay" $\tau_a$) is the sum of two components:</p>
+                    <ol>
+                        <li>The <strong>Wigner delay</strong> ($\tau_\mathrm{W}$), which is an intrinsic property of the photoionization process itself.</li>
+                        <li>A <strong>Continuum-Continuum (CC) delay</strong> ($\tau_\mathrm{cc}$), which is a measurement-induced effect. It arises from the phase the electron acquires from the probing IR laser field itself as it moves in the continuum.</li>
+                    </ol>
+                    $$ \tau_a = \tau_\mathrm{W} + \tau_\mathrm{cc} $$
+                    <p>Disentangling these two contributions is challenging but possible, and it allows us to isolate the fundamental Wigner delay from the influence of the measurement apparatus.</p>
+                </div>
+            </div>
+        </section>
+        
+        <hr>
+
+        <section class="concept-section" id="section-3">
+            <h2>3. Experimental Tools: Streaking and RABBITT</h2>
+            <div class="pre-question">
+                <p><strong>Before reading on, consider this:</strong> How would you actually measure a time delay of just a few dozen attoseconds? You would need a "clock" with an attosecond-fast "tick". What physical process oscillates fast enough to serve as the basis for such a clock?</p>
+                <button class="reveal-btn">Think about it, then click to explore</button>
+                <div class="hidden-content">
+                    <p>The answer is the electric field of light itself! The oscillations of a visible or near-infrared laser pulse occur on a femtosecond timescale, but the field changes direction within hundreds of attoseconds. This hyperfast variation provides the "tick" for our attosecond clock, enabling two powerful measurement techniques: Attosecond Streaking and RABBITT.</p>
+
+                    <h3>Attosecond Streaking Spectroscopy (AST)</h3>
+                    <p>Streaking is the most direct way to measure the duration of an attosecond event. It works like an ultrafast oscilloscope for electron emission.</p>
+                    <ul>
+                        <li><strong>The Principle:</strong> An attosecond XUV pulse (pump) ionizes the atom, releasing a photoelectron wave packet. At the same time, the strong, oscillating electric field of a synchronized few-cycle IR laser pulse (probe) is present. This IR "streaking" field changes the final momentum (and thus energy) of the photoelectron.</li>
+                        <li><strong>How it Works:</strong> An electron released at the peak of the IR field experiences no net change in momentum, as the field quickly reverses. However, an electron released near a zero-crossing of the field (where the vector potential is maximum) receives a significant <em>kick</em>, and its final energy is shifted up or down.</li>
+                        <li><strong>The Result:</strong> The temporal profile of the electron emission is mapped directly onto a final energy distribution. By recording the "streaked" photoelectron spectrum as a function of the delay between the XUV and IR pulses, one can reconstruct the timing of the emission with attosecond resolution.</li>
+                    </ul>
+                    <figure>
+                        <div class="figure-interactive-container">
+                             <img src="Figure3.png" alt="Diagram showing the principle of attosecond streaking" id="fig3">
+                             <div class="hotspot" style="top: 15%; left: 47%;" title="Vector Potential">
+                                <span class="hotspot-popup" style="bottom: 110%; left: -50%;">The change in momentum, $\Delta p(t)$, is given by the negative of the laser's vector potential, $-A_\mathrm{L}(t)$. Near the zero-crossings of the electric field $E_\mathrm{L}(t)$, the vector potential is at its maximum or minimum, giving the largest kick.</span>
+                            </div>
+                            <div class="hotspot" style="top: 60%; left: 15%;" title="Temporal Mapping">
+                                <span class="hotspot-popup" style="bottom: 110%; left: -50%;">The temporal shape of the incident XUV pulse (and thus the electron release) is mapped one-to-one onto the final velocity/momentum distribution of the electrons. A short pulse in time becomes a narrow distribution in momentum.</span>
+                            </div>
+                        </div>
+                        <figcaption>
+                            <b>Figure 3:</b> The principle of light-field-driven attosecond streaking. The oscillating laser electric field, $E_\mathrm{L}(t)$ (red curve), imparts a momentum change $\Delta p(t)$ (black curve) to photoelectrons released by an attosecond pulse. This maps the temporal profile of the electron emission onto a final velocity distribution (green).
+                        </figcaption>
+                    </figure>
+
+                    <h3>RABBITT (Reconstruction of Attosecond Beating by Interference of Two-Photon Transitions)</h3>
+                    <p>RABBITT (also known as RABBIT and RABITT) is an interferometric technique that is exceptionally well-suited for measuring photoemission time delays.</p>
+                    <ul>
+                        <li><strong>The Principle:</strong> Instead of a single attosecond pulse, RABBITT uses an attosecond pulse train, which consists of a comb of odd harmonics of the fundamental IR frequency (e.g., H13, H15, H17...). The atom is ionized simultaneously by this pulse train and the fundamental IR field itself.</li>
+                        <li><strong>Quantum Interference:</strong> An electron can reach the same final energy, located in a "sideband" (e.g., SB14) between two odd harmonics, via two different quantum paths. For SB14, the paths are: (1) absorb H15 and emit one IR photon, or (2) absorb H13 and absorb one IR photon.</li>
+                        <li><strong>The Measurement:</strong> These two paths interfere. As the delay between the XUV pulse train and the IR field is scanned, the intensity of the sideband signal oscillates with a period corresponding to twice the IR frequency ($2\omega$). The phase of this oscillation, $\Phi_R$, is directly related to the time delay: $\tau_a = \Phi_R / (2\omega)$.</li>
+                    </ul>
+                     <figure>
+                        <div class="figure-interactive-container">
+                             <img src="Figure4.jpg" alt="Diagram comparing RABBITT and streaking pathways" id="fig4">
+                        </div>
+                        <figcaption>
+                           <b>Figure 4:</b> Comparison of the quantum pathways for RABBITT (left) and Attosecond Streaking (right, a specific case of Laser-Assisted Photoelectric Effect - LAPE). In RABBITT, two two-photon pathways (a and e) interfere to create a sideband. In streaking, a one-photon path (d) interferes with two-photon paths (a or e).
+                        </figcaption>
+                    </figure>
+                    <div class="reflection-prompt">
+                        <p><strong>Pause and think:</strong> Both streaking and RABBITT use an IR field to probe the photoemission process. Streaking directly maps time to energy, while RABBITT uses quantum interference. How might the required intensity of the IR field differ between the two techniques? Which one do you think is more sensitive to small time delays?</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" id="section-4">
+            <h2>4. Watching Electrons Move: Wave Packets & Correlations</h2>
+            <div class="pre-question">
+                <p><strong>Before reading on, consider this:</strong> We know from basic quantum mechanics that an electron in a single eigenstate (like the 1s state of hydrogen) has a static, unchanging probability distribution. How can we make an electron "move" in a way that we can observe its position changing over time?</p>
+                <button class="reveal-btn">Think about it, then click to explore</button>
+                <div class="hidden-content">
+                    <p>The key is to create a <strong>coherent superposition</strong> of two or more eigenstates. The resulting state is called an <strong>electron wave packet</strong>, and its charge density is not static but oscillates in time, creating the closest quantum analog to classical motion. For instance, a superposition of the 1s and 2p states in hydrogen creates a charge cloud that oscillates back and forth with a period of about 405 attoseconds. Our goal is to create and then trace these wave packets.</p>
+
+                    <h3>Tracing Charge Migration in Molecules</h3>
+                    <p>One of the most exciting applications is tracing <strong>charge migration</strong>. This occurs when a sudden ionization event (e.g., from an attosecond pulse) removes an electron from a molecule, creating a <em>hole</em>. This hole is often not localized on a single atom but exists as a superposition of states spread across the molecule. This hole wave packet then evolves, causing the charge density to move across the molecular backbone on a sub-femtosecond to few-femtosecond timescale.</p>
+                    <p>This ultrafast charge motion happens before the much slower nuclei have time to react, and it is believed to be a critical first step that can direct the outcome of chemical reactions—a concept known as "charge-directed chemistry".</p>
+                    <figure>
+                        <div class="figure-interactive-container">
+                             <img src="Figure5.png" alt="Illustration of tracing an electron wave packet in helium" id="fig5">
+                             <div class="hotspot" style="top: 15%; left: 45%;" title="VUV Pump">
+                                <span class="hotspot-popup" style="bottom: 110%; left: -50%;">A femtosecond VUV pump pulse creates a coherent superposition of excited 'np' states in the helium atom, launching an electron wave packet that orbits the nucleus.</span>
+                            </div>
+                             <div class="hotspot" style="top: 35%; left: 20%;" title="XUV Probe">
+                                <span class="hotspot-popup" style="bottom: 110%; left: -50%;">A time-delayed attosecond XUV probe pulse ionizes the atom again. The probability of this second ionization depends on the position of the orbiting wave packet.</span>
+                            </div>
+                        </div>
+                        <figcaption>
+                           <b>Figure 5:</b> An example of tracing intra-atomic electron motion in helium. (a) A VUV pump pulse creates an orbiting electron wave packet. A delayed XUV probe pulse then ionizes the atom again. (b) The probability of double ionization oscillates as a function of the pump-probe delay, directly mapping the motion of the wave packet. (c) The energy sharing between the two ejected electrons also depends on the wave packet's position at the moment of probing, providing further insight into electron correlation.
+                        </figcaption>
+                    </figure>
+
+                     <h3>Probing Electron-Electron Correlation</h3>
+                    <p>How do electrons in a multi-electron atom <em>talk</em> to each other? Attosecond spectroscopy provides direct access to these interactions, often called <strong>electron correlation</strong>. The example in Figure 5 is a perfect illustration. The probability of the XUV probe knocking out the second electron strongly depends on the position of the first (orbiting) electron. The correlation is strongest when the two electrons are close together, maximizing the double ionization yield.</p>
+                    <p>Another powerful tool for studying correlation is <strong>coincidence spectroscopy</strong>, where the momenta of <em>all</em> resulting particles (e.g., two electrons and an ion) are measured simultaneously. This allows us to build a complete picture of how energy and momentum are shared during a multielectron process like double ionization or Auger decay.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" id="section-5">
+            <h2>5. Other Probing Techniques & Conclusion</h2>
+            <div class="pre-question">
+                <p><strong>Before reading on, consider this:</strong> So far, we have focused on detecting the <em>electrons</em> that are ejected from the atom. Can you think of another way to probe the state of the atom after it has been excited by a pump pulse?</p>
+                <button class="reveal-btn">Think about it, then click to explore</button>
+                <div class="hidden-content">
+                    <p>Instead of detecting the particles that leave the atom, we can probe what happens to light that passes <em>through</em> it. This is the basis of absorption spectroscopy, and when performed with attosecond pulses, it's a powerful complementary technique.</p>
+                
+                    <h3>Attosecond Transient Absorption Spectroscopy (ATAS)</h3>
+                    <p>The principle of ATAS is to use a pump pulse to initiate dynamics and a subsequent broadband attosecond probe pulse to measure the sample's absorption spectrum as a function of the pump-probe delay. An excited system will absorb light at different frequencies than a system in its ground state. By tracking how the absorption lines appear, disappear, or shift in energy, we can follow the electronic dynamics.</p>
+                     <div class="callout">
+                        <p><strong>Key Insight:</strong> ATAS is particularly useful for tracking the population of bound excited states. For instance, after a shake-up process, ATAS can directly see the absorption features corresponding to the newly populated excited state, allowing us to watch the electronic shell of an atom or molecule rearrange itself in real time.</p>
+                    </div>
+                    
+                     <figure>
+                        <div class="figure-interactive-container">
+                             <img src="Figure6.png" alt="Illustration of ATAS" id="fig6">
+                        </div>
+                        <figcaption>
+                           <b>Figure 6:</b> A simplified schematic of Attosecond Transient Absorption Spectroscopy. A strong few-cycle laser pulse can initiate dynamics in a material. A synchronized, delayed attosecond pulse with a broad spectrum is sent through the sample, and its absorption spectrum is measured. This reveals the transient electronic states of the material.
+                        </figcaption>
+                    </figure>
+
+                    <h3>Conclusion: A Complete Toolkit for Electron Dynamics</h3>
+                    <p>Together, Attosecond Streaking Spectroscopy (AST), RABBITT, Attosecond Tunneling Spectroscopy (ATS), and Attosecond Transient Absorption Spectroscopy (ATAS) form a powerful and versatile toolkit. They allow us to:</p>
+                    <ul>
+                        <li><strong>Initiate</strong> electron dynamics with attosecond precision using either XUV pulses or the strong field of a laser.</li>
+                        <li><strong>Track</strong> the temporal evolution of both free electrons (photoelectrons, Auger electrons) and bound electrons in excited states.</li>
+                        <li><strong>Measure</strong> fundamental quantities like photoemission time delays, which reveal deep insights into electron-ion scattering and electron-electron correlation.</li>
+                        <li><strong>Reconstruct</strong> the motion of electron wave packets as they move within and between atoms.</li>
+                    </ul>
+                    <p>By combining these techniques, we are no longer limited to observing the static structure of atoms and molecules but can now watch the fundamental motions that drive all of chemistry and biology as they happen in real time.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>This interactive guide was generated based on foundational review articles in attosecond physics. The goal is to provide a conceptual understanding for educational purposes.</p>
+            <p>&copy; 2025 Attosecond Physics Course</p>
+        </div>
+    </footer>
+    
+    <div id="modal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modal-img">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Toggler ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) {
+                document.documentElement.setAttribute('data-theme', currentTheme);
+            }
+            themeToggle.addEventListener('click', () => {
+                let theme = document.documentElement.getAttribute('data-theme');
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
+            // --- Reveal Content ---
+            const revealButtons = document.querySelectorAll('.reveal-btn');
+            revealButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const hiddenContent = button.nextElementSibling;
+                    if (hiddenContent.style.maxHeight && hiddenContent.style.maxHeight !== '0px') {
+                        hiddenContent.style.maxHeight = '0px';
+                    } else {
+                        hiddenContent.style.maxHeight = hiddenContent.scrollHeight + 'px';
+                    }
+                });
+            });
+
+            // --- Table of Contents & Progress Bar ---
+            const mainNav = document.getElementById('main-nav');
+            const tocList = document.getElementById('toc-list');
+            const progressBar = document.getElementById('progress-bar');
+            const sections = document.querySelectorAll('.concept-section');
+            let tocItems = [];
+
+            sections.forEach((section, index) => {
+                const title = section.querySelector('h2').textContent;
+                const id = section.id;
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `#${id}`;
+                link.textContent = title;
+                listItem.appendChild(link);
+                tocList.appendChild(listItem);
+                tocItems.push(link);
+            });
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const id = entry.target.getAttribute('id');
+                    const link = tocList.querySelector(`a[href="#${id}"]`);
+                    if (entry.isIntersecting) {
+                        tocItems.forEach(item => item.classList.remove('active'));
+                        if (link) link.classList.add('active');
+                    }
+                });
+            }, { rootMargin: '-40% 0px -60% 0px' });
+
+            sections.forEach(section => observer.observe(section));
+
+            window.addEventListener('scroll', () => {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = window.scrollY;
+                const progress = (scrolled / scrollableHeight) * 100;
+                progressBar.style.width = progress + '%';
+            });
+            
+            // --- Figure Modal (Zoom) ---
+            const modal = document.getElementById('modal');
+            const modalImg = document.getElementById('modal-img');
+            const figures = document.querySelectorAll('figure img');
+            const closeBtn = document.querySelector('.modal-close');
+
+            figures.forEach(img => {
+                img.addEventListener('click', () => {
+                    modal.style.display = 'flex';
+                    modalImg.src = img.src;
+                });
+            });
+
+            const closeModal = () => {
+                modal.style.display = 'none';
+            }
+            
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- Hotspot Popup positioning ---
+            const hotspots = document.querySelectorAll('.hotspot');
+            hotspots.forEach(hotspot => {
+                const popup = hotspot.querySelector('.hotspot-popup');
+                hotspot.addEventListener('mouseenter', () => {
+                   const hotspotRect = hotspot.getBoundingClientRect();
+                   const containerRect = hotspot.parentElement.getBoundingClientRect();
+                   
+                   // Position popup above the hotspot by default
+                   popup.style.bottom = '120%';
+                   popup.style.left = '50%';
+                   popup.style.transform = 'translateX(-50%)';
+                   
+                   // Check if popup goes off-screen and adjust
+                   const popupRect = popup.getBoundingClientRect();
+                   if (popupRect.top < 0) { // Off top screen
+                       popup.style.bottom = 'auto';
+                       popup.style.top = '120%';
+                   }
+                   if (popupRect.left < 0) { // Off left screen
+                       popup.style.left = '0';
+                       popup.style.transform = 'translateX(0)';
+                   }
+                   if (popupRect.right > window.innerWidth) { // Off right screen
+                        popup.style.left = 'auto';
+                        popup.style.right = '0';
+                        popup.style.transform = 'translateX(0)';
+                   }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
