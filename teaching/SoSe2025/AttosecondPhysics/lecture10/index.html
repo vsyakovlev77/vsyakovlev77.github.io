@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probing Molecular Dynamics with Attosecond Tools</title>
+    
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        /* --- General Styling & Theming --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #212529;
+            --primary-color: #0056b3;
+            --secondary-color: #6c757d;
+            --accent-color: #b30056;
+            --border-color: #dee2e6;
+            --card-bg: #f8f9fa;
+            --highlight-bg: #e9ecef;
+            --nav-bg: rgba(248, 249, 250, 0.85);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #212529;
+            --text-color: #f8f9fa;
+            --primary-color: #8ab4f8;
+            --secondary-color: #adb5bd;
+            --accent-color: #f48fb1;
+            --border-color: #495057;
+            --card-bg: #343a40;
+            --highlight-bg: #495057;
+            --nav-bg: rgba(43, 48, 53, 0.85);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.7;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1, h2, h3 {
+            font-family: "Georgia", serif;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        h1 { font-size: 2.5rem; text-align: center; margin-bottom: 2rem; }
+        h2 { font-size: 2rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem; margin-top: 3rem; }
+        h3 { font-size: 1.5rem; margin-top: 2rem; color: var(--text-color);}
+
+        p, ul, li { margin-bottom: 1rem; }
+        ul { padding-left: 20px; }
+        a { color: var(--primary-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        strong { color: var(--primary-color); font-weight: 600; }
+        em { font-style: italic; }
+        hr { border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0; }
+
+        /* --- Header & Navigation --- */
+        .theme-switcher {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1001;
+            cursor: pointer;
+        }
+        .theme-switcher-label {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .theme-switcher input { display: none; }
+        .theme-switcher .slider {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            transition: transform 0.3s;
+        }
+        .theme-switcher input:checked + .slider {
+            transform: translateX(24px);
+            background-color: var(--primary-color);
+        }
+        .theme-switcher span { padding: 0 8px; }
+
+        header {
+            padding: 1rem;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        #toc {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            list-style-type: none;
+            padding: 0;
+            gap: 1rem;
+        }
+
+        #toc li a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        #toc li a:hover, #toc li a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .progress-indicator {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        #toc li a.completed .progress-indicator {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* --- Content Blocks & Interactive Elements --- */
+        .callout-box {
+            background-color: var(--card-bg);
+            border-left: 5px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px var(--shadow-color);
+        }
+        .callout-box strong { color: var(--accent-color); }
+        
+        .pre-question {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 2px 2px 15px var(--shadow-color);
+        }
+        
+        .pre-question > p {
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .reveal-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.2s;
+            display: block;
+            width: 100%;
+        }
+
+        .reveal-btn:hover {
+            background-color: #004494;
+        }
+        [data-theme="dark"] .reveal-btn:hover {
+            background-color: #a6cfff;
+        }
+
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out, padding-top 0.7s ease-in-out;
+        }
+        
+        .hidden-content.show {
+            padding-top: 1.5rem;
+        }
+
+        /* --- Figure & Image Modal --- */
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+        
+        figure img:hover {
+            transform: scale(1.02);
+        }
+        
+        figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            text-align: left;
+            padding: 0 1rem;
+        }
+        figcaption strong { color: var(--text-color); }
+        
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        .image-modal img {
+            max-width: 90vw;
+            max-height: 90vh;
+            animation: zoomIn 0.3s;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.8); } to { transform: scale(1); } }
+        
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            #toc { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+            #toc li a { justify-content: flex-start; }
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            body { background-color: white; color: black; }
+            header, footer, .theme-switcher, .reveal-btn { display: none; }
+            main { max-width: 100%; margin: 0; padding: 0; }
+            .hidden-content { max-height: none !important; padding-top: 1.5rem !important; display: block !important; overflow: visible !important; }
+            .callout-box { border-left: 5px solid #ccc; background-color: #f9f9f9; box-shadow: none; }
+            figure img { max-width: 80%; box-shadow: none; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Probing Molecular Dynamics with Attosecond Tools</h1>
+        <div class="theme-switcher">
+            <label class="theme-switcher-label" for="theme-toggle">
+                <span>☀️</span>
+                <input type="checkbox" id="theme-toggle">
+                <div class="slider"></div>
+                <span>🌙</span>
+            </label>
+        </div>
+        <nav>
+            <ul id="toc">
+                </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="intro" data-title="Introduction" id="intro">
+            <h2>Learning Objectives</h2>
+            <p>Welcome to our exploration of molecular dynamics on the shortest possible timescales. After completing this module, you will be able to:</p>
+            <ul>
+                <li>Distinguish between the goals of <strong>femtochemistry</strong> and the emerging field of <strong>attochemistry</strong>.</li>
+                <li>Explain how attosecond pulses create <strong>electronic wavepackets</strong> and the difference between <strong>charge migration</strong> and <strong>charge transfer</strong>.</li>
+                <li>Describe the principles of key experimental techniques used to probe molecular dynamics, including <strong>pump-probe spectroscopy</strong> and <strong>High-Harmonic Spectroscopy (HHS)</strong>.</li>
+                <li>Analyze seminal experiments that have provided "movies" of electronic and nuclear motion, such as charge migration in iodoacetylene and dynamics at conical intersections.</li>
+            </ul>
+            <div class="callout-box">
+                <p><strong>Prerequisite Check:</strong> This module assumes you have a foundational understanding of the three-step model of High-Harmonic Generation (HHG), the basic properties of attosecond pulses (large bandwidth, short duration), and general pump-probe principles. We'll be building on these concepts to see how they are applied to observe molecules in motion.</p>
+            </div>
+        </section>
+
+        <hr>
+        
+        <section class="concept-section" data-title="Attochemistry" id="concept-1">
+            <h2>1. The Goal: From Watching Atoms to Steering Electrons</h2>
+            
+            <p>For decades, the field of <strong>femtochemistry</strong> has provided incredible insights into chemical reactions by using femtosecond ($10^{-15}$ s) laser pulses to create "movies" of atoms moving and bonds breaking. This is possible because the timescale of <strong>nuclear motion</strong>—vibrations and dissociations—is on the order of femtoseconds.</p>
+
+            <p>However, the motion of nuclei is ultimately dictated by the forces exerted by the electrons, which hold molecules together. Electrons move on a much faster timescale, the <strong>attosecond</strong> ($10^{-18}$ s) scale. The ability to generate pulses of light with attosecond duration has therefore opened a new frontier: observing and controlling the <strong>electronic motion</strong> that precedes and directs all chemistry. This new, emerging field is called <strong>attochemistry</strong>.</p>
+
+             <div class="callout-box">
+                <strong>Key Insight:</strong> The ultimate goal of attochemistry is to control the outcome of a chemical reaction not by pushing the atoms around, but by steering the electrons that are responsible for the chemical bonds in the first place.
+            </div>
+
+            <figure>
+                 <img src="Figure1.webp" alt="Diagram comparing attochemistry and femtochemistry timescales." class="zoomable-image">
+                 <figcaption>
+                    <strong>Figure 1: Timescales of Chemistry.</strong> Femtochemistry probes nuclear motion (like the <em>cis-trans</em> isomerization of azobenzene, right panel) on the femtosecond to picosecond timescale. Attochemistry aims to probe and control electron motion (like the charge distribution in tryptophan, left panel), which occurs on the attosecond to femtosecond timescale.
+                 </figcaption>
+            </figure>
+
+            <div class="pre-question">
+                <p><strong>Before you continue:</strong> A femtosecond pulse has a narrow enough bandwidth to typically excite just one electronic state. An attosecond pulse is much shorter. Based on the time-energy uncertainty principle ($\Delta E \Delta t \geq \hbar/2$), what does this imply about the energy bandwidth of an attosecond pulse, and what effect might this have on a molecule it interacts with?</p>
+                <button class="reveal-btn">Think about it, then click to continue</button>
+                <div class="hidden-content">
+                    <h3>Electronic Wavepackets: The Starting Point of Attosecond Dynamics</h3>
+                    <p>Your intuition is correct! Because attosecond pulses are so short in time, they are necessarily very broad in energy (or frequency). Their bandwidth is often several electron-volts (eV) wide, which is larger than the energy spacing between different electronic states in a molecule.</p>
+                    <p>This has a profound consequence: a single attosecond pulse doesn't just excite a molecule from its ground state to one specific excited state. Instead, it can simultaneously excite a <strong>coherent superposition of multiple electronic states</strong>. This superposition is known as an <strong>electronic wavepacket</strong>. The molecule is no longer in a stationary state; the relative phases of the states in the wavepacket evolve in time, causing the molecule's electron density to oscillate and move with attosecond periodicity. This electron motion, known as <strong>charge migration</strong>, is the fundamental process that attochemistry seeks to control.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" data-title="Self-Probing" id="concept-2">
+            <h2>2. Probing Purely Electronic Dynamics: High-Harmonic Spectroscopy</h2>
+            <p>How can we observe a process like charge migration, which can be faster than the duration of even the shortest laser pulses? One of the most elegant solutions uses the process of High-Harmonic Generation (HHS) itself as an ultrafast probe.</p>
+
+            <div class="callout-box">
+                <p><strong>Pause and Think:</strong> From the previous lecture, you'll recall the three-step model of HHG: ionization, acceleration, and recombination. How could this process, driven by a <em>single</em> laser pulse, act as a <em>pump-probe</em> experiment?</p>
+            </div>
+            
+            <p>The answer lies in the built-in time delay between ionization and recombination. The strong laser field <strong>pumps</strong> the molecule by tunnel-ionizing it, which creates the electronic wavepacket (a "hole") in the parent ion and starts the clock. The electron is then accelerated away and driven back by the same laser field, <strong>probing</strong> the molecular ion when it recollides about 0.5 to 1.5 femtoseconds later. The properties of the emitted harmonic photon depend on the state of the ion at the exact moment of recombination. This gives HHS an intrinsic sub-femtosecond temporal resolution.</p>
+
+            <div class="pre-question">
+                <p><strong>Before you continue:</strong> To study a molecule's properties, we need to know its orientation in space. How can we force gas-phase molecules, which are normally randomly oriented, into a specific alignment before the main experiment begins?</p>
+                <button class="reveal-btn">Think about it, then click to continue</button>
+                <div class="hidden-content">
+                    <h3>Molecular Frame Measurements and Charge Migration</h3>
+                    <p>To get structural information, the molecules must first be aligned. This is achieved using a weaker, prepulse of linearly polarized light. This pulse doesn't ionize the molecules but creates a coherent superposition of rotational states. After the pulse is gone, this rotational wavepacket evolves, and at specific, predictable times, the states re-phase, creating a field-free ensemble of molecules that are aligned in space. This allows us to perform measurements in the molecule's own frame of reference.</p>
+                    <h4>Key Experiment: Visualizing Charge Migration in Iodoacetylene</h4>
+                    <p>A landmark experiment used HHS to directly observe charge migration in ionized iodoacetylene (HCCI) molecules. The oriented molecules were ionized by an intense IR laser pulse, which also drove the HHG process. By analyzing the harmonic spectrum, the evolution of the electron hole was reconstructed with sub-femtosecond resolution.</p>
+                    <ul>
+                        <li>At t=0, the strong field creates a hole localized at the most easily ionizable site: the <strong>iodine atom</strong>.</li>
+                        <li>The hole wavepacket then travels along the molecular backbone. At t = <strong>930 attoseconds</strong>, the hole is predominantly located at the opposite (acetylene) end of the molecule.</li>
+                        <li>The hole then migrates back towards the iodine atom, completing a full oscillation in about <strong>1.85 femtoseconds</strong>.</li>
+                    </ul>
+                    <p>This experiment was a spectacular confirmation that purely electronic motion can be tracked in real-time.</p>
+                    
+                    <figure>
+                        <img src="Figure2.webp" alt="Snapshots of hole density migration in iodoacetylene." class="zoomable-image">
+                        <figcaption>
+                            <strong>Figure 2: Attosecond Charge Migration in Iodoacetylene.</strong> These snapshots, reconstructed from HHS data, show the location of the electron hole at different times after ionization. The hole starts at the iodine atom (purple sphere), moves to the acetylene group, and then returns. This entire migration cycle is completed in under 2 fs.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+        
+        <hr>
+
+        <section class="concept-section" data-title="External Probing" id="concept-3">
+            <h2>3. Pump-Probe Spectroscopy on Complex Molecules</h2>
+            <p>While HHS is a powerful self-probing technique, the more traditional pump-probe scheme using two separate pulses is more versatile. It allows us to study molecules that may not be suitable for HHS and provides a more direct way to control the timing between the pump and probe events.</p>
+
+            <h3>Key Experiment: Observing Ultrafast Dynamics in Phenylalanine</h3>
+            <p>The first observation of attosecond-scale dynamics in a biologically relevant molecule was achieved in the amino acid phenylalanine ($\text{C}_9\text{H}_{11}\text{NO}_2$).</p>
+            <ul>
+                <li><strong>The Pump:</strong> A sub-300 attosecond EUV pulse ionized the molecule, creating an electronic wavepacket in the resulting cation.</li>
+                <li><strong>The Probe:</strong> A time-delayed, phase-stable 4 fs near-infrared (NIR) pulse was used to probe the evolving cation. This probe pulse could further ionize the cation, leading to a doubly-charged species that then fragments.</li>
+                <li><strong>The Observable:</strong> The experimenters measured the yield of a specific doubly-charged fragment as a function of the XUV-IR delay.</li>
+            </ul>
+
+            <figure>
+                 <img src="Figure3.jpg" alt="Diagram of the phenylalanine pump-probe experiment" class="zoomable-image">
+                 <figcaption>
+                    <strong>Figure 3: Phenylalanine Pump-Probe Scheme.</strong> An attosecond XUV pulse (blue) ionizes the molecule, creating an electronic wavepacket in the cation (shown as a delocalized hole). A delayed IR pulse (red) probes this dynamics by creating a dication, which then fragments. Measuring the fragment yield versus the delay reveals the underlying electronic motion.
+                 </figcaption>
+            </figure>
+            
+            <div class="pre-question">
+                 <p><strong>Before you continue:</strong> If the electronic wavepacket created by the pump pulse is causing the charge to oscillate within the molecule, how would you expect the yield of the dication (created by the probe) to change as a function of the time delay?</p>
+                <button class="reveal-btn">Think about it, then click to continue</button>
+                <div class="hidden-content">
+                    <p>Exactly! You would expect the dication yield to <strong>oscillate</strong>. The probability of the IR probe pulse removing a second electron depends on the instantaneous electronic configuration of the cation. As the charge density shifts back and forth between different parts of the molecule (e.g., the amine group and the phenyl ring), the ionization probability for the probe pulse is modulated. </p>
+                    <p>This is precisely what was observed. The experiment measured a clear oscillation in the dication yield with a period of <strong>4.3 femtoseconds</strong>. This period is far too short to correspond to a nuclear vibration, confirming it as a signature of a purely electronic quantum beat, or charge migration, between different states of the phenylalanine cation.</p>
+                </div>
+            </div>
+            
+            <h3>Femtosecond Charge Transfer: The Role of Environment</h3>
+            <p>It's important to contrast the fast, purely electronic charge migration with slower, nuclear-driven charge transfer. In experiments on tryptophan-containing ions, a UV pump pulse initiated dynamics that was probed by an IR pulse. The key finding was that the charge transfer lifetime depended dramatically on the chemical environment. The process took <strong>390 fs</strong> in protonated tryptophan (TrpH<sup>+</sup>), but slowed to <strong>13 ps</strong> when the proton was replaced by a sodium ion (TrpNa<sup>+</sup>). This highlights that while charge *migration* is attosecond, subsequent charge *transfer* and chemical outcomes are on the femtosecond scale and can be tuned by the nuclear landscape.</p>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" data-title="Coupled Dynamics" id="concept-4">
+            <h2>4. Probing Coupled Electron-Nuclear Dynamics</h2>
+            <p>Chemistry happens when nuclei move in response to electronic forces. The most interesting and complex molecular dynamics occur when the electronic and nuclear motions are strongly coupled, a regime where the Born-Oppenheimer approximation breaks down. A key feature of molecular potential energy surfaces where this happens is a <strong>conical intersection (CI)</strong>.</p>
+            
+            <div class="callout-box">
+                <p><strong>Core Concept: Conical Intersections.</strong> A conical intersection is a point of degeneracy between two electronic potential energy surfaces. CIs act as highly efficient funnels, allowing a molecule to rapidly transition from a higher electronic state to a lower one. At a CI, it's not that nuclei move at attosecond speeds, but rather that electron dynamics slow down to femtosecond timescales to couple with the nuclei.</p>
+            </div>
+            
+            <h3>Key Experiment 1: Following a Reaction Through a CI in NO₂</h3>
+            <p>HHS can be used in a pump-probe configuration to watch a molecule evolve through a CI.</p>
+            <ul>
+                <li><strong>Setup:</strong> An optical pump pulse excites NO₂. A delayed, intense IR pulse then generates high harmonics from the evolving molecule. A special technique, <strong>transient grating spectroscopy<strong>, enhances sensitivity by measuring the difference signal between excited and unexcited molecules.</li>
+                <li><strong>Finding:</strong> The experimenters observed a modulation in the harmonic signal which directly reflected the population transfer between electronic states each time the nuclear wavepacket passed through the conical intersection. This provided a movie of the molecule's journey through this crucial photochemical funnel.</li>
+            </ul>
+
+             <figure>
+                 <img src="Figure4.webp" alt="Diagram showing the NO2 transient grating experiment and results." class="zoomable-image">
+                 <figcaption>
+                    <strong>Figure 4: Probing a Conical Intersection in NO₂.</strong> (a) An optical pump creates a transient grating of excited molecules. A probe pulse generates harmonics, and the diffracted signal ($m=\pm 1$) reveals the dynamics. (b) The measured harmonic signal (blue line) oscillates as the molecule passes through the CI. (c) The calculated population on the upper diabatic state shows the same oscillation, confirming the interpretation.
+                 </figcaption>
+            </figure>
+
+            <h3>Key Experiment 2: Controlling Bond-Breaking in D₂</h3>
+            <p>This classic experiment demonstrates how probing an electronic coherence can steer a nuclear outcome.</p>
+            <ul>
+                <li><strong>Setup:</strong> A single attosecond EUV pulse ionizes and excites D₂ molecules, creating a coherent superposition of the $1s\sigma_g$ and $2p\sigma_u$ states of the D₂⁺ ion. A delayed, few-cycle IR pulse interacts with this evolving superposition.</li>
+                <li><strong>Finding:</strong> The direction in which the D⁺ fragments are emitted shows a strong asymmetry that oscillates with the pump-probe delay. This asymmetry is a direct signature of <strong>electron localization</strong>—the electron being forced onto one of the two deuterons before dissociation. By controlling the delay, one can control which side the electron ends up on, thereby controlling the fragmentation.</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" data-title="Structural Dynamics" id="concept-5">
+            <h2>5. Probing Structural Dynamics: LIED</h2>
+            <p>Beyond electronic dynamics, attosecond tools can also capture snapshots of the molecule's changing geometry—the positions of the atoms themselves—with femtosecond resolution.</p>
+
+            <div class="pre-question">
+                 <p><strong>Before you continue:</strong> In the three-step model, the electron can recombine to emit a high-energy photon (HHS). What other fate could the recolliding electron have, and how could that be used to probe the molecular structure?</p>
+                <button class="reveal-btn">Think about it, then click to continue</button>
+                <div class="hidden-content">
+                    <h3>Laser-Induced Electron Diffraction (LIED)</h3>
+                    <p>Instead of recombining, the returning electron can <strong>elastically scatter</strong> off the parent ion. Because the electron's de Broglie wavelength is comparable to molecular bond lengths ($\sim$0.1 nm), this scattering event creates a diffraction pattern. This is the principle behind <strong>Laser-Induced Electron Diffraction (LIED)</strong>. By analyzing this diffraction pattern in the final electron momentum distribution, one can deduce the internuclear distances at the moment of recollision.</p>
+                    <figure>
+                        <img src="Figure5.jpeg" alt="Schematic of the LIED process." class="zoomable-image">
+                        <figcaption>
+                            <strong>Figure 5: The Principle of LIED.</strong> An intense laser field tunnel-ionizes a molecule (top). The electron wavepacket is split; part travels directly to the detector (reference wave), while the other part is driven back by the laser field to scatter off the parent ion (signal wave) before also reaching the detector (bottom). The interference between these two paths contains structural information.
+                        </figcaption>
+                    </figure>
+
+                    <h3>Key Experiment: Imaging Ultrafast Bond Contraction in O₂⁺</h3>
+                    <p>One of the first major successes of LIED was in observing the change in bond length of an oxygen molecule immediately after ionization.</p>
+                     <ul>
+                        <li><strong>Setup:</strong> Aligned O₂ molecules were ionized by a mid-infrared laser. Using a longer wavelength gives the recolliding electron more kinetic energy, which translates to a shorter de Broglie wavelength and thus better spatial resolution.</li>
+                        <li><strong>Finding:</strong> By analyzing the diffraction pattern, a <strong>contraction of the O-O bond by 0.1 Å</strong> was measured within the first few femtoseconds of ionization. This demonstrates the ability to capture bond length changes on their natural timescale.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="concept-section" data-title="Summary" id="summary">
+            <h2>Summary and Key Takeaways</h2>
+            <p>We've explored how attosecond science has moved beyond static measurements to probe the rich dynamics within molecules. Here are the core ideas to remember:</p>
+
+            <div class="callout-box">
+                <ul>
+                    <li><strong>Attochemistry's Goal:</strong> To control chemical reactions by steering electron motion on its natural <strong>attosecond timescale</strong>. This requires creating and probing coherent <strong>electronic wavepackets</strong>.</li>
+                    <li><strong>Two Types of Dynamics:</strong> We can now observe both purely electronic <strong>charge migration</strong> (attoseconds to few-fs scale) and coupled electron-nuclear dynamics that drive <strong>charge transfer</strong> and other chemical processes (femtosecond scale).</li>
+                    <li><strong>Self-Probing with HHS:</strong> The recolliding electron in High-Harmonic Generation acts as an intrinsic probe with <strong>sub-femtosecond temporal resolution</strong>, allowing us to track processes like charge migration and dynamics at conical intersections.</li>
+                    <li><strong>Pump-Probe Spectroscopy:</strong> Using external, time-delayed attosecond and femtosecond pulses allows us to create "movies" of dynamics in complex molecules, revealing how processes are influenced by the chemical environment.</li>
+                    <li><strong>Imaging Structure with LIED:</strong> By analyzing the diffraction of recolliding electrons, we can take femtosecond <strong>snapshots</strong> of a molecule's geometry and observe structural changes like bond stretching in real time.</li>
+                </ul>
+            </div>
+             <p>The field is rapidly evolving, with ongoing challenges in theory, experiment, and extending these powerful techniques to even more complex systems, such as molecules in solution. The ability to directly watch and interact with electrons as they choreograph chemical reactions promises a revolutionary future for chemistry.</p>
+        </section>
+        
+    </main>
+    
+    <div class="image-modal" id="imageModal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <footer>
+        <p style="text-align:center; font-size:0.8rem; color: var(--secondary-color);">Interactive guide prepared based on articles from Nature Photonics, Nature Reviews Physics, Journal of Physics B, JPC Letters, and more.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('main > section');
+            const toc = document.getElementById('toc');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            // --- Dark/Light Mode ---
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) {
+                document.documentElement.setAttribute('data-theme', currentTheme);
+                if (currentTheme === 'dark') {
+                    themeToggle.checked = true;
+                }
+            }
+            themeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // --- Table of Contents and Progress Tracking ---
+            sections.forEach((section) => {
+                const title = section.getAttribute('data-title');
+                if (title) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    const progressIndicator = document.createElement('span');
+                    progressIndicator.className = 'progress-indicator';
+                    
+                    link.href = `#${section.id}`;
+                    link.textContent = title;
+                    link.prepend(progressIndicator);
+                    
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        section.scrollIntoView({ behavior: 'smooth' });
+                    });
+                    
+                    listItem.appendChild(link);
+                    toc.appendChild(listItem);
+                }
+            });
+
+            const tocLinks = document.querySelectorAll('#toc a');
+            const observerOptions = { root: null, rootMargin: '-40% 0px -60% 0px', threshold: 0 };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const id = entry.target.getAttribute('id');
+                    const tocLink = document.querySelector(`#toc a[href="#${id}"]`);
+
+                    if (entry.isIntersecting) {
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        if (tocLink) tocLink.classList.add('active');
+                        
+                        const allContent = entry.target.querySelector('.hidden-content');
+                        if(allContent && allContent.classList.contains('show')){
+                           if (tocLink) tocLink.classList.add('completed');
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+
+
+            // --- Reveal Button Functionality ---
+            const revealButtons = document.querySelectorAll('.reveal-btn');
+            revealButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const section = button.closest('.concept-section');
+                    const tocLink = document.querySelector(`#toc a[href="#${section.id}"]`);
+
+                    if (content.style.maxHeight && content.style.maxHeight !== "0px") {
+                        content.style.maxHeight = null;
+                        content.classList.remove('show');
+                        if (tocLink) tocLink.classList.remove('completed');
+                    } else {
+                        content.classList.add('show');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                         if (tocLink) tocLink.classList.add('completed');
+                    }
+                });
+            });
+
+            // --- Image Modal Functionality ---
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            const images = document.querySelectorAll(".zoomable-image");
+            const closeModal = document.querySelector(".modal-close");
+
+            images.forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = "flex";
+                    modalImg.src = this.src;
+                });
+            });
+
+            const closeTheModal = () => {
+                modal.style.display = "none";
+            };
+
+            closeModal.addEventListener('click', closeTheModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeTheModal();
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape' && modal.style.display === 'flex') {
+                    closeTheModal();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
