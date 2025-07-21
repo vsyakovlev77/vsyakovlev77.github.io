@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attosecond Science: Probing Condensed Matter Dynamics</title>
+    <title>Attosecond Science: Probing Electron Dynamics in Condensed Matter</title>
     
     <script>
       MathJax = {
@@ -144,10 +144,6 @@
 
         p, li {
             margin-bottom: 1rem;
-        }
-
-        strong, b {
-            color: var(--secondary-color);
         }
         
         .learning-objectives, .prerequisites, .key-takeaways {
@@ -368,7 +364,7 @@
 
     <div class="container">
         <header>
-            <h1>Probing Condensed Matter Dynamics</h1>
+            <h1>Probing Electron Dynamics in Condensed Matter</h1>
             <button id="theme-toggle">Toggle Theme</button>
         </header>
 
@@ -385,92 +381,93 @@
                 <div class="learning-objectives">
                     <h3>🎓 Learning Objectives</h3>
                     <ul>
-                        <li>Understand the fundamental differences between strong-field interactions in gases and solids.</li>
-                        <li>Explain the core concepts of intraband and interband dynamics.</li>
-                        <li>Describe the working principles of High-Harmonic Generation (HHG) and Attosecond Transient Absorption (ATAS) spectroscopy in solids.</li>
-                        <li>Analyze key experimental results.</li>
-                        <li>Recognize the unique role of nanostructures in modifying and enhancing strong-field phenomena.</li>
+                        <li>Understand the fundamental differences between strong-field interactions in gases and solids, focusing on intraband and interband dynamics.</li>
+                        <li>Explain how nanostructures and 2D materials are used to enhance and control light-matter interactions.</li>
+                        <li>Describe the working principles of key experimental techniques: attosecond streaking, petahertz current measurements, and optical-field-resolved sampling.</li>
+                        <li>Analyze the experimental evidence for lightwave-driven electronics and its potential for petahertz signal processing.</li>
                     </ul>
                 </div>
                 <div class="prerequisites">
                     <h3>🔍 Prerequisites</h3>
-                    <p>This lecture assumes a basic understanding of solid-state physics (energy bands, Brillouin zones), quantum mechanics (tunneling, wave-particle duality), and the principles of attosecond science in atomic systems (the three-step model).</p>
+                    <p>This lecture assumes an understanding of solid-state physics (energy bands, Brillouin zones), quantum mechanics (tunneling), and the basics of HHG in solids (interband/intraband currents). We will build on this to explore new concepts and experimental techniques.</p>
                 </div>
             </section>
             
             <hr>
 
             <section id="concept-1" class="section-content">
-                <h2>1. The New Frontier: From Atoms to Solids</h2>
-                
+                <h2>1. Core Concepts: Driving Electrons in Solids</h2>
                 <div class="reveal-container">
                     <div class="reveal-header">
-                        <p><strong>Before we begin, consider:</strong> Why would a physicist want to blast a solid crystal with an incredibly intense laser pulse, similar to what's done with single atoms?</p>
+                        <p><strong>Before we begin, consider:</strong> When an electron in a solid is accelerated by an external field, does it speed up indefinitely like a free particle?</p>
                         <span class="arrow">▶</span>
                     </div>
                     <div class="hidden-content">
-                        <p>While strong-field physics began with single atoms, extending these techniques to condensed matter opens up a new world of possibilities. Solids are not just a collection of atoms; their periodic lattice structure creates electronic bands, collective behaviors like plasmons, and exotic quantum phenomena such as topology and strong electron correlations. Understanding how electrons behave in this complex environment on their natural, attosecond timescale is fundamental. Furthermore, the dream of controlling these electrons with the oscillating field of light could lead to <strong>petahertz electronics</strong>—signal processing thousands of times faster than today's gigahertz technology.</p>
-                        <p>The key shift in thinking is from an electron escaping an isolated Coulomb potential to an electron being promoted between energy bands and driven through a periodic potential landscape. This change in the "playground" for the electron is what makes the physics so rich and different from the gas phase.</p>
-                    </div>
-                </div>
-            </section>
-
-            <hr>
-
-            <section id="concept-2" class="section-content">
-                <h2>2. Core Concepts: How Strong Fields Drive Electrons in Solids</h2>
-                
-                <div class="reveal-container">
-                    <div class="reveal-header">
-                        <p><strong>Before we begin, consider:</strong> When an electron in a solid is hit by a strong laser pulse, does it move <em>within</em> its energy band or does it jump to a different one? Or both?</p>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="hidden-content">
-                        <p>The answer is both, and this distinction is the most important concept in solid-state strong-field physics. The electron's response is a coherent combination of two fundamental processes: <strong>interband</strong> and <strong>intraband</strong> dynamics.</p>
+                        <p>Unlike a free electron in a vacuum, an electron in a crystal lattice experiences a periodic potential. This has profound consequences for its motion under a strong electric field, giving rise to two key concepts we must understand: Bloch acceleration and the Keldysh parameter.</p>
                         
-                        <p><strong>Interband Dynamics</strong> involve an electron making a quantum leap from one energy band to another, typically from the valence band (VB) to the conduction band (CB). This is the solid-state analog of ionization. At high field strengths, this happens via <strong>Zener tunneling</strong>, where the laser field effectively "tilts" the bands so steeply that the energy gap becomes a narrow barrier the electron can tunnel through. Later, the electron can recombine with the hole left in the VB, emitting a high-energy photon.</p>
-
-                        <p><strong>Intraband Dynamics</strong> describe the motion of an electron (or hole) <em>within</em> a single band. This motion is governed by the <strong>Bloch acceleration theorem</strong>, which states that the electron's crystal momentum, $\mathbf{k}$, changes in response to the electric field, $\mathbf{E}(t)$:
+                        <p><strong>Intraband Dynamics: Bloch Acceleration and Oscillations</strong></p>
+                        <p>The motion of an electron within a single energy band (intraband motion) is not governed by Newton's law, but by the <strong>Bloch acceleration theorem</strong>. It states that the electron's crystal momentum, $\mathbf{k}$, changes linearly in time in response to an external electric field, $\mathbf{E}(t)$:</p>
                         $$ \hbar \frac{d\mathbf{k}(t)}{dt} = -e \mathbf{E}(t) $$
-                        Because the energy bands in a solid are not simple parabolas, this acceleration leads to a highly nonlinear current. An electron can even be driven to the edge of the Brillouin zone and effectively "diffract," reversing its velocity—a process called a <strong>Bloch oscillation</strong>. This intraband current is a powerful source of high-harmonic light.</p>
-
-                        <figure>
-                            <div style="position: relative;">
-                                <img src="Figure1.webp" alt="Comparison of HHG mechanisms in solids and atoms." id="fig1" class="zoomable">
-                                <span class="annotation" style="top: 25%; left: 40%;" data-tooltip="fig1-tip1">
-                                    1
-                                    <div class="tooltip" id="fig1-tip1"><strong>Intraband Current:</strong> An electron in the conduction band is accelerated by the laser field. Because the band is not a simple parabola, this motion creates a nonlinear current that emits high-order harmonics. This mechanism has no direct analog in atomic HHG.</div>
-                                </span>
-                                <span class="annotation" style="top: 50%; left: 40%;" data-tooltip="fig1-tip2">
-                                    2
-                                    <div class="tooltip" id="fig1-tip2"><strong>Interband Recombination:</strong> An electron from the conduction band recombines with a hole in the valence band, emitting a high-energy photon. This is analogous to the recombination step in the atomic three-step model.</div>
-                                </span>
-                                <span class="annotation" style="top: 80%; left: 75%;" data-tooltip="fig1-tip3">
-                                    3
-                                    <div class="tooltip" id="fig1-tip3"><strong>Atomic HHG:</strong> The classic three-step model: (1) Tunneling ionization, (2) Acceleration in the vacuum, (3) Recombination with the parent ion. Note the electron travels much farther from the core than in a solid.</div>
-                                </span>
-                            </div>
-                            <figcaption>
-                                <b>Figure 1:</b> A comparison of the microscopic mechanisms for High-Harmonic Generation (HHG) in solids (top) and atoms (bottom), shown in both real space and momentum space. Solids have two primary channels: the <strong>intraband current</strong> and <strong>interband recombination</strong>.
-                            </figcaption>
-                        </figure>
+                        <p>However, the electron's velocity in a particular energy band is given by the group velocity, $v_g(\mathbf{k}) = \frac{1}{\hbar} \nabla_\mathbf{k} \epsilon(\mathbf{k})$, which is proportional to the <em>slope</em> of the energy band $\epsilon(\mathbf{k})$. Because the energy bands are periodic and curved, an electron that is slowly (adiabatically) accelerated towards the edge of the Brillouin zone will slow down, stop (where the band is flat), and then reverse its direction. This periodic motion in real space, driven by a constant electric field, is known as a <strong>Bloch oscillation</strong>. This highly nonlinear motion is a rich source of high-frequency radiation and a key mechanism in solid-state strong-field physics.</p>
 
                         <div class="key-takeaways">
                             <h3>💡 The Keldysh Parameter: Tunneling vs. Multiphoton</h3>
-                            <p>How do we know if an electron will tunnel or absorb multiple photons? The <strong>Keldysh adiabaticity parameter</strong>, $\gamma$, gives us the answer. For a direct-bandgap solids with a bandgap of $E_{\mathrm{g}}$,</p>
-                            $$ \gamma = \frac{\omega_\mathrm{L} \sqrt{2m^* E_{\mathrm{g}}}}{e E_0}, $$
-                            where $e' is the elementary charge, $E_0$ is the amplitude of the electric field, $\omega_\mathrm{L}$ is its frequency, and $m^*$ is the effective reduced mass for an electron-hole pair.
+                            <p>How an electron is promoted from the valence band (VB) to the conduction band (CB) depends on the strength and frequency of the laser field. The <strong>Keldysh adiabaticity parameter</strong>, $\gamma$, elegantly distinguishes between two regimes. For a solid with bandgap $E_{\mathrm{g}}$ and laser frequency $\omega$, it is given by</p>
+                            $$ \gamma = \frac{\omega \sqrt{2m^* E_{\mathrm{g}}}}{e E_0} $$
+                            <p>Here, $m^*$ is the effective reduced mass of the electron-hole pair, and $E_0$ is the peak electric field amplitude.</p>
                             <ul>
-                                <li>If $\gamma \gg 1$ (e.g., weaker fields, higher frequencies), the field oscillates too quickly for the electron to tunnel. The process is <strong>diabatic</strong>, and we are in the <strong>multiphoton regime</strong>.</li>
-                                <li>If $\gamma \ll 1$ (e.g., very strong, low-frequency fields), the field varies slowly compared to the electron's dynamics. The process is <strong>adiabatic</strong>, and we are in the <strong>tunneling regime</strong>. This is the regime crucial for lightwave electronics, as it allows for current injection within a fraction of a light cycle.</li>
+                                <li>If <strong>$\gamma \gg 1$ (Multiphoton Absorption)</strong>: The field is relatively weak or oscillates very fast. The electron absorbs multiple photons to bridge the bandgap. The process depends on the laser's cycle-averaged <em>intensity</em>.</li>
+                                <li>If <strong>$\gamma \ll 1$ (Field-Driven Tunneling)</strong>: The field is very strong or has a low frequency. The field "tilts" the bands so severely that the electron can tunnel from a valence band to a conduction band within a fraction of a light cycle. The process is governed by the instantaneous <em>electric field</em>.</li>
                             </ul>
+                            <p>Operating in the field-driven regime is the key to <strong>lightwave electronics</strong>, where we can control electron currents with the waveform of light itself.</p>
                         </div>
                         <figure>
-                            <img src="Figure2.webp" alt="Diagram showing the field-driven vs photon-absorption regimes of electronics." class="zoomable">
+                            <img src="fig1.webp" alt="Diagram showing the field-driven vs photon-absorption regimes of electronics." class="zoomable">
                             <figcaption>
-                                <b>Figure 2:</b> The regimes of electronics. At low frequencies and field strengths (bottom left), we have conventional electronics. In the optical domain (top), we can have either photon-driven processes (where the cycle-averaged intensity matters) or <em>field-driven</em> processes (where the instantaneous electric field controls the current). The transition is governed by the Keldysh parameter, $\gamma$. Petahertz electronics operates in the field-driven regime where $\gamma < 1$.
+                                <b>Figure 1:</b> The regimes of electronics. At low frequencies and field strengths (bottom left), we have conventional gigahertz electronics. In the optical domain (top), we can have either photon-driven processes ($\gamma > 1$), where the cycle-averaged intensity matters, or <em>field-driven</em> processes ($\gamma < 1$), where the instantaneous electric field controls the current. Petahertz electronics operates in this field-driven regime.
                             </figcaption>
                         </figure>
+                    </div>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="concept-2" class="section-content">
+                <h2>2. The World of Nanostructures & 2D Materials</h2>
+                 <div class="reveal-container">
+                    <div class="reveal-header">
+                        <p><strong>Before we begin, consider:</strong> To reach the strong-field regime ($\gamma \lesssim 1$) in a wide-bandgap material like glass ($E_\mathrm{g} \approx 9$ eV), you need enormous laser intensities, often close to the material's damage threshold. How could you achieve these strong fields locally, using much less laser power?</p>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="hidden-content">
+                        <p>The answer lies in using precisely engineered nanostructures. These structures, along with atomically thin 2D materials, form the essential platforms for modern lightwave electronics experiments. They allow us to control and enhance light-matter interactions in ways that are impossible in bulk materials.</p>
+
+                        <h3>Nanostructures as Optical Antennas</h3>
+                        <p>Metallic or semiconducting nanostructures shaped into tips, bow-ties, or antennas can act as nanoscale lightning rods for light. They exploit plasmonic resonances or geometric effects (like sharp tips) to concentrate the energy of an incident laser pulse into tiny "hot spots".</p>
+                        <p>This <strong>near-field enhancement</strong> means the local electric field at the structure's apex can be tens or even hundreds of times stronger than the incident laser field. This allows us to:</p>
+                        <ul>
+                            <li><strong>Reach the strong-field regime</strong> with much lower incident laser energies (picojoules instead of microjoules), making experiments more accessible and reducing the risk of bulk damage.</li>
+                            <li><strong>Localize the interaction</strong> to a nanometer-scale region, enabling the creation of on-chip devices where current is generated and collected over very short distances.</li>
+                        </ul>
+
+                        <figure>
+                            <div style="position: relative;">
+                                <img src="fig2.png" alt="Scanning electron microscope image of a bow-tie nanoantenna." id="fig2" class="zoomable">
+                            </div>
+                            <figcaption>
+                                <b>Figure 2:</b> A scanning electron micrograph of a gold bow-tie nanoantenna designed for lightwave electronics. The sharp tips, separated by a gap of only a few nanometers, create a region of massive electric field enhancement when illuminated by a laser pulse. This allows for field-driven electron emission and current generation at much lower input pulse energies. Such nanoplasmonic structures can be arrayed for increased signal generation.
+                            </figcaption>
+                        </figure>
+                        
+                        <h3>Atomically Thin 2D Materials</h3>
+                        <p>Materials like graphene and transition metal dichalcogenides (TMDs, e.g., $\text{WSe}_2$, $\text{MoS}_2$) offer a unique playground for lightwave electronics. Their properties include:</p>
+                        <ul>
+                            <li><strong>Unique Band Structures:</strong> Graphene's linear, "Dirac cone" band structure leads to unusual electron dynamics. TMDs possess "valleys" in their band structure that can be used to encode information, paving the way for <em>valleytronics</em>.</li>
+                            <li><strong>Reduced Coulomb Screening:</strong> Atomically thin 2D materials exhibit enhanced many-body interactions due to a lack of screening, which profoundly influences the Coulomb interaction between electrons.</li>
+                            <li><strong>Exceptional Strength:</strong> These materials are mechanically robust and can withstand very high electric fields before breaking down, making them ideal for strong-field experiments.</li>
+                        </ul>
+                        <p>By combining nanostructured electrodes with 2D materials, we can create hybrid devices that harness the benefits of both platforms for ultimate control over light-driven currents.</p>
                     </div>
                 </div>
             </section>
@@ -481,99 +478,86 @@
                 <h2>3. The Main Experimental Techniques</h2>
                 <div class="reveal-container">
                     <div class="reveal-header">
-                        <p><strong>Before we begin, consider:</strong> If you have an attosecond XUV pulse, how could you use it to "take a picture" of what electrons are doing inside a solid that is being shaken by an intense infrared laser pulse?</p>
+                        <p><strong>Before we begin, consider:</strong> An electron moves through a crystal, either driven by a light field oscillating every few femtoseconds or leaving the solid within a fraction of a femtosecond. How could you possibly measure this attosecond-scale motion?</p>
                         <span class="arrow">▶</span>
                     </div>
                     <div class="hidden-content">
-                        <p>We have two powerful, all-optical techniques that are complementary: High-Harmonic Generation (HHG) Spectroscopy and Attosecond Transient Absorption/Reflection Spectroscopy (ATAS/ATRS). They both provide attosecond time resolution but look at the system from different angles.</p>
+                        <p>Observing and controlling dynamics on the attosecond-to-femtosecond scale requires sophisticated all-optical techniques. Beyond HHG and ATAS/ATRS, several key methods form the bedrock of modern lightwave electronics.</p>
 
-                        <h3>High-Harmonic Generation (HHG) Spectroscopy</h3>
-                        <p>In HHG spectroscopy, we don't use an external probe pulse. The system probes itself! An intense IR laser pulse drives the electron dynamics (the interband and intraband currents described earlier). These dynamics then cause the solid to <strong>emit</strong> its own light at high harmonics of the driving frequency. By analyzing the spectrum, polarization, and phase of this emitted harmonic light, we can reconstruct the electron dynamics that created it. It's like listening to the "scream" of the electrons as they are violently accelerated by the field.</p>
-                        
-                        <h3>Attosecond Transient Absorption/Reflection Spectroscopy (ATAS/ATRS)</h3>
-                        <p>This is a classic pump-probe technique. An intense IR <strong>pump</strong> pulse initiates the dynamics in the solid. A precisely delayed attosecond XUV <strong>probe</strong> pulse is then sent through (ATAS) or reflected off (ATRS) the sample. The XUV photons are chosen to have enough energy to excite electrons from deep, localized <strong>core levels</strong> into the now-dynamic valence and conduction bands. By measuring how the absorption of the XUV probe changes as a function of the pump-probe delay, we can map the electron dynamics with attosecond resolution and element specificity. It's like taking a series of snapshots of the electronic structure as it evolves in time.</p>
-
+                        <h3>1. Attosecond Streaking in Solids</h3>
+                        <p>This is a powerful pump-probe technique for timing electronic processes with attosecond precision. The concept is analogous to its gas-phase counterpart:</p>
+                        <ol>
+                            <li>An attosecond extreme ultraviolet (XUV) pulse (the "probe") photoionizes an electron from a deep, localized core level. Because this electron's initial state is well-defined, it acts as a precise time reference.</li>
+                            <li>Simultaneously, an intense, few-cycle infrared (IR) pulse (the "pump" or "streaking field") is present. The electric field of this IR pulse accelerates the newly freed electron.</li>
+                            <li>By measuring the final kinetic energy of the electron as a function of the delay between the XUV and IR pulses, we can map out the vector potential of the IR field.</li>
+                        </ol>
+                        <p>By comparing the streaking trace of an electron from a dynamic valence or conduction band to the reference trace from the static core level, we can measure delays in photoemission or the speed of electronic screening with attosecond resolution.</p>
                         <figure>
-                             <div style="position: relative;">
-                                <img src="Figure4.webp" alt="Comparison of HHG and ATAS mechanisms." class="zoomable" id="fig4">
-                                <span class="annotation" style="top: 40%; left: 25%;" data-tooltip="fig4-tip1">
-                                    1
-                                    <div class="tooltip" id="fig4-tip1"><strong>HHG (Panel a):</strong> A single strong "ultrafast beam" drives all the dynamics: (1) tunneling, (2) acceleration, and (3) recombination, leading to the emission of HHG light from both interband and intraband currents. It is a self-probing process.</div>
-                                </span>
-                                <span class="annotation" style="top: 60%; left: 75%;" data-tooltip="fig4-tip2">
-                                    2
-                                    <div class="tooltip" id="fig4-tip2"><strong>ATAS (Panel b):</strong> A strong IR "pump beam" initiates the dynamics. A separate, time-delayed attosecond "XUV" pulse probes the system by exciting an inner-shell (IS) electron. The absorption of this XUV light reveals the state of the conduction band (CB).</div>
-                                </span>
-                             </div>
+                            <img src="fig3.png" alt="Attosecond streaking in a solid." class="zoomable">
                             <figcaption>
-                                <b>Figure 4:</b> The complementary mechanisms of HHG spectroscopy (left) and Attosecond Transient Spectroscopy (right). HHG is an <em>emission-based</em> technique driven by a single strong field, while ATAS/ATRS is a pump-probe <em>absorption</em> technique.
+                                <b>Figure 3:</b> The principle of attosecond streaking in solids. An XUV pulse excites electrons from a static core level (the reference clock) and a dynamic valence/conduction band. A synchronized, strong IR field ("streaking field") imparts a momentum kick to the photoelectrons. The time delay ($\Delta t$) between the two electron wavepackets arriving at the detector reveals the ultrafast dynamics within the solid.
+                            </figcaption>
+                        </figure>
+
+                        <h3>2. Petahertz Current Measurements</h3>
+                        <p>The most direct way to probe lightwave electronics is to simply measure the resulting current. In a typical experiment, a sample (e.g., a dielectric or a 2D material) is placed between two metal electrodes. A few-cycle laser pulse is focused onto the sample. If the pulse waveform is asymmetric (controlled by the Carrier-Envelope Phase, $\varphi_{\mathrm{CE}}$), and the interaction is in the field-driven regime, a net number of electrons will be driven towards one electrode. This creates a tiny, directional current (picoamperes or less) that can be measured with sensitive electronics. By varying the CEP, one can directly control the direction and magnitude of this current, proving that the light's <em>field</em>, not its intensity, is in command.</p>
+
+                        <h3>3. Optical-Field-Resolved Sampling</h3>
+                        <p>What if the effect you want to measure is the lightwave itself? Petahertz electronic devices can act as incredibly fast sampling oscilloscopes for light fields. The two main approaches are based on ultrafast photoinjection that "gates" the interaction with a probe pulse:</p>
+                        <ul>
+                            <li><strong>Light-controlled carrier motion (e.g., Nonlinear Photoconductive Sampling - NPS):</strong> A strong "gate" pulse generates a sub-cycle burst of charge carriers in a solid (like $\text{SiO}_2$). A weaker, orthogonally polarized "signal" pulse, which we want to measure, accelerates these carriers towards the collection electrodes. The measured drift current, as a function of the delay between the two pulses, is proportional to the <em>vector potential</em> $A_{\mathrm{s}}(t)$ of the signal field. This resembles attosecond streaking, except that this technique does not measure energy-resolved electron distributions.</li>
+                            <li><strong>Perturbation of strong-field photoinjection:</strong> Here, the gate and signal pulses are co-polarized. The strong gate pulse drives a highly nonlinear current emission. The weak signal pulse slightly perturbs this emission. The measured change in current as a function of delay is directly proportional to the <em>electric field</em> $E_{\mathrm{s}}(t)$ of the signal. This method can be extremely sensitive, allowing for the measurement of fields from femtojoule-level pulses.</li>
+                        </ul>
+                        <figure>
+                             <img src="fig4.png" alt="Comparison of field sampling techniques" class="zoomable">
+                            <figcaption>
+                                <b>Figure 4:</b> Two schemes for on-chip optical field sampling. <em>Left:</em> Nonlinear photoconductive sampling in $\text{SiO}_2$, where a gate pulse injects charge and an orthogonal signal pulse "streaks" it, measuring the signal's vector potential. <em>Right:</em> Perturbation of interband tunneling at a plasmonic nanoantenna, where a gate drives emission and a co-polarized signal perturbs it, directly measuring the signal's electric field with femtojoule sensitivity.
                             </figcaption>
                         </figure>
                     </div>
                 </div>
             </section>
-                        
+            
             <hr>
             
             <section id="concept-4" class="section-content">
-                <h2>4. Case Study: Towards Petahertz Electronics</h2>
+                <h2>4. Case Study: The Birth of Petahertz Electronics</h2>
                 <div class="reveal-container">
                     <div class="reveal-header">
-                        <p><strong>Before we begin, consider:</strong> Normally, the current from a photodiode depends on the <em>intensity</em> (power) of the light. How could you make a current that depends on the light's electric <em>field</em> itself, including its direction?</p>
+                        <p><strong>Before we begin, consider:</strong> In a normal electrical circuit, a voltage creates a current. How can the oscillating electric field of light, which averages to zero over a cycle, produce a steady, directional DC current?</p>
                         <span class="arrow">▶</span>
                     </div>
                     <div class="hidden-content">
-                        <p>The key is to operate in the tunneling regime ($\gamma \ll 1$), where charge carriers are injected into the conduction band on a timescale much shorter than a single optical cycle. If the laser pulse is only a few cycles long, its electric field waveform is asymmetric. For example, a "cosine-like" pulse has a strong central peak, while a "sine-like" pulse has zero field at its center but strong fields on either side.</p>
+                        <p>This is the central magic of petahertz electronics. The key lies in breaking the symmetry of the driving field and ensuring the electron response is fast enough to follow it. This is achieved by using <strong>few-cycle laser pulses</strong> in the <strong>field-driven regime</strong>.</p>
                         
-                        <p>Because the tunneling rate is extremely sensitive to the instantaneous electric field strength, an asymmetric waveform will inject more electrons during the stronger half-cycles. This creates a net flow of charge—a residual current—whose direction and magnitude can be controlled by the light's waveform. The parameter that controls this asymmetry is the <strong>carrier-envelope phase (CEP)</strong>.</p>
-                        
-                        <p>Pioneering experiments on dielectrics like fused silica ($\text{Si} \text{O}_2$) showed exactly this effect. By placing a thin sample between two electrodes, researchers measured a net current that oscillated sinusoidally as the CEP of the few-cycle laser pulse was varied. This demonstrated that the electric field of light could be used as an ultrafast "gate" to directly drive and control a current, forming the fundamental building block of <strong>petahertz electronics</strong>.</p>
-                        
-                        <figure>
-                            <img src="Figure6.png" alt="CEP control of current at a material interface." class="zoomable">
-                            <figcaption>
-                                <b>Figure 6:</b> Direct control of current with the light field. The measured current across a metal-dielectric-metal interface shows a clear sinusoidal dependence on the carrier-envelope phase (CEP), proving that the current is driven by the field's waveform, not just its intensity envelope. This experiment is a cornerstone of lightwave electronics.
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </section>
-            
-            <hr>
-
-            <section id="concept-5" class="section-content">
-                <h2>5. Special Topic: The World of Nanostructures</h2>
-                 <div class="reveal-container">
-                    <div class="reveal-header">
-                        <p><strong>Before we begin, consider:</strong> We've discussed isolated atoms and bulk crystals. What new physics might emerge if we study an object in between—a tiny sphere only a few hundred nanometers in diameter?</p>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="hidden-content">
-                        <p>Nanostructures, like dielectric nanospheres or metallic nanotips, introduce a fascinating new ingredient: the interplay between strong-field physics and <strong>plasmonic near-field enhancement</strong>. These structures act like nanoscale antennas, concentrating the incident laser field into tiny "hot spots" near their surface.</p>
-
-                        <h3>Near-Field Enhancement</h3>
-                        <p>The local electric field at the surface of a nanostructure can be many times stronger than the incident laser field. This means we can reach the strong-field regime (and even tunnel-ionize wide-bandgap dielectrics!) using much lower laser intensities. The field is also highly inhomogeneous, decaying rapidly away from the surface.</p>
-
-                        <figure>
-                            <img src="Figure7.png" alt="Map of electric field enhancement around a gold nanorod." class="zoomable">
-                            <figcaption>
-                                <b>Figure 7:</b> Simulation of the electric field enhancement around a 150-nm gold nanorod at its plasmon resonance. The field at the tips is over 25 times stronger than the incident laser field, creating "hot spots" where strong-field physics can occur.
-                            </figcaption>
-                        </figure>
-
-                        <h3>Consequences for Electron Dynamics</h3>
-                        <p>This enhanced, localized near-field fundamentally changes the electron's trajectory after it's emitted:</p>
+                        <h3>Controlling Current with the Carrier-Envelope Phase (CEP)</h3>
+                        <p>A laser pulse lasting only a few femtoseconds consists of just a handful of optical cycles contained within an intensity envelope. The <strong>carrier-envelope phase ($\varphi_{\mathrm{CE}}$)</strong> describes the phase offset of the rapidly oscillating carrier wave with respect to the peak of the pulse envelope.</p>
                         <ul>
-                            <li><strong>Surface Rescattering:</strong> The electron is born in the near-field and can be driven back to the nanosphere's surface, where it scatters. The maximum kinetic energy of these rescattered electrons scales with the <strong>local, enhanced field</strong>, leading to much higher electron energies than would be expected from the incident laser intensity alone.</li>
-                            <li><strong>Charge Interaction and TRAB:</strong> At high intensities, so many electrons are emitted that the nanosphere becomes significantly positively charged. This creates a powerful static "trapping field". An electron that recollides with the surface is now accelerated not only by the laser field but also by this attractive trapping field, gaining even more energy in a process called <strong>Trapping-Field Assisted Backscattering (TRAB)</strong>.</li>
+                            <li>A pulse with $\varphi_{\mathrm{CE}} = 0$ is "cosine-like". It has its strongest electric field peak aligned with the center of the envelope.</li>
+                            <li>A pulse with $\varphi_{\mathrm{CE}} = \pi/2$ is "sine-like". It has zero field at the center, but two strong, oppositely directed peaks on either side.</li>
                         </ul>
-
+                        <p>Because field-driven tunneling is exponentially sensitive to the instantaneous electric field strength, a cosine-like pulse ($\varphi_{\mathrm{CE}} = 0$) will inject a huge burst of electrons in one direction during the central peak, with much smaller bursts in the opposite direction from the weaker side-lobes. This creates a net directional current. A sine-like pulse ($\varphi_{\mathrm{CE}} = \pi/2$), being symmetric, produces no net current. As you vary the $\varphi_{\mathrm{CE}}$ from 0 to $2\pi$, the asymmetry of the waveform sweeps smoothly, and so does the resulting current—from maximum in one direction, to zero, to maximum in the other direction, and back.</p>
+                        
                         <figure>
-                            <img src="Figure8.jpg" alt="Photoelectron spectrum from a nanosphere showing a rescattering plateau." class="zoomable">
+                            <div style="position: relative;">
+                                <img src="fig5.png" alt="CEP control of electric field and current." id="fig5" class="zoomable">
+                                <span class="annotation" style="top: 25%; left: 75%;" data-tooltip="fig5-tip1">
+                                    1
+                                    <div class="tooltip" id="fig5-tip1"><strong>Asymmetric Fields:</strong> A few-cycle pulse with $\varphi_{\mathrm{CE}} = 0$ (blue) is highly asymmetric, with a single strong positive peak. A pulse with $\varphi_{\mathrm{CE}} = \pi/2$ (red) is anti-symmetric, with balanced positive and negative peaks.</div>
+                                </span>
+                                 <span class="annotation" style="top: 70%; left: 50%;" data-tooltip="fig5-tip2">
+                                    2
+                                    <div class="tooltip" id="fig5-tip2"><strong>Current Response:</strong> The measured average current (in picoamperes, pA) across the device oscillates sinusoidally as a function of the CEP, which is controlled by inserting a thin wedge of $\text{SiO}_2$. Maximum positive and negative currents correspond to the most asymmetric waveforms.</div>
+                                </span>
+                            </div>
                             <figcaption>
-                                <b>Figure 8:</b> A typical photoelectron energy spectrum from a nanosphere. The spectrum features a high-energy plateau that extends to a cutoff energy far beyond what would be expected from direct emission. This plateau is the signature of electrons that have rescattered off the nanoparticle surface. The cutoff energy provides a direct measure of the <strong>local, enhanced field</strong> strength.
+                                <b>Figure 5:</b> Direct control of current with the light field. (Top right) The electric field of a few-cycle pulse for two different CEPs. (Bottom) Experimental data showing that the average current measured across a nano-device oscillates sinusoidally as the CEP is varied. This proves that the current is driven by the field's waveform, not just its intensity, and forms the basis of a light-controlled switch.
                             </figcaption>
                         </figure>
+
+                        <h3>From Switches to Logic</h3>
+                        <p>This CEP-controlled current is the fundamental building block of a lightwave-driven switch or transistor. The light field acts as the "gate voltage," and the current is the output. Since the response happens on the timescale of the light field itself (~fs), this enables processing speeds in the petahertz ($10^{15}$ Hz) range, millions of times faster than today's gigahertz electronics.</p>
+                        <p>Recent experiments have gone even further. By using two light pulses with controlled waveforms as inputs ('0' or '1') and measuring the total output current, researchers have demonstrated the first all-optical logic gates (AND, OR, etc.) that operate at petahertz speeds, marking a crucial step towards digital lightwave electronics.</p>
                     </div>
                 </div>
             </section>
@@ -585,13 +569,13 @@
                 <div class="key-takeaways">
                     <h3>Key Takeaways from Today's Lecture 🚀</h3>
                     <ul>
-                        <li>Strong-field physics in condensed matter is a rich field where the laser interacts with electrons in a <strong>periodic potential</strong>, leading to an interplay of <strong>interband</strong> and <strong>intraband dynamics</strong>.</li>
-                        <li>We can probe these dynamics on attosecond timescales using two main all-optical tools: <strong>HHG spectroscopy</strong> (measuring emitted light) and <strong>ATAS/ATRS</strong> (measuring absorbed light).</li>
-                        <li>These techniques have provided unprecedented insight into fundamental material properties.</li>
-                        <li>Controlling electron currents with the waveform of light itself has laid the foundation for future <strong>petahertz electronics</strong>.</li>
-                        <li><strong>Nanostructures</strong> act as optical antennas, creating enhanced near-fields that open up new regimes of strong-field physics, such as surface rescattering and charge-interaction-driven acceleration.</li>
+                        <li>Strong-field physics in solids is governed by the interplay of <strong>interband</strong> (tunneling) and <strong>intraband</strong> (Bloch acceleration) dynamics, distinguished by the <strong>Keldysh parameter $\gamma$</strong>.</li>
+                        <li><strong>Nanostructures</strong> and <strong>2D materials</strong> are crucial platforms, enabling field enhancement and providing unique electronic properties for controlling light-driven currents.</li>
+                        <li>We can probe these dynamics using techniques like <strong>attosecond streaking</strong> for timing, <strong>direct current measurements</strong> to see the net effect, and <strong>field sampling</strong> to characterize the lightwaves themselves.</li>
+                        <li>By operating in the field-driven regime ($\gamma \lesssim 1$ being a sufficient but not strictly necessary condition) with few-cycle pulses, the <strong>CEP</strong> can be used to control the direction and magnitude of a current, forming the basis of <strong>petahertz electronics</strong>.</li>
+                        <li>Light-driven switches and logic gates may lay foundations for future technologies capable of  information processing at petahertz frequencies.</li>
                     </ul>
-                    <p>The convergence of condensed matter physics, quantum optics, and ultrafast science is pushing the frontiers of how we understand and control the quantum world. Future directions include exploring attomagnetism, complex quantum materials, and developing the first real-world lightwave electronic devices.</p>
+                    <p>The convergence of condensed matter physics and ultrafast science is pushing the frontiers of how we understand and control the quantum world. Current and future research directions include exploring quantum-optical phenomena, attomagnetism, complex quantum materials, as well as developing the first real-world lightwave electronic devices that integrate sources, logic, and detectors on a single chip.</p>
                 </div>
             </section>
         </main>
@@ -640,21 +624,40 @@
             let indexToActivate = 0;
             let minDist = Infinity;
             
-            // *** FIX: Iterate over the 'tocSections' array, not all sections ***
+            // Iterate over the 'tocSections' array, not all sections
             tocSections.forEach((section, idx) => {
                 const rect = section.getBoundingClientRect();
                 const offset = 80; // Small buffer from the top of the screen
-                if (rect.top <= offset && Math.abs(rect.top - offset) < minDist) {
-                    minDist = Math.abs(rect.top - offset);
-                    indexToActivate = idx; // The index from this loop now correctly matches the tocLinks index
+                // Activate section if its top is within the viewport buffer area
+                if (rect.top >= 0 && rect.top <= offset) {
+                    if (rect.top < minDist) {
+                        minDist = rect.top;
+                        indexToActivate = idx;
+                    }
+                } 
+                // Fallback for when scrolling past the last section
+                else if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                    indexToActivate = tocLinks.length - 1;
                 }
             });
+
+            // If no section is in the active zone, find the one closest to the top
+            if (minDist === Infinity) {
+                 tocSections.forEach((section, idx) => {
+                    const rect = section.getBoundingClientRect();
+                    if (Math.abs(rect.top) < minDist) {
+                        minDist = Math.abs(rect.top);
+                        indexToActivate = idx;
+                    }
+                 });
+            }
+
 
             tocLinks.forEach((link, idx) => {
                 link.classList.toggle('active', idx === indexToActivate);
             });
             
-            const progress = tocLinks.length > 0 ? ((indexToActivate + 1) / tocLinks.length) * 100 : 0;
+            const progress = tocLinks.length > 0 ? ((indexToActivate) / (tocLinks.length - 1)) * 100 : 0;
             progressBar.style.width = `${progress}%`;
         }
 
@@ -671,7 +674,6 @@
                 const targetSection = document.querySelector(targetId);
                 
                 if (targetSection) {
-                    // This scroll logic was already correct
                     const y = targetSection.getBoundingClientRect().top + window.pageYOffset - 70;
                     window.scrollTo({ top: y, behavior: 'smooth' });
                 }
@@ -697,7 +699,12 @@
             img.addEventListener('click', () => {
                 modal.classList.add('show');
                 modalImg.src = img.src;
-                modalCaption.innerHTML = img.closest('figure').querySelector('figcaption').innerHTML;
+                const figcaption = img.closest('figure').querySelector('figcaption');
+                if (figcaption) {
+                    modalCaption.innerHTML = figcaption.innerHTML;
+                } else {
+                    modalCaption.innerHTML = "";
+                }
             });
         });
 
@@ -713,14 +720,19 @@
             annotation.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const wasActive = annotation.classList.contains('active');
-                annotations.forEach(a => a.classList.remove('active'));
-                if (!wasActive) {
-                    annotation.classList.add('active');
-                }
+                // Deactivate all other annotations first
+                annotations.forEach(a => {
+                    if (a !== annotation) {
+                       a.classList.remove('active');
+                    }
+                });
+                // Toggle the clicked one
+                annotation.classList.toggle('active', !wasActive);
             });
         });
         
         document.addEventListener('click', (e) => {
+            // Close tooltips if clicking anywhere outside an annotation
             if (!e.target.closest('.annotation')) {
                 annotations.forEach(a => a.classList.remove('active'));
             }
