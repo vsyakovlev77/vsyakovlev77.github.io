@@ -603,126 +603,131 @@
 
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Theme Toggle ---
-            const themeToggle = document.getElementById('theme-toggle');
-            const body = document.body;
-            themeToggle.addEventListener('click', () => {
-                body.classList.toggle('dark-mode');
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
 
-            // --- Table of Contents & Progress Bar ---
-            const tocList = document.querySelector('#toc ul');
-            const sections = document.querySelectorAll('.section-content');
-            const progressBar = document.getElementById('progress-bar');
+        // --- Table of Contents & Progress Bar ---
+        const tocList = document.querySelector('#toc ul');
+        const progressBar = document.getElementById('progress-bar');
+        const allSections = document.querySelectorAll('.section-content');
+        const tocSections = []; // This will hold only the sections that appear in the TOC
 
-            sections.forEach((section, index) => {
-                const title = section.querySelector('h2');
-                if (title) {
-                    const listItem = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = `#${section.id}`;
-                    link.textContent = title.textContent;
-                    listItem.appendChild(link);
-                    tocList.appendChild(listItem);
+        // Build the TOC list items and populate our dedicated 'tocSections' array
+        allSections.forEach(section => {
+            const title = section.querySelector('h2');
+            if (title) {
+                tocSections.push(section); // Add the section to our matched array
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `#${section.id}`;
+                link.textContent = title.textContent;
+                listItem.appendChild(link);
+                tocList.appendChild(listItem);
+            }
+        });
+
+        // Now, select the links that were just created
+        const tocLinks = document.querySelectorAll('#toc a');
+
+        // --- Highlight TOC link for section nearest top ---
+        function updateActiveTocLink() {
+            let indexToActivate = 0;
+            let minDist = Infinity;
+            
+            // *** FIX: Iterate over the 'tocSections' array, not all sections ***
+            tocSections.forEach((section, idx) => {
+                const rect = section.getBoundingClientRect();
+                const offset = 80; // Small buffer from the top of the screen
+                if (rect.top <= offset && Math.abs(rect.top - offset) < minDist) {
+                    minDist = Math.abs(rect.top - offset);
+                    indexToActivate = idx; // The index from this loop now correctly matches the tocLinks index
                 }
             });
 
-            const tocLinks = document.querySelectorAll('#toc a');
-
-            // --- Highlight TOC link for section nearest top ---
-            function updateActiveTocLink() {
-                let indexToActivate = 0;
-                let minDist = Infinity;
-                sections.forEach((section, idx) => {
-                    const rect = section.getBoundingClientRect();
-                    // Find the section whose top is closest to (but not greater than) 0
-                    if (rect.top <= 80 && Math.abs(rect.top - 80) < minDist) {
-                        minDist = Math.abs(rect.top - 80);
-                        indexToActivate = idx;
-                    }
-                });
-                tocLinks.forEach((link, idx) => {
-                    link.classList.toggle('active', idx === indexToActivate);
-                });
-                const progress = ((indexToActivate + 1) / tocLinks.length) * 100;
-                progressBar.style.width = `${progress}%`;
-            }
-
-            // On scroll, update active TOC link
-            window.addEventListener('scroll', updateActiveTocLink, { passive: true });
-            // On load, set initial active link
-            updateActiveTocLink();
-
-            // On TOC link click, highlight immediately and scroll to section with offset
             tocLinks.forEach((link, idx) => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    tocLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    const progress = ((idx + 1) / tocLinks.length) * 100;
-                    progressBar.style.width = `${progress}%`;
-                    // Scroll to section with offset to account for sticky TOC/header
-                    const targetSection = sections[idx];
+                link.classList.toggle('active', idx === indexToActivate);
+            });
+            
+            const progress = tocLinks.length > 0 ? ((indexToActivate + 1) / tocLinks.length) * 100 : 0;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // On scroll, update active TOC link
+        window.addEventListener('scroll', updateActiveTocLink, { passive: true });
+        // On load, set initial active link
+        updateActiveTocLink();
+
+        // On TOC link click, scroll to section
+        tocLinks.forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    // This scroll logic was already correct
                     const y = targetSection.getBoundingClientRect().top + window.pageYOffset - 70;
                     window.scrollTo({ top: y, behavior: 'smooth' });
-                });
-            });
-
-            // --- Reveal Content ---
-            const revealContainers = document.querySelectorAll('.reveal-container');
-            revealContainers.forEach(container => {
-                const header = container.querySelector('.reveal-header');
-                header.addEventListener('click', () => {
-                    container.classList.toggle('open');
-                });
-            });
-            
-            // --- Figure Zoom Modal ---
-            const modal = document.getElementById('modal');
-            const modalImg = document.getElementById('modal-img');
-            const modalCaption = document.getElementById('modal-caption');
-            const zoomableImages = document.querySelectorAll('img.zoomable');
-
-            zoomableImages.forEach(img => {
-                img.addEventListener('click', () => {
-                    modal.classList.add('show');
-                    modalImg.src = img.src;
-                    modalCaption.innerHTML = img.closest('figure').querySelector('figcaption').innerHTML;
-                });
-            });
-
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal || e.target === modalImg || e.target === modalCaption) {
-                    modal.classList.remove('show');
                 }
             });
-            
-            // --- Interactive Annotations ---
-            const annotations = document.querySelectorAll('.annotation');
-            annotations.forEach(annotation => {
-                annotation.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const wasActive = annotation.classList.contains('active');
-                    // Close all other annotations
-                    annotations.forEach(a => a.classList.remove('active'));
-                    // Toggle current annotation
-                    if (!wasActive) {
-                        annotation.classList.add('active');
-                    }
-                });
-            });
-            
-            document.addEventListener('click', (e) => {
-                // Close tooltips if clicking outside
-                if (!e.target.closest('.annotation')) {
-                    annotations.forEach(a => a.classList.remove('active'));
-                }
-            });
-
         });
-    </script>
+
+        // --- Reveal Content ---
+        const revealContainers = document.querySelectorAll('.reveal-container');
+        revealContainers.forEach(container => {
+            const header = container.querySelector('.reveal-header');
+            header.addEventListener('click', () => {
+                container.classList.toggle('open');
+            });
+        });
+        
+        // --- Figure Zoom Modal ---
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalCaption = document.getElementById('modal-caption');
+        const zoomableImages = document.querySelectorAll('img.zoomable');
+
+        zoomableImages.forEach(img => {
+            img.addEventListener('click', () => {
+                modal.classList.add('show');
+                modalImg.src = img.src;
+                modalCaption.innerHTML = img.closest('figure').querySelector('figcaption').innerHTML;
+            });
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target === modalImg || e.target === modalCaption) {
+                modal.classList.remove('show');
+            }
+        });
+        
+        // --- Interactive Annotations ---
+        const annotations = document.querySelectorAll('.annotation');
+        annotations.forEach(annotation => {
+            annotation.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const wasActive = annotation.classList.contains('active');
+                annotations.forEach(a => a.classList.remove('active'));
+                if (!wasActive) {
+                    annotation.classList.add('active');
+                }
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.annotation')) {
+                annotations.forEach(a => a.classList.remove('active'));
+            }
+        });
+
+    });
+</script>
 
 </body>
 </html>
