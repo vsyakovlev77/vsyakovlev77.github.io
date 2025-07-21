@@ -459,7 +459,7 @@
                             <h3>💡 The Keldysh Parameter: Tunneling vs. Multiphoton</h3>
                             <p>How do we know if an electron will tunnel or absorb multiple photons? The <strong>Keldysh adiabaticity parameter</strong>, $\gamma$, gives us the answer. For a direct-bandgap solids with a bandgap of $E_{\mathrm{g}}$,</p>
                             $$ \gamma = \frac{\omega_\mathrm{L} \sqrt{2m^* E_{\mathrm{g}}}}{e E_0}, $$
-                            where $e$ is the elementary charge, $E_0$ is the amplitude of the electric field, $\omega_\mathrm{L}$ is its frequency, and $m^*$ is the effective reduced mass for an electron-hole pair.
+                            where $e' is the elementary charge, $E_0$ is the amplitude of the electric field, $\omega_\mathrm{L}$ is its frequency, and $m^*$ is the effective reduced mass for an electron-hole pair.
                             <ul>
                                 <li>If $\gamma \gg 1$ (e.g., weaker fields, higher frequencies), the field oscillates too quickly for the electron to tunnel. The process is <strong>diabatic</strong>, and we are in the <strong>multiphoton regime</strong>.</li>
                                 <li>If $\gamma \ll 1$ (e.g., very strong, low-frequency fields), the field varies slowly compared to the electron's dynamics. The process is <strong>adiabatic</strong>, and we are in the <strong>tunneling regime</strong>. This is the regime crucial for lightwave electronics, as it allows for current injection within a fraction of a light cycle.</li>
@@ -614,9 +614,9 @@
 
             // --- Table of Contents & Progress Bar ---
             const tocList = document.querySelector('#toc ul');
-            const progressBar = document.getElementById('progress-bar');
             const sections = document.querySelectorAll('.section-content');
-            
+            const progressBar = document.getElementById('progress-bar');
+
             sections.forEach((section, index) => {
                 const title = section.querySelector('h2');
                 if (title) {
@@ -630,24 +630,45 @@
             });
 
             const tocLinks = document.querySelectorAll('#toc a');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        tocLinks.forEach(link => {
-                            link.classList.remove('active');
-                            if (link.getAttribute('href').substring(1) === entry.target.id) {
-                                link.classList.add('active');
-                            }
-                        });
-                        
-                        const activeLinkIndex = Array.from(tocLinks).findIndex(link => link.classList.contains('active'));
-                        const progress = ((activeLinkIndex + 1) / tocLinks.length) * 100;
-                        progressBar.style.width = `${progress}%`;
+
+            // --- Highlight TOC link for section nearest top ---
+            function updateActiveTocLink() {
+                let indexToActivate = 0;
+                let minDist = Infinity;
+                sections.forEach((section, idx) => {
+                    const rect = section.getBoundingClientRect();
+                    // Find the section whose top is closest to (but not greater than) 0
+                    if (rect.top <= 80 && Math.abs(rect.top - 80) < minDist) {
+                        minDist = Math.abs(rect.top - 80);
+                        indexToActivate = idx;
                     }
                 });
-            }, { rootMargin: '-40% 0px -60% 0px', threshold: 0 });
+                tocLinks.forEach((link, idx) => {
+                    link.classList.toggle('active', idx === indexToActivate);
+                });
+                const progress = ((indexToActivate + 1) / tocLinks.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
 
-            sections.forEach(section => observer.observe(section));
+            // On scroll, update active TOC link
+            window.addEventListener('scroll', updateActiveTocLink, { passive: true });
+            // On load, set initial active link
+            updateActiveTocLink();
+
+            // On TOC link click, highlight immediately and scroll to section with offset
+            tocLinks.forEach((link, idx) => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    tocLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    const progress = ((idx + 1) / tocLinks.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    // Scroll to section with offset to account for sticky TOC/header
+                    const targetSection = sections[idx];
+                    const y = targetSection.getBoundingClientRect().top + window.pageYOffset - 70;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                });
+            });
 
             // --- Reveal Content ---
             const revealContainers = document.querySelectorAll('.reveal-container');
