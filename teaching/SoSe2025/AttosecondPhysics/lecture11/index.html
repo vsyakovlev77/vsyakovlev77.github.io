@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attosecond Science: Probing Condensed Matter Dynamics</title>
+    
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #212529;
+            --primary-color: #005f73;
+            --secondary-color: #0a9396;
+            --accent-color: #94d2bd;
+            --card-bg: #f8f9fa;
+            --border-color: #dee2e6;
+            --header-font: 'Georgia', 'Times New Roman', serif;
+            --body-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary-color: #94d2bd;
+            --secondary-color: #0a9396;
+            --accent-color: #005f73;
+            --card-bg: #1e1e1e;
+            --border-color: #444;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--body-font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 16px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            grid-column: 1 / -1;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-family: var(--header-font);
+            color: var(--primary-color);
+            font-size: 2.5rem;
+        }
+
+        #toc {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        #toc h2 {
+            font-family: var(--header-font);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        #toc ul {
+            list-style: none;
+        }
+
+        #toc li a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: block;
+            padding: 0.5rem;
+            border-left: 3px solid var(--border-color);
+            transition: all 0.2s ease-in-out;
+        }
+
+        #toc li a.active {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border-left-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        #toc li a:hover {
+            background-color: var(--card-bg);
+        }
+        
+        #progress-container {
+            width: 100%;
+            background-color: var(--border-color);
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 8px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        main h2 {
+            font-family: var(--header-font);
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        p, li {
+            margin-bottom: 1rem;
+        }
+
+        strong, b {
+            color: var(--secondary-color);
+        }
+        
+        .learning-objectives, .prerequisites, .key-takeaways {
+            background-color: var(--card-bg);
+            border-left: 5px solid var(--accent-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 5px;
+        }
+        
+        .learning-objectives h3, .prerequisites h3, .key-takeaways h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .reveal-container {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .reveal-header {
+            padding: 1rem 1.5rem;
+            background-color: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reveal-header p {
+            margin: 0;
+            font-style: italic;
+        }
+        
+        .reveal-header .arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.5rem;
+        }
+        
+        .reveal-container.open .arrow {
+            transform: rotate(90deg);
+        }
+
+        .hidden-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 1.5rem;
+        }
+        
+        .reveal-container.open .hidden-content {
+            max-height: 5000px; /* Large enough for content */
+            opacity: 1;
+            padding: 1.5rem;
+        }
+
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: zoom-in;
+        }
+
+        figcaption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .annotation {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(0, 95, 115, 0.8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .annotation:hover {
+            transform: scale(1.2);
+        }
+        
+        .tooltip {
+            position: absolute;
+            top: 150%; /* Position below the circle */
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 250px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            width: 250px;
+            text-align: left;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+        
+        .annotation.active .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #theme-toggle {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 5px;
+        }
+        
+        #modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #modal-img {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        #modal-caption {
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+        }
+
+        #modal.show {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            #toc {
+                position: static;
+                margin-bottom: 2rem;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            header h1 {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        @media print {
+            body {
+                --bg-color: #ffffff;
+                --text-color: #000000;
+                font-size: 12pt;
+            }
+            header, #toc, #theme-toggle, .reveal-header .arrow {
+                display: none;
+            }
+            .container {
+                display: block;
+            }
+            .hidden-content {
+                max-height: none;
+                opacity: 1;
+                padding: 1rem 0;
+            }
+            .reveal-header p {
+                display: none;
+            }
+             figure img {
+                max-width: 70% !important;
+                page-break-inside: avoid;
+            }
+            .annotation, .tooltip {
+                display: none !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Probing Condensed Matter Dynamics</h1>
+            <button id="theme-toggle">Toggle Theme</button>
+        </header>
+
+        <nav id="toc">
+            <h2>Lecture Outline</h2>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+            <ul></ul>
+        </nav>
+
+        <main>
+            <section id="intro" class="section-content">
+                <div class="learning-objectives">
+                    <h3>🎓 Learning Objectives</h3>
+                    <ul>
+                        <li>Understand the fundamental differences between strong-field interactions in gases and solids.</li>
+                        <li>Explain the core concepts of intraband and interband dynamics.</li>
+                        <li>Describe the working principles of High-Harmonic Generation (HHG) and Attosecond Transient Absorption (ATAS) spectroscopy in solids.</li>
+                        <li>Analyze key experimental results demonstrating how these techniques probe band structure, topology, and phase transitions.</li>
+                        <li>Recognize the unique role of nanostructures in modifying and enhancing strong-field phenomena.</li>
+                    </ul>
+                </div>
+                <div class="prerequisites">
+                    <h3>🔍 Prerequisites</h3>
+                    <p>This lecture assumes a basic understanding of solid-state physics (energy bands, Brillouin zones), quantum mechanics (tunneling, wave-particle duality), and the principles of attosecond science in atomic systems (the three-step model).</p>
+                </div>
+            </section>
+            
+            <hr>
+
+            <section id="concept-1" class="section-content">
+                <h2>1. The New Frontier: From Atoms to Solids</h2>
+                
+                <div class="reveal-container">
+                    <div class="reveal-header">
+                        <p><strong>Before we begin, consider:</strong> Why would a physicist want to blast a solid crystal with an incredibly intense laser pulse, similar to what's done with single atoms?</p>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="hidden-content">
+                        <p>While strong-field physics began with single atoms, extending these techniques to condensed matter opens up a new world of possibilities. Solids are not just a collection of atoms; their periodic lattice structure creates electronic bands, collective behaviors like plasmons, and exotic quantum phenomena such as topology and strong electron correlations. Understanding how electrons behave in this complex environment on their natural, attosecond timescale is fundamental. Furthermore, the dream of controlling these electrons with the oscillating field of light could lead to <strong>petahertz electronics</strong>—signal processing thousands of times faster than today's gigahertz technology.</p>
+                        <p>The key shift in thinking is from an electron escaping an isolated Coulomb potential to an electron being promoted between energy bands and driven through a periodic potential landscape. This change in the "playground" for the electron is what makes the physics so rich and different from the gas phase.</p>
+                    </div>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="concept-2" class="section-content">
+                <h2>2. Core Concepts: How Strong Fields Drive Electrons in Solids</h2>
+                
+                <div class="reveal-container">
+                    <div class="reveal-header">
+                        <p><strong>Before we begin, consider:</strong> When an electron in a solid is hit by a strong laser pulse, does it move <em>within</em> its energy band or does it jump to a different one? Or both?</p>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="hidden-content">
+                        <p>The answer is both, and this distinction is the most important concept in solid-state strong-field physics. The electron's response is a coherent combination of two fundamental processes: <strong>interband</strong> and <strong>intraband</strong> dynamics.</p>
+                        
+                        <p><strong>Interband Dynamics</strong> involve an electron making a quantum leap from one energy band to another, typically from the valence band (VB) to the conduction band (CB). This is the solid-state analog of ionization. At high field strengths, this happens via <strong>Zener tunneling</strong>, where the laser field effectively "tilts" the bands so steeply that the energy gap becomes a narrow barrier the electron can tunnel through. Later, the electron can recombine with the hole left in the VB, emitting a high-energy photon.</p>
+
+                        <p><strong>Intraband Dynamics</strong> describe the motion of an electron (or hole) <em>within</em> a single band. This motion is governed by the <strong>Bloch acceleration theorem</strong>, which states that the electron's crystal momentum, $\mathbf{k}$, changes in response to the electric field, $\mathbf{E}(t)$:
+                        $$ \hbar \frac{d\mathbf{k}(t)}{dt} = -e \mathbf{E}(t) $$
+                        Because the energy bands in a solid are not simple parabolas, this acceleration leads to a highly nonlinear current. An electron can even be driven to the edge of the Brillouin zone and effectively "diffract," reversing its velocity—a process called a <strong>Bloch oscillation</strong>. This intraband current is a powerful source of high-harmonic light.</p>
+
+                        <figure>
+                            <div style="position: relative;">
+                                <img src="Figure1.webp" alt="Comparison of HHG mechanisms in solids and atoms." id="fig1" class="zoomable">
+                                <span class="annotation" style="top: 25%; left: 40%;" data-tooltip="fig1-tip1">
+                                    1
+                                    <div class="tooltip" id="fig1-tip1"><strong>Intraband Current:</strong> An electron in the conduction band is accelerated by the laser field. Because the band is not a simple parabola, this motion creates a nonlinear current that emits high-order harmonics. This mechanism has no direct analog in atomic HHG.</div>
+                                </span>
+                                <span class="annotation" style="top: 50%; left: 40%;" data-tooltip="fig1-tip2">
+                                    2
+                                    <div class="tooltip" id="fig1-tip2"><strong>Interband Recombination:</strong> An electron from the conduction band recombines with a hole in the valence band, emitting a high-energy photon. This is analogous to the recombination step in the atomic three-step model.</div>
+                                </span>
+                                <span class="annotation" style="top: 80%; left: 75%;" data-tooltip="fig1-tip3">
+                                    3
+                                    <div class="tooltip" id="fig1-tip3"><strong>Atomic HHG:</strong> The classic three-step model: (1) Tunneling ionization, (2) Acceleration in the vacuum, (3) Recombination with the parent ion. Note the electron travels much farther from the core than in a solid.</div>
+                                </span>
+                            </div>
+                            <figcaption>
+                                <b>Figure 1:</b> A comparison of the microscopic mechanisms for High-Harmonic Generation (HHG) in solids (top) and atoms (bottom), shown in both real space and momentum space. Solids have two primary channels: the <strong>intraband current</strong> and <strong>interband recombination</strong>.
+                            </figcaption>
+                        </figure>
+
+                        <div class="key-takeaways">
+                            <h3>💡 The Keldysh Parameter: Tunneling vs. Multiphoton</h3>
+                            <p>How do we know if an electron will tunnel or absorb multiple photons? The <strong>Keldysh adiabaticity parameter</strong>, $\gamma$, gives us the answer. For a direct-bandgap solids with a bandgap of $E_{\mathrm{g}}$,</p>
+                            $$ \gamma = \frac{\omega_\mathrm{L} \sqrt{2m^* E_{\mathrm{g}}}}{e E_0}, $$
+                            where $e$ is the elementary charge, $E_0$ is the amplitude of the electric field, $\omega_\mathrm{L}$ is its frequency, and $m^*$ is the effective reduced mass for an electron-hole pair.
+                            <ul>
+                                <li>If $\gamma \gg 1$ (e.g., weaker fields, higher frequencies), the field oscillates too quickly for the electron to tunnel. The process is <strong>diabatic</strong>, and we are in the <strong>multiphoton regime</strong>.</li>
+                                <li>If $\gamma \ll 1$ (e.g., very strong, low-frequency fields), the field varies slowly compared to the electron's dynamics. The process is <strong>adiabatic</strong>, and we are in the <strong>tunneling regime</strong>. This is the regime crucial for lightwave electronics, as it allows for current injection within a fraction of a light cycle.</li>
+                            </ul>
+                        </div>
+                        <figure>
+                            <img src="Figure2.webp" alt="Diagram showing the field-driven vs photon-absorption regimes of electronics." class="zoomable">
+                            <figcaption>
+                                <b>Figure 2:</b> The regimes of electronics. At low frequencies and field strengths (bottom left), we have conventional electronics. In the optical domain (top), we can have either photon-driven processes (where the cycle-averaged intensity matters) or <em>field-driven</em> processes (where the instantaneous electric field controls the current). The transition is governed by the Keldysh parameter, $\gamma$. Petahertz electronics operates in the field-driven regime where $\gamma < 1$.
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+            
+            <hr>
+
+            <section id="concept-3" class="section-content">
+                <h2>3. The Main Experimental Techniques</h2>
+                <div class="reveal-container">
+                    <div class="reveal-header">
+                        <p><strong>Before we begin, consider:</strong> If you have an attosecond XUV pulse, how could you use it to "take a picture" of what electrons are doing inside a solid that is being shaken by an intense infrared laser pulse?</p>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="hidden-content">
+                        <p>We have two powerful, all-optical techniques that are complementary: High-Harmonic Generation (HHG) Spectroscopy and Attosecond Transient Absorption/Reflection Spectroscopy (ATAS/ATRS). They both provide attosecond time resolution but look at the system from different angles.</p>
+
+                        <h3>High-Harmonic Generation (HHG) Spectroscopy</h3>
+                        <p>In HHG spectroscopy, we don't use an external probe pulse. The system probes itself! An intense IR laser pulse drives the electron dynamics (the interband and intraband currents described earlier). These dynamics then cause the solid to <strong>emit</strong> its own light at high harmonics of the driving frequency. By analyzing the spectrum, polarization, and phase of this emitted harmonic light, we can reconstruct the electron dynamics that created it. It's like listening to the "scream" of the electrons as they are violently accelerated by the field.</p>
+                        
+                        <h3>Attosecond Transient Absorption/Reflection Spectroscopy (ATAS/ATRS)</h3>
+                        <p>This is a classic pump-probe technique. An intense IR <strong>pump</strong> pulse initiates the dynamics in the solid. A precisely delayed attosecond XUV <strong>probe</strong> pulse is then sent through (ATAS) or reflected off (ATRS) the sample. The XUV photons are chosen to have enough energy to excite electrons from deep, localized <strong>core levels</strong> into the now-dynamic valence and conduction bands. By measuring how the absorption of the XUV probe changes as a function of the pump-probe delay, we can map the electron dynamics with attosecond resolution and element specificity. It's like taking a series of snapshots of the electronic structure as it evolves in time.</p>
+
+                        <figure>
+                             <div style="position: relative;">
+                                <img src="Figure4.webp" alt="Comparison of HHG and ATAS mechanisms." class="zoomable" id="fig4">
+                                <span class="annotation" style="top: 40%; left: 25%;" data-tooltip="fig4-tip1">
+                                    1
+                                    <div class="tooltip" id="fig4-tip1"><strong>HHG (Panel a):</strong> A single strong "ultrafast beam" drives all the dynamics: (1) tunneling, (2) acceleration, and (3) recombination, leading to the emission of HHG light from both interband and intraband currents. It is a self-probing process.</div>
+                                </span>
+                                <span class="annotation" style="top: 60%; left: 75%;" data-tooltip="fig4-tip2">
+                                    2
+                                    <div class="tooltip" id="fig4-tip2"><strong>ATAS (Panel b):</strong> A strong IR "pump beam" initiates the dynamics. A separate, time-delayed attosecond "XUV" pulse probes the system by exciting an inner-shell (IS) electron. The absorption of this XUV light reveals the state of the conduction band (CB).</div>
+                                </span>
+                             </div>
+                            <figcaption>
+                                <b>Figure 4:</b> The complementary mechanisms of HHG spectroscopy (left) and Attosecond Transient Spectroscopy (right). HHG is an <em>emission-based</em> technique driven by a single strong field, while ATAS/ATRS is a pump-probe <em>absorption</em> technique.
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="concept-4" class="section-content">
+                <h2>4. Case Study: Probing Symmetries and Topology</h2>
+                <div class="reveal-container">
+                    <div class="reveal-header">
+                        <p><strong>Before we begin, consider:</strong> A topological insulator is a material that is an insulator in its bulk but has conducting states on its surface. Could a strong laser field "feel" the difference between the bulk and the surface? How might this show up in an experiment?</p>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="hidden-content">
+                        <p>HHG spectroscopy is exquisitely sensitive to the symmetries and quantum-mechanical phases of electron wavefunctions, making it a perfect tool for studying exotic quantum materials like topological insulators (TIs).</p>
+                        <p>In a 3D TI like bismuth selenide ($\text{Bi}_2\text{Se}_3$), the bulk is centrosymmetric, while the surface is not. This means the bulk should only generate odd harmonics, whereas the surface can generate both odd and even harmonics. More strikingly, the topologically protected surface states have a unique property called spin-momentum locking, which profoundly alters their interaction with circularly polarized light.</p>
+                        <p>Experiments have shown an <strong>anomalous ellipticity dependence</strong> of HHG from $\text{Bi}_2\text{Se}_3$: the harmonic yield <em>increases</em> as the driving laser's polarization is changed from linear to circular. This is the opposite of what happens in atoms, where the electron-ion recollision is suppressed, and the HHG yield plummets for circular polarization. This unique signature is a direct fingerprint of the topological surface states.</p>
+                        <p>Even more convincingly, this effect can be used to watch a topological phase transition happen in real time. By doping $\text{Bi}_2\text{Se}_3$ with indium, one can tune the material from a topological to a trivial insulator. As the indium concentration crosses the threshold for the phase transition, the anomalous ellipticity dependence of the HHG signal vanishes, and the material starts behaving like a normal solid. This provides all-optical, ultrafast access to the topological state of matter.</p>
+                        
+                        <figure>
+                            <img src="Figure5.png" alt="HHG signal tracking a topological phase transition." class="zoomable">
+                            <figcaption>
+                                <b>Figure 5:</b> Watching a topological phase transition with HHG. (Left panels) ARPES data shows the band structure of $(Bi_{1-x}In_x)_2Se_3$ changing with indium concentration (x). The topological surface state (the 'X' shape) disappears around x=7%-10%. (Right panel) The ratio of HHG intensity for circular vs. linear polarization. This ratio is high (> 1) in the topological phase and drops dramatically in the trivial phase, perfectly tracking the transition seen in ARPES.
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="concept-5" class="section-content">
+                <h2>5. Case Study: Towards Petahertz Electronics</h2>
+                <div class="reveal-container">
+                    <div class="reveal-header">
+                        <p><strong>Before we begin, consider:</strong> Normally, the current from a photodiode depends on the <em>intensity</em> (power) of the light. How could you make a current that depends on the light's electric <em>field</em> itself, including its direction?</p>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="hidden-content">
+                        <p>The key is to operate in the tunneling regime ($\gamma \ll 1$), where charge carriers are injected into the conduction band on a timescale much shorter than a single optical cycle. If the laser pulse is only a few cycles long, its electric field waveform is asymmetric. For example, a "cosine-like" pulse has a strong central peak, while a "sine-like" pulse has zero field at its center but strong fields on either side.</p>
+                        
+                        <p>Because the tunneling rate is extremely sensitive to the instantaneous electric field strength, an asymmetric waveform will inject more electrons during the stronger half-cycles. This creates a net flow of charge—a residual current—whose direction and magnitude can be controlled by the light's waveform. The parameter that controls this asymmetry is the <strong>carrier-envelope phase (CEP)</strong>.</p>
+                        
+                        <p>Pioneering experiments on dielectrics like fused silica ($\text{Si} \text{O}_2$) showed exactly this effect. By placing a thin sample between two electrodes, researchers measured a net current that oscillated sinusoidally as the CEP of the few-cycle laser pulse was varied. This demonstrated that the electric field of light could be used as an ultrafast "gate" to directly drive and control a current, forming the fundamental building block of <strong>petahertz electronics</strong>.</p>
+                        
+                        <figure>
+                            <img src="Figure6.png" alt="CEP control of current at a material interface." class="zoomable">
+                            <figcaption>
+                                <b>Figure 6:</b> Direct control of current with the light field. The measured current across a metal-dielectric-metal interface shows a clear sinusoidal dependence on the carrier-envelope phase (CEP), proving that the current is driven by the field's waveform, not just its intensity envelope. This experiment is a cornerstone of lightwave electronics.
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+            
+            <hr>
+
+            <section id="concept-6" class="section-content">
+                <h2>6. Special Topic: The World of Nanostructures</h2>
+                 <div class="reveal-container">
+                    <div class="reveal-header">
+                        <p><strong>Before we begin, consider:</strong> We've discussed isolated atoms and bulk crystals. What new physics might emerge if we study an object in between—a tiny sphere only a few hundred nanometers in diameter?</p>
+                        <span class="arrow">▶</span>
+                    </div>
+                    <div class="hidden-content">
+                        <p>Nanostructures, like dielectric nanospheres or metallic nanotips, introduce a fascinating new ingredient: the interplay between strong-field physics and <strong>plasmonic near-field enhancement</strong>. These structures act like nanoscale antennas, concentrating the incident laser field into tiny "hot spots" near their surface.</p>
+
+                        <h3>Near-Field Enhancement</h3>
+                        <p>The local electric field at the surface of a nanostructure can be many times stronger than the incident laser field. This means we can reach the strong-field regime (and even tunnel-ionize wide-bandgap dielectrics!) using much lower laser intensities. The field is also highly inhomogeneous, decaying rapidly away from the surface.</p>
+
+                        <figure>
+                            <img src="Figure7.png" alt="Map of electric field enhancement around a gold nanorod." class="zoomable">
+                            <figcaption>
+                                <b>Figure 7:</b> Simulation of the electric field enhancement around a 150-nm gold nanorod at its plasmon resonance. The field at the tips is over 25 times stronger than the incident laser field, creating "hot spots" where strong-field physics can occur.
+                            </figcaption>
+                        </figure>
+
+                        <h3>Consequences for Electron Dynamics</h3>
+                        <p>This enhanced, localized near-field fundamentally changes the electron's trajectory after it's emitted:</p>
+                        <ul>
+                            <li><strong>Surface Rescattering:</strong> The electron is born in the near-field and can be driven back to the nanosphere's surface, where it scatters. The maximum kinetic energy of these rescattered electrons scales with the <strong>local, enhanced field</strong>, leading to much higher electron energies than would be expected from the incident laser intensity alone.</li>
+                            <li><strong>Charge Interaction and TRAB:</strong> At high intensities, so many electrons are emitted that the nanosphere becomes significantly positively charged. This creates a powerful static "trapping field". An electron that recollides with the surface is now accelerated not only by the laser field but also by this attractive trapping field, gaining even more energy in a process called <strong>Trapping-Field Assisted Backscattering (TRAB)</strong>.</li>
+                        </ul>
+
+                        <figure>
+                            <img src="Figure8.jpg" alt="Photoelectron spectrum from a nanosphere showing a rescattering plateau." class="zoomable">
+                            <figcaption>
+                                <b>Figure 8:</b> A typical photoelectron energy spectrum from a nanosphere. The spectrum features a high-energy plateau that extends to a cutoff energy far beyond what would be expected from direct emission. This plateau is the signature of electrons that have rescattered off the nanoparticle surface. The cutoff energy provides a direct measure of the <strong>local, enhanced field</strong> strength.
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+            
+            <hr>
+
+            <section id="conclusion" class="section-content">
+                <h2>Conclusion & Outlook</h2>
+                <div class="key-takeaways">
+                    <h3>Key Takeaways from Today's Lecture 🚀</h3>
+                    <ul>
+                        <li>Strong-field physics in condensed matter is a rich field where the laser interacts with electrons in a <strong>periodic potential</strong>, leading to an interplay of <strong>interband</strong> and <strong>intraband dynamics</strong>.</li>
+                        <li>We can probe these dynamics on attosecond timescales using two main all-optical tools: <strong>HHG spectroscopy</strong> (measuring emitted light) and <strong>ATAS/ATRS</strong> (measuring absorbed light).</li>
+                        <li>These techniques have provided unprecedented insight into fundamental material properties like their <strong>band structure</strong>, <strong>crystal symmetry</strong>, and <strong>topology</strong>.</li>
+                        <li>Controlling electron currents with the waveform of light itself has laid the foundation for future <strong>petahertz electronics</strong>.</li>
+                        <li><strong>Nanostructures</strong> act as optical antennas, creating enhanced near-fields that open up new regimes of strong-field physics, such as surface rescattering and charge-interaction-driven acceleration.</li>
+                    </ul>
+                    <p>The convergence of condensed matter physics, quantum optics, and ultrafast science is pushing the frontiers of how we understand and control the quantum world. Future directions include exploring attomagnetism, complex quantum materials, and developing the first real-world lightwave electronic devices.</p>
+                </div>
+            </section>
+        </main>
+        
+        <div id="modal">
+            <img id="modal-img" src="" alt="Zoomed view">
+            <div id="modal-caption"></div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Toggle ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+            });
+
+            // --- Table of Contents & Progress Bar ---
+            const tocList = document.querySelector('#toc ul');
+            const progressBar = document.getElementById('progress-bar');
+            const sections = document.querySelectorAll('.section-content');
+            
+            sections.forEach((section, index) => {
+                const title = section.querySelector('h2');
+                if (title) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = `#${section.id}`;
+                    link.textContent = title.textContent;
+                    listItem.appendChild(link);
+                    tocList.appendChild(listItem);
+                }
+            });
+
+            const tocLinks = document.querySelectorAll('#toc a');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        tocLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                        
+                        const activeLinkIndex = Array.from(tocLinks).findIndex(link => link.classList.contains('active'));
+                        const progress = ((activeLinkIndex + 1) / tocLinks.length) * 100;
+                        progressBar.style.width = `${progress}%`;
+                    }
+                });
+            }, { rootMargin: '-40% 0px -60% 0px', threshold: 0 });
+
+            sections.forEach(section => observer.observe(section));
+
+            // --- Reveal Content ---
+            const revealContainers = document.querySelectorAll('.reveal-container');
+            revealContainers.forEach(container => {
+                const header = container.querySelector('.reveal-header');
+                header.addEventListener('click', () => {
+                    container.classList.toggle('open');
+                });
+            });
+            
+            // --- Figure Zoom Modal ---
+            const modal = document.getElementById('modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalCaption = document.getElementById('modal-caption');
+            const zoomableImages = document.querySelectorAll('img.zoomable');
+
+            zoomableImages.forEach(img => {
+                img.addEventListener('click', () => {
+                    modal.classList.add('show');
+                    modalImg.src = img.src;
+                    modalCaption.innerHTML = img.closest('figure').querySelector('figcaption').innerHTML;
+                });
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal || e.target === modalImg || e.target === modalCaption) {
+                    modal.classList.remove('show');
+                }
+            });
+            
+            // --- Interactive Annotations ---
+            const annotations = document.querySelectorAll('.annotation');
+            annotations.forEach(annotation => {
+                annotation.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const wasActive = annotation.classList.contains('active');
+                    // Close all other annotations
+                    annotations.forEach(a => a.classList.remove('active'));
+                    // Toggle current annotation
+                    if (!wasActive) {
+                        annotation.classList.add('active');
+                    }
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                // Close tooltips if clicking outside
+                if (!e.target.closest('.annotation')) {
+                    annotations.forEach(a => a.classList.remove('active'));
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>
