@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attoworld Retreat 2026 - Scientific Program</title>
+  <title>Attoworld Retreat 2026 - Complete Schedule</title>
   <!-- Modern clean typography from Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,33 +51,41 @@
     /* Ambient background glows for premium look on light background */
     .bg-glow {
       position: absolute;
-      width: 600px;
-      height: 600px;
+      width: 700px;
+      height: 700px;
       border-radius: 50%;
-      filter: blur(140px);
+      filter: blur(150px);
       z-index: -1;
-      opacity: 0.08;
+      opacity: 0.07;
       pointer-events: none;
     }
     .glow-left {
       background: var(--color-physics);
-      top: -100px;
-      left: -100px;
+      top: -150px;
+      left: -150px;
     }
     .glow-right {
       background: var(--color-cmf);
-      bottom: -100px;
-      right: -100px;
+      bottom: -150px;
+      right: -150px;
+    }
+    .glow-center {
+      background: var(--color-social);
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
       max-width: 800px;
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 2.75rem;
       font-weight: 800;
       letter-spacing: -0.04em;
       margin-bottom: 0.5rem;
@@ -87,17 +95,17 @@
     }
 
     .subtitle {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--text-muted);
       font-weight: 500;
     }
 
     .program-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1600px;
       z-index: 10;
     }
 
@@ -108,6 +116,8 @@
       border-radius: 24px;
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+      display: flex;
+      flex-direction: column;
     }
 
     .day-title {
@@ -118,8 +128,14 @@
       align-items: center;
       gap: 0.5rem;
     }
-    .tue-title { color: #4f46e5; }
-    .wed-title { color: #0891b2; }
+    
+    /* Day-specific color codings */
+    .mon-title { color: #64748b; } /* Slate */
+    .tue-title { color: #4f46e5; } /* Indigo */
+    .wed-title { color: #0891b2; } /* Cyan */
+    .thu-title { color: #8b5cf6; } /* Violet */
+    .fri-title { color: #059669; } /* Emerald */
+    .sat-title { color: #475569; } /* Dark Slate */
 
     .day-subtitle {
       font-size: 0.95rem;
@@ -134,6 +150,7 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      flex-grow: 1;
     }
 
     .slot-card {
@@ -258,7 +275,13 @@
       font-style: italic;
     }
 
-    @media (max-width: 968px) {
+    @media (max-width: 1400px) {
+      .program-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
       .program-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -270,21 +293,77 @@
 
   <div class="bg-glow glow-left"></div>
   <div class="bg-glow glow-right"></div>
+  <div class="bg-glow glow-center"></div>
 
   <header>
     <h1>Attoworld Retreat 2026</h1>
-    <div class="subtitle">Scientific Program &bullet; Budapest &bullet; September 22 – 23</div>
+    <div class="subtitle">Complete Program &bullet; Budapest & Lake Balaton &bullet; Sept 21 – 26</div>
   </header>
 
   <main class="program-grid">
     
-    <!-- Tuesday, Sept 22 -->
+    <!-- Monday, Sept 21 -->
     <section class="day-column">
-      <h2 class="day-title tue-title">Tuesday, Sept 22</h2>
-      <div class="day-subtitle">Laser Technology & Spectroscopy Foundations</div>
+      <h2 class="day-title mon-title">Monday, Sept 21</h2>
+      <div class="day-subtitle">Travel Day & Staff Meeting (Budapest)</div>
       
       <div class="timeline-container">
         
+        <div class="slot-card social">
+          <div class="time-block">07:30</div>
+          <div class="content-block">
+            <div class="topic">Departure from MPQ</div>
+            <div class="leader">Group Travel</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">16:00</div>
+          <div class="content-block">
+            <div class="topic">Arrival at <a href="https://www.hrewards.com/en/intercityhotel-budapest" target="_blank">IntercityHotel Budapest</a></div>
+            <div class="leader">Check-in & Buffer included</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">16:00 – 19:00</div>
+          <div class="content-block">
+            <div class="break-text">🚗 Arrival & Traffic Buffer</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">19:00 – 20:30</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Dinner</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">20:30 onwards</div>
+          <div class="content-block">
+            <div class="topic">🗣️ Staff Meeting (Open-Ended)</div>
+            <div class="leader">PhDs, Masters, & Postdocs (No Leadership)</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Tuesday, Sept 22 -->
+    <section class="day-column">
+      <h2 class="day-title tue-title">Tuesday, Sept 22</h2>
+      <div class="day-subtitle">Laser Technology & Spectroscopy (Budapest)</div>
+      
+      <div class="timeline-container">
+        
+        <div class="slot-card break">
+          <div class="time-block">08:00 – 09:15</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Breakfast</div>
+          </div>
+        </div>
+
         <div class="slot-card physics">
           <div class="time-block">09:30 – 10:30</div>
           <div class="content-block">
@@ -367,10 +446,17 @@
     <!-- Wednesday, Sept 23 -->
     <section class="day-column">
       <h2 class="day-title wed-title">Wednesday, Sept 23</h2>
-      <div class="day-subtitle">Broadband IR Diagnostics & CMF</div>
+      <div class="day-subtitle">Broadband IR Diagnostics & CMF (Budapest)</div>
       
       <div class="timeline-container">
         
+        <div class="slot-card break">
+          <div class="time-block">07:30 – 08:45</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Breakfast</div>
+          </div>
+        </div>
+
         <div class="slot-card cmf">
           <div class="time-block">09:00 – 10:00</div>
           <div class="content-block">
@@ -440,7 +526,7 @@
           </div>
         </div>
 
-        <div class="slot-card report" style="margin-bottom: 0.25rem;">
+        <div class="slot-card report">
           <div class="time-block">16:30 – 17:15</div>
           <div class="content-block">
             <div class="topic">Staff Feedback & Discussion</div>
@@ -463,10 +549,123 @@
           </div>
         </div>
 
-        <div class="slot-card break" style="background: rgba(15,23,42,0.005); border-radius: 12px; border: 1px dashed rgba(15,23,42,0.08);">
+        <div class="slot-card break" style="margin-bottom: 0.25rem;">
           <div class="time-block">Evening</div>
           <div class="content-block">
             <div class="break-text">🏙️ Free Time in Budapest (Explore City)</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Thursday, Sept 24 -->
+    <section class="day-column">
+      <h2 class="day-title thu-title">Thursday, Sept 24</h2>
+      <div class="day-subtitle">Transfer to Lake Balaton (No Talks)</div>
+      
+      <div class="timeline-container">
+        
+        <div class="slot-card break">
+          <div class="time-block">08:00 – 09:00</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Breakfast</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">10:00</div>
+          <div class="content-block">
+            <div class="topic">Departure towards <a href="https://wellamarin.hu" target="_blank">Hotel Wellamarin</a></div>
+            <div class="leader">Transfer to Lake Balaton</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">~12:00</div>
+          <div class="content-block">
+            <div class="topic">Arrival & Check-in</div>
+            <div class="leader">Hotel Wellamarin, Lake Balaton</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">12:00 – 18:30</div>
+          <div class="content-block">
+            <div class="topic">Free Time / Socializing</div>
+            <div class="leader">Recreation & Informal Discussions</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">19:00</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Dinner</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Friday, Sept 25 -->
+    <section class="day-column">
+      <h2 class="day-title fri-title">Friday, Sept 25</h2>
+      <div class="day-subtitle">Attoworld Recreation & Activities (Lake Balaton)</div>
+      
+      <div class="timeline-container">
+        
+        <div class="slot-card break">
+          <div class="time-block">08:00 – 09:30</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Breakfast</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">09:30 – 18:30</div>
+          <div class="content-block">
+            <div class="topic">General Recreation & Group Activities</div>
+            <div class="leader">Attoworld Social</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">19:00</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Dinner</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Saturday, Sept 26 -->
+    <section class="day-column">
+      <h2 class="day-title sat-title">Saturday, Sept 26</h2>
+      <div class="day-subtitle">Travel Day (Return)</div>
+      
+      <div class="timeline-container">
+        
+        <div class="slot-card break">
+          <div class="time-block">07:00 – 08:00</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Breakfast</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">08:30</div>
+          <div class="content-block">
+            <div class="topic">Departure from Hotel Wellamarin</div>
+            <div class="leader">Group Travel back to Garching</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">~17:00</div>
+          <div class="content-block">
+            <div class="topic">Expected Arrival at MPQ</div>
+            <div class="leader">End of Retreat</div>
           </div>
         </div>
 
