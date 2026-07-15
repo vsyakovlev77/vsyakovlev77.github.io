@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attoworld Retreat 2026 - Scientific Program</title>
+  <!-- Modern clean typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --panel-bg: rgba(248, 250, 252, 0.75);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --text-main: #0f172a; /* Slate 900 */
+      --text-muted: #475569; /* Slate 600 */
+      
+      /* Theme colors for sessions (darker hues for readability on light BG) */
+      --color-physics: #4f46e5; /* Indigo 600 */
+      --color-physics-glow: rgba(79, 70, 229, 0.06);
+      --color-cmf: #0891b2; /* Cyan 600 */
+      --color-cmf-glow: rgba(8, 145, 178, 0.06);
+      --color-social: #e11d48; /* Rose 600 */
+      --color-social-glow: rgba(225, 29, 72, 0.06);
+      --color-break: #64748b; /* Slate 500 */
+      --color-break-glow: rgba(100, 116, 139, 0.04);
+      --color-report: #059669; /* Emerald 600 */
+      --color-report-glow: rgba(5, 150, 105, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1.5rem;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background glows for premium look on light background */
+    .bg-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: -1;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .glow-left {
+      background: var(--color-physics);
+      top: -100px;
+      left: -100px;
+    }
+    .glow-right {
+      background: var(--color-cmf);
+      bottom: -100px;
+      right: -100px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #475569 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1200px;
+      z-index: 10;
+    }
+
+    .day-column {
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+    }
+
+    .day-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tue-title { color: #4f46e5; }
+    .wed-title { color: #0891b2; }
+
+    .day-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .timeline-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .slot-card {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      align-items: center;
+      padding: 1.25rem;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.015);
+      border: 1px solid rgba(15, 23, 42, 0.03);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slot-card:hover {
+      transform: translateY(-2px);
+      background: rgba(15, 23, 42, 0.03);
+      border-color: rgba(15, 23, 42, 0.08);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .time-block {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: -0.01em;
+    }
+
+    .content-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-left: 1rem;
+      border-left: 3px solid transparent;
+    }
+
+    .slot-card.physics .content-block {
+      border-color: var(--color-physics);
+    }
+    .slot-card.physics:hover {
+      box-shadow: 0 8px 30px var(--color-physics-glow);
+    }
+
+    .slot-card.cmf .content-block {
+      border-color: var(--color-cmf);
+    }
+    .slot-card.cmf:hover {
+      box-shadow: 0 8px 30px var(--color-cmf-glow);
+    }
+
+    .slot-card.report .content-block {
+      border-color: var(--color-report);
+    }
+    .slot-card.report:hover {
+      box-shadow: 0 8px 30px var(--color-report-glow);
+    }
+
+    .slot-card.social .content-block {
+      border-color: var(--color-social);
+    }
+    .slot-card.social:hover {
+      box-shadow: 0 8px 30px var(--color-social-glow);
+    }
+
+    .slot-card.break {
+      background: transparent;
+      border-color: transparent;
+      padding: 0.75rem 1.25rem;
+    }
+    .slot-card.break .content-block {
+      border-color: var(--color-break);
+    }
+    .slot-card.break:hover {
+      transform: none;
+      box-shadow: none;
+      background: rgba(150, 150, 150, 0.04);
+    }
+
+    .topic {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .topic a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(15, 23, 42, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .slot-card.physics .topic a {
+      border-bottom-color: rgba(79, 70, 229, 0.3);
+    }
+    .slot-card.physics .topic a:hover {
+      border-bottom-color: var(--color-physics);
+    }
+
+    .slot-card.cmf .topic a {
+      border-bottom-color: rgba(8, 145, 178, 0.3);
+    }
+    .slot-card.cmf .topic a:hover {
+      border-bottom-color: var(--color-cmf);
+    }
+
+    .slot-card.social .topic a {
+      border-bottom-color: rgba(225, 29, 72, 0.3);
+    }
+    .slot-card.social .topic a:hover {
+      border-bottom-color: var(--color-social);
+    }
+
+    .leader {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .break-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    @media (max-width: 968px) {
+      .program-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow glow-left"></div>
+  <div class="bg-glow glow-right"></div>
+
+  <header>
+    <h1>Attoworld Retreat 2026</h1>
+    <div class="subtitle">Scientific Program &bullet; Budapest &bullet; September 22 – 23</div>
+  </header>
+
+  <main class="program-grid">
+    
+    <!-- Tuesday, Sept 22 -->
+    <section class="day-column">
+      <h2 class="day-title tue-title">Tuesday, Sept 22</h2>
+      <div class="day-subtitle">Laser Technology & Spectroscopy Foundations</div>
+      
+      <div class="timeline-container">
+        
+        <div class="slot-card physics">
+          <div class="time-block">09:30 – 10:30</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://attoworld.de/amo.html" target="_blank">Advanced Multilayer Optics</a></div>
+            <div class="leader">Volodymyr Pervak</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">10:30 – 11:00</div>
+          <div class="content-block">
+            <div class="break-text">☕ Coffee Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card physics">
+          <div class="time-block">11:00 – 12:30</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://attoworld.de/atto-20.html" target="_blank">Attosecond Spectroscopy - Experiment</a></div>
+            <div class="leader">Nicholas Karpowicz</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">12:30 – 14:00</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Lunch Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card physics">
+          <div class="time-block">14:00 – 14:30</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://www.mpq.mpg.de/photonlab-en" target="_blank">PhotonLab</a></div>
+            <div class="leader">Silke Stähler-Schöpf</div>
+          </div>
+        </div>
+
+        <div class="slot-card physics">
+          <div class="time-block">14:30 – 15:30</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://attoworld.de/atto-20.html" target="_blank">Attosecond Spectroscopy - Theory</a></div>
+            <div class="leader">Vladislav Yakovlev</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">15:30 – 16:00</div>
+          <div class="content-block">
+            <div class="break-text">☕ Coffee Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">16:00 – 18:30</div>
+          <div class="content-block">
+            <div class="topic">Poster Session (Part 1)</div>
+            <div class="leader">All Groups</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">18:30 – 20:00</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Dinner</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">20:00 onwards</div>
+          <div class="content-block">
+            <div class="topic">Poster Session (Part 2 - Open-Ended)</div>
+            <div class="leader">Drinks & Social Gathering</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Wednesday, Sept 23 -->
+    <section class="day-column">
+      <h2 class="day-title wed-title">Wednesday, Sept 23</h2>
+      <div class="day-subtitle">Broadband IR Diagnostics & CMF</div>
+      
+      <div class="timeline-container">
+        
+        <div class="slot-card cmf">
+          <div class="time-block">09:00 – 10:00</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://attoworld.de/bird.html" target="_blank">Broadband Infrared Diagnostics</a></div>
+            <div class="leader">Mihaela Žigman</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">10:00 – 10:15</div>
+          <div class="content-block">
+            <div class="break-text">☕ Coffee Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card cmf">
+          <div class="time-block">10:15 – 11:00</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://cmf.hu/" target="_blank">Center for Molecular Fingerprinting Overview</a></div>
+            <div class="leader">Min Kim</div>
+          </div>
+        </div>
+
+        <div class="slot-card cmf">
+          <div class="time-block">11:00 – 11:20</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://www.protecting.health/" target="_blank">protecting.health</a></div>
+            <div class="leader">Marija Marolt & Min Kim</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">11:20 – 11:30</div>
+          <div class="content-block">
+            <div class="break-text">☕ Coffee Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card cmf">
+          <div class="time-block">11:30 – 12:30</div>
+          <div class="content-block">
+            <div class="topic">Metabolomics</div>
+            <div class="leader">Virag Sagi-Kiss</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">12:30 – 14:00</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Lunch Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card cmf">
+          <div class="time-block">14:00 – 15:00</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://attoworld.de/fris.html" target="_blank">Field-Resolved Spectroscopy</a></div>
+            <div class="leader">Alexander Weigel</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">15:00 – 15:15</div>
+          <div class="content-block">
+            <div class="break-text">☕ Coffee Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card cmf">
+          <div class="time-block">15:15 – 16:15</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://attoworld.de/data.html" target="_blank">Data Science</a></div>
+            <div class="leader">Kosmas Kepesidis</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">16:15 – 16:30</div>
+          <div class="content-block">
+            <div class="break-text">☕ Coffee Break</div>
+          </div>
+        </div>
+
+        <div class="slot-card report" style="margin-bottom: 0.25rem;">
+          <div class="time-block">16:30 – 17:15</div>
+          <div class="content-block">
+            <div class="topic">Staff Feedback & Discussion</div>
+            <div class="leader">Staff Representatives & Leadership</div>
+          </div>
+        </div>
+
+        <div class="slot-card social">
+          <div class="time-block">17:15 – 17:30</div>
+          <div class="content-block">
+            <div class="topic"><a href="https://attoworld.de/our-vision.html" target="_blank">Closing Remarks</a></div>
+            <div class="leader">Ferenc Krausz</div>
+          </div>
+        </div>
+
+        <div class="slot-card break">
+          <div class="time-block">18:30</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Dinner</div>
+          </div>
+        </div>
+
+        <div class="slot-card break" style="background: rgba(15,23,42,0.005); border-radius: 12px; border: 1px dashed rgba(15,23,42,0.08);">
+          <div class="time-block">Evening</div>
+          <div class="content-block">
+            <div class="break-text">🏙️ Free Time in Budapest (Explore City)</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
