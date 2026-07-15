@@ -1,3 +1,9 @@
+<!-- 
+  NOTE: This file (scientific_program.html) is a derivative subset containing ONLY the Tuesday & Wednesday scientific program.
+  The master schedule and single source of truth for the entire retreat is 'schedule.html'.
+  Do not update Tuesday or Wednesday times/details here directly without first updating 'schedule.html'.
+  In case of any conflict between the two documents, 'scientific_program.html' must be revised to match 'schedule.html'.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,33 +57,41 @@
     /* Ambient background glows for premium look on light background */
     .bg-glow {
       position: absolute;
-      width: 600px;
-      height: 600px;
+      width: 700px;
+      height: 700px;
       border-radius: 50%;
-      filter: blur(140px);
+      filter: blur(150px);
       z-index: -1;
-      opacity: 0.08;
+      opacity: 0.07;
       pointer-events: none;
     }
     .glow-left {
       background: var(--color-physics);
-      top: -100px;
-      left: -100px;
+      top: -150px;
+      left: -150px;
     }
     .glow-right {
       background: var(--color-cmf);
-      bottom: -100px;
-      right: -100px;
+      bottom: -150px;
+      right: -150px;
+    }
+    .glow-center {
+      background: var(--color-social);
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
       max-width: 800px;
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 2.75rem;
       font-weight: 800;
       letter-spacing: -0.04em;
       margin-bottom: 0.5rem;
@@ -87,14 +101,14 @@
     }
 
     .subtitle {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--text-muted);
       font-weight: 500;
     }
 
     .program-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 2rem;
       width: 100%;
       max-width: 1200px;
@@ -108,6 +122,8 @@
       border-radius: 24px;
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+      display: flex;
+      flex-direction: column;
     }
 
     .day-title {
@@ -118,8 +134,10 @@
       align-items: center;
       gap: 0.5rem;
     }
-    .tue-title { color: #4f46e5; }
-    .wed-title { color: #0891b2; }
+    
+    /* Day-specific color codings */
+    .tue-title { color: #4f46e5; } /* Indigo */
+    .wed-title { color: #0891b2; } /* Cyan */
 
     .day-subtitle {
       font-size: 0.95rem;
@@ -134,6 +152,7 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      flex-grow: 1;
     }
 
     .slot-card {
@@ -258,7 +277,7 @@
       font-style: italic;
     }
 
-    @media (max-width: 968px) {
+    @media (max-width: 900px) {
       .program-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -270,10 +289,11 @@
 
   <div class="bg-glow glow-left"></div>
   <div class="bg-glow glow-right"></div>
+  <div class="bg-glow glow-center"></div>
 
   <header>
     <h1>Attoworld Retreat 2026</h1>
-    <div class="subtitle">Scientific Program &bullet; Budapest &bullet; September 22 – 23</div>
+    <div class="subtitle">Scientific Program &bullet; Budapest &bullet; Sept 22 – 23</div>
   </header>
 
   <main class="program-grid">
@@ -281,10 +301,17 @@
     <!-- Tuesday, Sept 22 -->
     <section class="day-column">
       <h2 class="day-title tue-title">Tuesday, Sept 22</h2>
-      <div class="day-subtitle">Laser Technology & Spectroscopy Foundations</div>
+      <div class="day-subtitle">Laser Technology & Spectroscopy (Budapest)</div>
       
       <div class="timeline-container">
         
+        <div class="slot-card break">
+          <div class="time-block">08:00 – 09:15</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Breakfast</div>
+          </div>
+        </div>
+
         <div class="slot-card physics">
           <div class="time-block">09:30 – 10:30</div>
           <div class="content-block">
@@ -367,10 +394,17 @@
     <!-- Wednesday, Sept 23 -->
     <section class="day-column">
       <h2 class="day-title wed-title">Wednesday, Sept 23</h2>
-      <div class="day-subtitle">Broadband IR Diagnostics & CMF</div>
+      <div class="day-subtitle">Broadband IR Diagnostics & CMF (Budapest)</div>
       
       <div class="timeline-container">
         
+        <div class="slot-card break">
+          <div class="time-block">07:30 – 08:45</div>
+          <div class="content-block">
+            <div class="break-text">🍽️ Breakfast</div>
+          </div>
+        </div>
+
         <div class="slot-card cmf">
           <div class="time-block">09:00 – 10:00</div>
           <div class="content-block">
@@ -440,7 +474,7 @@
           </div>
         </div>
 
-        <div class="slot-card report" style="margin-bottom: 0.25rem;">
+        <div class="slot-card report">
           <div class="time-block">16:30 – 17:15</div>
           <div class="content-block">
             <div class="topic">Staff Feedback & Discussion</div>
@@ -463,7 +497,7 @@
           </div>
         </div>
 
-        <div class="slot-card break" style="background: rgba(15,23,42,0.005); border-radius: 12px; border: 1px dashed rgba(15,23,42,0.08);">
+        <div class="slot-card break" style="margin-bottom: 0.25rem;">
           <div class="time-block">Evening</div>
           <div class="content-block">
             <div class="break-text">🏙️ Free Time in Budapest (Explore City)</div>
